@@ -5,7 +5,8 @@
   "dependencies": {
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "yarn": "^1.19.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,5 +28,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.0",
+    "@testing-library/react": "^9.3.0"
   }
 }
