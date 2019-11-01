@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<DocumentFragment>
+  <div
+    class="center"
+    data-testid="container"
+  >
+    <h1
+      data-testid="text"
+    >
+      Sudoku Battle Royale
+    </h1>
+  </div>
+</DocumentFragment>
+`;
