@@ -8,6 +8,9 @@ COPY Pipfile.lock Pipfile.lock
 
 RUN pipenv install --dev
 
+EXPOSE 80
+
 COPY src /app
+WORKDIR /app
 
 CMD [ "pipenv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80" ]
