@@ -7,12 +7,15 @@ verify_ssl = true
 pylint = "*"
 black = "*"
 flake8 = "*"
+bandit = "*"
 
 [packages]
-starlette = "*"
+fastapi = "*"
+uvicorn = "*"
+email-validator = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
 
 [pipenv]
 allow_prereleases = true
