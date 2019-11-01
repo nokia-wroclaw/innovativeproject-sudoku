@@ -1,13 +1,15 @@
 matrix:
   include:
     - language: python
+      python:
+        - "3.8"
       before_install: cd backend
       install:
         - pip install pipenv
         - pipenv install --dev
       script:
-        - pipenv run pylint app/ -E
-        - pipenv run pylint app/ --exit-zero
-        - pipenv run flake8 app/
-        - pipenv run black app/ --check
-
+        - pipenv run black src/ --check
+        - pipenv run pylint src/ -E
+        - pipenv run pylint src/ --exit-zero
+        - pipenv run flake8 src/
+        - pipenv run bandit src/ -r
