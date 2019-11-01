@@ -1,0 +1,11 @@
+matrix:
+  include:
+    - language: python
+      before_install: cd backend
+      install:
+        - pip install pipenv
+        - pipenv install --dev
+      script:
+        - pipenv run -E
+        - pipenv run black . --check
+        - pipenv run pylint --exit-zero
