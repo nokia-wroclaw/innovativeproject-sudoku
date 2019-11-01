@@ -8,8 +8,8 @@ matrix:
         - pip install pipenv
         - pipenv install --dev
       script:
-        - pipenv run black src/ --check
-        - pipenv run pylint src/ -E
-        - pipenv run pylint src/ --exit-zero
-        - pipenv run flake8 src/
-        - pipenv run bandit src/ -r
+        - black src/ --check
+        - pylint src/ -E
+        - pylint src/ --exit-zero
+        - flake8 src/
+        - bandit src/ -r
