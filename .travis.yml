@@ -6,6 +6,8 @@ matrix:
         - pip install pipenv
         - pipenv install --dev
       script:
-        - pipenv run -E
-        - pipenv run black . --check
-        - pipenv run pylint --exit-zero
+        - pipenv run pylint app/ -E
+        - pipenv run pylint app/ --exit-zero
+        - pipenv run flake8 app/
+        - pipenv run black app/ --check
+
