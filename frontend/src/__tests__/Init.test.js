@@ -1,9 +1,7 @@
 import React from 'react';
-import {render, cleanup} from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import {render} from '@testing-library/react';
 import Init from "../components/Init/Init"
 
-afterEach(cleanup);
 
 it('renders', () => {
     const {asFragment} = render(<Init text="Sudoku Battle Royale"/>);
@@ -12,6 +10,5 @@ it('renders', () => {
 
 it("inserts text in h1", () => {
     const {getByTestId} = render(<Init text="Sudoku Battle Royale"/>);
-    expect(getByTestId('container')).toHaveClass('center');
     expect(getByTestId('text')).toHaveTextContent('Sudoku Battle Royale');
 });
