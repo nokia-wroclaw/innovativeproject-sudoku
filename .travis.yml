@@ -21,3 +21,4 @@ matrix:
       script:
         - npm test
         - npx prettier -c src/**/*.js src/*.js
+        - npm run lint
