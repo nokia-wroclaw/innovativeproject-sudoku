@@ -15,7 +15,9 @@ matrix:
         - bandit src/ -r
 
     - language: node_js
+      node_js:
+        - "node"
       before_install: cd frontend
       script:
         - npm test
-        - npx prettier --check src/**.js
+        - npx prettier -c src/**/*.js src/*.js
