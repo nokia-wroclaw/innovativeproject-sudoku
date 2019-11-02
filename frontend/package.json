@@ -12,7 +12,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eslint-check": "eslint --print-config src/index.js | eslint-config-prettier-check",
+    "lint": "./node_modules/.bin/eslint src"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,13 +34,20 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.0",
     "@testing-library/react": "^9.3.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^3.0.9",
     "prettier": "1.18.2",
     "pretty-quick": "^2.0.0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged --pattern '**/*.*(js|jsx)'"
     }
   }
 }
