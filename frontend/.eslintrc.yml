@@ -5,6 +5,7 @@ extends:
   - 'airbnb'
   - 'prettier'
   - 'prettier/react'
+  - 'plugin:testing-library/react'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -14,8 +15,14 @@ parserOptions:
   ecmaVersion: 2018
   sourceType: module
 plugins:
+  - testing-library
   - react
+  - react-hooks
+  - import
 rules: {
   "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
-  "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+  "testing-library/await-async-query": "error",
+  "testing-library/no-await-sync-query": "error",
+  "testing-library/no-debug": "warn"
 }
