@@ -13,3 +13,9 @@ matrix:
         - pylint src/ --exit-zero
         - flake8 src/
         - bandit src/ -r
+
+    - language: node_js
+      before_install: cd frontend
+      script:
+        - npm test
+        - npx prettier --check src/**.js
