@@ -1,0 +1,15 @@
+matrix:
+  include:
+    - language: python
+      python:
+        - "3.8"
+      before_install: cd backend
+      install:
+        - pip install pipenv
+        - pipenv install --dev
+      script:
+        - black src/ --check
+        - pylint src/ -E
+        - pylint src/ --exit-zero
+        - flake8 src/
+        - bandit src/ -r
