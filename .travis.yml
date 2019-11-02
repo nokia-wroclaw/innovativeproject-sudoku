@@ -19,6 +19,7 @@ matrix:
         - "node"
       before_install: cd frontend
       script:
-        - npm test
+        - npm run eslint-check
         - npx prettier -c src/**/*.js src/*.js
         - npm run lint
+        - npm test
