@@ -13,9 +13,9 @@ bandit = "*"
 fastapi = "*"
 uvicorn = "*"
 email-validator = "*"
-passlib[bcrypt] = "*"
 pyjwt = "*"
 python-multipart = "*"
+passlib = "*"
 
 [requires]
 python_version = "3.8"

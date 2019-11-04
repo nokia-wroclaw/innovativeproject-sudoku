@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-
 import jwt
 from fastapi import Depends, FastAPI, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -25,6 +24,12 @@ mock_db = {
     }
 }
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
+router = APIRouter()
+
 
 class Token(BaseModel):
     access_token: str
@@ -44,13 +49,6 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
-
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
-
-router = APIRouter()
 
 
 def verify_password(plain_password, hashed_password):
