@@ -1,0 +1,36 @@
+version: '3'
+services:
+  backend:
+    container_name: backend-container
+    restart: always
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    command: pipenv run uvicorn main:app --host 0.0.0.0 --port 80
+    ports:
+      - "80:80"
+    links:
+      - database
+  database:
+    image: 'mongo'
+    container_name: 'mongo-container'
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo-volume:/data/db
+    ports:
+      - '27017-27019:27017-27019'
+  frontend:
+    container_name: frontend-container
+    #restart: always
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    #command: npm start
+    ports:
+      - "3000:3000"
+    links:
+      - database
