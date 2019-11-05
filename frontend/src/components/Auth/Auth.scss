@@ -1,0 +1,30 @@
+@import "../../Variables";
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px;
+  border-radius: 5px;
+  background-color: $background-color1;
+}
+
+.textField {
+  width: 85%;
+}
+
+@media (max-width: 576px) {
+  .card {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .textField {
+    width: 100%;
+  }
+}
+
+a {
+  padding: 20px 0;
+}
