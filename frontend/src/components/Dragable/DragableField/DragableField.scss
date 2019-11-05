@@ -1,0 +1,32 @@
+
+@import "../../../Variables";
+
+.dragableField{
+    min-width: 4vw;
+    min-height: 4vw;
+    background: $board-color;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.dragableField p{
+    margin: 0;
+}
+
+@media(max-width: 1000px){
+    .dragableField{
+        min-width: 4.5vh;
+        min-height: 4.5vh;
+    }
+    
+}
+
+@media(max-width: 800px){
+    .dragableField{
+        min-width: 4vh;
+        min-height: 4vh;
+    }
+}
