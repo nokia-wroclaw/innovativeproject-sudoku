@@ -42,7 +42,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="card">
+      <div className="formPanel">
         <h1>Sudoku Battle Royale</h1>
         <form className="container" onSubmit={this.onSubmit} id="form">
           <div>

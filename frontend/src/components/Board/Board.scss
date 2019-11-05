@@ -1,0 +1,36 @@
+.card {
+    border-radius: 5px;
+    background: #F8F8FF;
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-content: center;
+    width: 40vw;
+    height: 40vw;
+}  
+
+
+.board {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111%;
+    grid-auto-flow: row;
+    border: 3px solid black;  
+    text-align: center;  
+}
+
+
+@media(max-width: 1400px){
+    .card{
+        width: 70vw;
+        height: 70vw;
+    }
+}
+
+@media(max-width: 1000px){
+    .card{
+        width: 85vw;
+        height:85vw;
+    }
+}

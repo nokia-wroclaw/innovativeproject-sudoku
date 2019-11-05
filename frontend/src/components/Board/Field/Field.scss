@@ -1,0 +1,14 @@
+.field{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    background: red;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.p{
+    padding: 0;
+    margin-block: 0;
+}

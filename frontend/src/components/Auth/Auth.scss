@@ -1,6 +1,6 @@
 @import "../../Variables";
 
-.card {
+.formPanel {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +14,7 @@
 }
 
 @media (max-width: 576px) {
-  .card {
+  .formPanel {
     width: 100vw;
     height: 100vh;
     border-radius: 0;
