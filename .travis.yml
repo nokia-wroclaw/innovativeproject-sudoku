@@ -6,7 +6,7 @@ matrix:
       before_install: cd backend
       install:
         - pip install pipenv
-        - pipenv install --dev
+        - pipenv install --dev --deploy
       script:
         - black src/ --check
         - pylint src/ -E
