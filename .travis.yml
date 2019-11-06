@@ -13,6 +13,7 @@ matrix:
         - pylint src/ --exit-zero
         - flake8 src/
         - bandit src/ -r
+        - pytest
 
     - language: node_js
       node_js:
