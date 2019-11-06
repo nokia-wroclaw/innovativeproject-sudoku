@@ -1,11 +1,11 @@
 matrix:
   stages:
-    - analysys
+    - lint
     - test
 
   include:
     - language: python
-      stage: code_analysys
+      stage: lint
       python:
         - "3.8"
       before_install: cd backend
@@ -19,7 +19,7 @@ matrix:
         - bandit . -r -c .bandit
 
     - language: node_js
-      stage: code_analysys
+      stage: lint
       node_js:
         - "node"
       before_install: cd frontend
@@ -27,7 +27,6 @@ matrix:
         - npm run eslint-check
         - npx prettier -c src/**/*.js src/*.js
         - npm run lint
-        - npm test
 
     - language: python
       stage: test
