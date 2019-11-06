@@ -8,11 +8,10 @@ matrix:
         - pip install pipenv
         - pipenv install --dev
       script:
-        - black src/ --check
-        - pylint src/ -E
-        - pylint src/ --exit-zero
-        - flake8 src/
-        - bandit src/ -r
+        - black . --check
+        - pylint src tests/*
+        - flake8
+        - bandit . -r -c .bandit
         - pytest
 
     - language: node_js
