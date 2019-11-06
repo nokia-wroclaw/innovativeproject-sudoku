@@ -1,6 +1,10 @@
 matrix:
+  stages:
+    - code_analysys
+
   include:
     - language: python
+      stage: code_analysys
       python:
         - "3.8"
       before_install: cd backend
@@ -15,6 +19,7 @@ matrix:
         - pytest
 
     - language: node_js
+      stage: code_analysys
       node_js:
         - "node"
       before_install: cd frontend
