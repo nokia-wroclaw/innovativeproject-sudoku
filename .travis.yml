@@ -1,6 +1,7 @@
 matrix:
   stages:
-    - code_analysys
+    - analysys
+    - test
 
   include:
     - language: python
@@ -16,7 +17,6 @@ matrix:
         - pylint src tests/*
         - flake8
         - bandit . -r -c .bandit
-        - pytest
 
     - language: node_js
       stage: code_analysys
@@ -27,4 +27,23 @@ matrix:
         - npm run eslint-check
         - npx prettier -c src/**/*.js src/*.js
         - npm run lint
+        - npm test
+
+    - language: python
+      stage: test
+      python:
+        - "3.8"
+      before_install: cd backend
+      install:
+        - pip install pipenv
+        - pipenv install --dev --deploy
+      script:
+        - pytest
+
+    - language: node_js
+      stage: test
+      node_js:
+        - "node"
+      before_install: cd frontend
+      script:
         - npm test
