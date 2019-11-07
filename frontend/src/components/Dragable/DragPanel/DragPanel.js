@@ -1,9 +1,9 @@
 import React from "react";
 import "./DragPanel.scss";
-import Field from "../Board/Field/Field";
+import DragableField from "../DragableField/DragableField";
 
 const renderField = value => {
-  return <Field value={value} key={value} />;
+  return <DragableField value={value} key={value} />;
 };
 
 const generatePanel = () => {
