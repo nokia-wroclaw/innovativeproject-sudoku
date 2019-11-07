@@ -8,7 +8,7 @@ const renderField = value => {
 
 const generatePanel = () => {
   const fields = [];
-  for (let i = 0; i < 9; i++) {
+  for (let i = 1; i < 10; i++) {
     fields.push(renderField(i));
   }
   return fields;

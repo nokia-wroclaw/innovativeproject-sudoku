@@ -26,8 +26,8 @@
 
 @media(max-width: 1400px){
     .board{
-        width: 70vh;
-        height: 70vh;
+        width: 45vw;
+        height: 45vw;
     }
 
     .game{
@@ -35,14 +35,12 @@
     }
 }
 
-@media(max-width: 1000px){
+@media(max-width: 800px){
 
     .board{
         width: 40vh;
         height:40vh;
     }
 
-    .game{
-        flex-direction: column;
-    }
+
 }

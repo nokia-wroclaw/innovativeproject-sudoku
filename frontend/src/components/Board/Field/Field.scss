@@ -18,14 +18,14 @@ p{
 
 @media(max-width: 1400px){
     .field{
-        min-width: 7.78vw;
-        min-height: 7.78vw;
+        min-width: 4.5vw;
+        min-height: 4.5vw;
     }
 }
 
-@media(max-width: 1000px){
-    .card{
-        min-width: 9.44vw;
-        min-height: 9.44vw;
+@media(max-width: 800px){
+    .field{
+        min-width: 3vh;
+        min-height: 3vh;
     }
 }

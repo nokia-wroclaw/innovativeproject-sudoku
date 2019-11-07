@@ -1,8 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "./Board.scss";
 import Field from "./Field/Field";
-import DragPanel from "../DragPanel/DragPanel";
 
 class Board extends React.Component {
   renderField = key => {
