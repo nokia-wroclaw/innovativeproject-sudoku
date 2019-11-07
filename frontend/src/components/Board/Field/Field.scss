@@ -4,11 +4,24 @@
     justify-content: center;
     border: 1px solid black;
     background: red;
-    min-width: 30px;
-    min-height: 30px;
+    min-width: 4vw;
+    min-height: 4vw;
+
 }
 
-.p{
-    padding: 0;
-    margin-block: 0;
+
+
+
+@media(max-width: 1400px){
+    .field{
+        min-width: (70/9)vw;
+        min-height: (70/9)vw;
+    }
+}
+
+@media(max-width: 1000px){
+    .card{
+        min-width: (85/9)vw;
+        min-height: (85/9)vw;
+    }
 }

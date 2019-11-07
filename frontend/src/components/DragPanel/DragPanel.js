@@ -17,3 +17,4 @@ const generatePanel = () => {
 export default function DragPanel() {
     return generatePanel()
 }
+

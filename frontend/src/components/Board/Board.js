@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./Board.scss"
 import Field from "./Field/Field"
+import DragPanel from "../DragPanel/DragPanel"
 
-class Board extends React.Component {
-    
+class Board extends React.Component {    
     renderField = (key) => {
         const x = key % 9
         const y = Math.floor(key/9)
@@ -24,7 +24,9 @@ class Board extends React.Component {
     }
 
     render(){
-        return(<div className="card" >  
+
+        return(
+                <div className="card" >
                     {this.generateBoard()}
                 </div>
         );
