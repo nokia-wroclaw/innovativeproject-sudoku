@@ -1,27 +1,31 @@
-.field{
+@import "../../../Variables";
+
+.field{ 
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid black;
-    background: red;
+    background: $board-color;
     min-width: 4vw;
     min-height: 4vw;
-
+    height: 100%;
+    width: 100%;
 }
-
-
+p{
+    margin: 0;
+}
 
 
 @media(max-width: 1400px){
     .field{
-        min-width: (70/9)vw;
-        min-height: (70/9)vw;
+        min-width: 7.78vw;
+        min-height: 7.78vw;
     }
 }
 
 @media(max-width: 1000px){
     .card{
-        min-width: (85/9)vw;
-        min-height: (85/9)vw;
+        min-width: 9.44vw;
+        min-height: 9.44vw;
     }
 }

@@ -1,37 +1,33 @@
+@import "../../Variables";
+
 .game {
     display: flex;
     flex-direction: row;
 }
 
-
 .card {
     border-radius: 5px;
-    background: pink;
+    background: $background-color1;
     display: flex;
-    padding: 20px;
+    padding: 5px;
     justify-content: center;
     align-content: center;
-    width: 40vw;
-    height: 40vw;
 }  
 
-
 .board {
-    width: 100%;
-    height: 100%;
+    width: 40vw;
+    height: 40vw;
     display: grid;
     grid-template-columns: 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111%;
     grid-auto-flow: row;
-    border: 3px solid black;  
+    border: 2px solid black;  
     text-align: center;  
 }
 
-
 @media(max-width: 1400px){
-    .card{
-        width: 70vw;
-        height: 70vw;
-        flex-direction: column;
+    .board{
+        width: 70vh;
+        height: 70vh;
     }
 
     .game{
@@ -40,11 +36,12 @@
 }
 
 @media(max-width: 1000px){
-    .card{
-        width: 85vw;
-        height:85vw;
-        flex-direction: column;
+
+    .board{
+        width: 40vh;
+        height:40vh;
     }
+
     .game{
         flex-direction: column;
     }

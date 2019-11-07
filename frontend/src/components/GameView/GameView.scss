@@ -1,0 +1,10 @@
+.gamePanel{
+    display: flex;
+    flex-direction: row;
+}
+
+@media(max-width: 1400px){
+    .gamePanel{
+        flex-direction: column;
+    }
+}
