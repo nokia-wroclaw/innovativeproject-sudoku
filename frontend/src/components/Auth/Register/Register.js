@@ -1,108 +1,93 @@
 import "../Auth.scss";
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import useForm from "../../../Hooks/useForm";
 
-class Register extends Component {
-  isFormValid = false;
+const onSubmit = event => {
+  event.preventDefault();
+};
 
-  state = {
+const Register = () => {
+  const [form, setForm] = useForm({
     email: {
-      invalid: false,
+      invalid: true,
+      touched: false,
       value: ""
     },
     password: {
-      invalid: false,
+      invalid: true,
+      touched: false,
       value: ""
     },
-    confirmPassword: {
-      invalid: false,
+    rePassword: {
+      invalid: true,
+      touched: false,
       value: ""
     }
-  };
+  });
 
-  onInput = event => {
-    const [name] = event.target.name;
-    const [value] = event.target.value;
-    this.setState(
-      {
-        [name]: {
-          invalid: value === "",
-          value
-        }
-      },
-      () => {
-        this.isFormValid =
-          !this.state.email.invalid &&
-          !this.state.password.invalid &&
-          !this.state.confirmPassword.invalid;
-      }
+  const [isFormValid, setFormValid] = useState(false);
+
+  useEffect(() => {
+    setFormValid(
+      !(form.email.invalid || form.password.invalid || form.rePassword.invalid)
     );
-  };
+  }, [form.email.invalid, form.password.invalid, form.rePassword.invalid]);
 
-  onSubmit = event => {
-    event.preventDefault();
-    console.log(this.state);
-  };
-
-  render() {
-    return (
-      <div className="card">
-        <h1>Sudoku Battle Royale</h1>
-        <form className="container" onSubmit={this.onSubmit}>
-          <div>
-            <TextField
-              name="email"
-              error={this.state.email.invalid}
-              label="Email"
-              defaultValue={this.state.email.value}
-              onChange={this.onInput}
-              onBlur={this.onInput}
-              className="textField"
-              margin="normal"
-            />
-          </div>
-          <div>
-            <TextField
-              name="password"
-              error={this.state.password.invalid}
-              label="Password"
-              type="password"
-              defaultValue={this.state.password.value}
-              onChange={this.onInput}
-              onBlur={this.onInput}
-              className="textField"
-              margin="normal"
-            />
-          </div>
-          <div>
-            <TextField
-              name="confirmPassword"
-              error={this.state.confirmPassword.invalid}
-              label="Confirm password"
-              type="password"
-              defaultValue={this.state.confirmPassword.value}
-              onChange={this.onInput}
-              onBlur={this.onInput}
-              className="textField"
-              margin="normal"
-            />
-          </div>
-          <Button
-            type="submit"
-            variant="outlined"
-            size="large"
-            className="mt-3 mb-3"
-            disabled={!this.isFormValid}
-          >
-            Sign Up
-          </Button>
-        </form>
-        <Link to="/login">Already have account?</Link>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="card">
+      <h1>Sudoku Battle Royale</h1>
+      <form className="container" onSubmit={onSubmit}>
+        <div>
+          <TextField
+            name="email"
+            error={form.email.invalid && form.email.touched}
+            label="Email"
+            defaultValue={form.email.value}
+            onChange={event => setForm("email", event.target.value)}
+            className="textField"
+            margin="normal"
+          />
+        </div>
+        <div>
+          <TextField
+            name="password"
+            error={form.password.invalid && form.password.touched}
+            label="Password"
+            type="password"
+            defaultValue={form.password.value}
+            onChange={event => setForm("password", event.target.value)}
+            className="textField"
+            margin="normal"
+          />
+        </div>
+        <div>
+          <TextField
+            name="confirmPassword"
+            error={form.rePassword.invalid && form.rePassword.touched}
+            label="Confirm password"
+            type="password"
+            defaultValue={form.rePassword.value}
+            onChange={event => setForm("rePassword", event.target.value)}
+            className="textField"
+            margin="normal"
+          />
+        </div>
+        <Button
+          type="submit"
+          variant="outlined"
+          size="large"
+          className="mt-3 mb-3"
+          disabled={!isFormValid}
+        >
+          Sign Up
+        </Button>
+      </form>
+      <Link to="/login">Already have account?</Link>
+    </div>
+  );
+};
 
 export default Register;
