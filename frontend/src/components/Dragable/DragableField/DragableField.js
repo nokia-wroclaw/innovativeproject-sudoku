@@ -8,7 +8,7 @@ export default function DragableField({ value }) {
   const [{ isDragging }, drag] = useDrag({
     item: { number: 1, type: ItemTypes.DRAGABLEFIELD }
   });
-  const opacity = isDragging ? 0.4 : 1;
+  const opacity = isDragging ? 0.9 : 1;
   return (
     <div className="field" ref={drag}>
       <p>{value}</p>
