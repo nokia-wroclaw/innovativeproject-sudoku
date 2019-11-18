@@ -23,8 +23,8 @@ const generatePanel = () => {
 
 export default function DragPanel() {
   return (
-    <div className="card">
-      <div className="table"> {generatePanel()} </div>
+    <div className="background">
+      <div> {generatePanel()} </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import "../../Board/Field/Field.scss";
+import "./DragableField.scss";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import ItemTypes from "../ItemTypes";
@@ -10,7 +10,7 @@ export default function DragableField({ value }) {
   });
   const opacity = isDragging ? 0.9 : 1;
   return (
-    <div className="field" ref={drag}>
+    <div className="dragableField" ref={drag}>
       <p>{value}</p>
     </div>
   );

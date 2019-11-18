@@ -5,12 +5,15 @@
     flex-direction: row;
 }
 
-.card {
+.background {
     border-radius: 5px;
+    display: flex;
     background: $background-color1;
     padding: 5px;
     justify-content: center;
-    align-content: center;
+    align-items: center;
+    margin-right: 4vw;
+    height: 90%;
 }  
 
 
@@ -19,11 +22,10 @@ table {
     border-collapse: collapse;
     
     td {
-      height: 2em;
-      width: 2em;
-      border: 1px solid black;
-      text-align: center;
-      outline: none;
+        padding: 0;
+        border: 1px solid black;
+        text-align: center;
+        // outline: none;
     }
   
     td:nth-child(3n) {
@@ -38,27 +40,31 @@ table {
   
 
 .board {
-    width: 40vw;
-    height: 40vw;
+    // width: 40vw;
+    // height: 40vw;
     border: 2px solid black;  
     text-align: center;  
 }
 
-@media(max-width: 1400px){
-    .board{
-        width: 45vw;
-        height: 45vw;
+@media(max-width: 1000px){
+    // .board{
+    //     width: 45vw;
+    //     height: 45vw;
+    // }
+    .background{
+        margin-right: 0;
+        margin-bottom: 4vh;
     }
 
 }
 
-@media(max-width: 800px){
+// @media(max-width: 800px){
 
-    .board{
-        width: 40vh;
-        height:40vh;
-    }
+//     .board{
+//         width: 40vh;
+//         height:40vh;
+//     }
 
 
-}
+// }
 

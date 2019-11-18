@@ -20,7 +20,7 @@ let generateBoard = () => {
     );
   });
   return (
-    <div className="card">
+    <div className="background">
       <table className="sudoku">
         <tbody>{rows}</tbody>
       </table>

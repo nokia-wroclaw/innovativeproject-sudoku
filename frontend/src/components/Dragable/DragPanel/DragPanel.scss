@@ -1,15 +1,26 @@
 .dragPanel{
     display: flex;
     flex-direction: column;
-    border: 2px solid black;  
     text-align: center;
     height: 100%;
     width: 100%;
     
 }
 
-@media(max-width: 1400px){
+// .dragPanel td{
+//     padding-top: 0.3vh;
+//     padding-bottom: 0.3vh;
+// }
+
+
+
+@media(max-width: 1000px){
     .dragPanel{
         flex-direction: row;
     }
+    // .dragPanel td{
+    //     padding-left: 0.3vw;
+    //     padding-right: 0.3vw;
+    // }
 }
+
