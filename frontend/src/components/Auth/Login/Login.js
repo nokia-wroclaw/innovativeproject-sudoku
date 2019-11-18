@@ -1,72 +1,62 @@
 import "../Auth.scss";
-import React, { useEffect, useState } from "react";
-import TextField from "@material-ui/core/TextField";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import useForm from "../../../Hooks/useForm";
+import { Formik, Form } from "formik";
+import * as yup from "yup";
+import MyTextField from "../../MyTextField/MyTextField";
 
-const onSubmit = event => {
-  event.preventDefault();
+const form = {
+  email: "",
+  password: ""
+};
+
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup.string().required()
+});
+
+const onSubmit = (data, setSubmitting) => {
+  setSubmitting(true);
+  console.log(data);
+  setSubmitting(false);
 };
 
 const Login = () => {
-  const [form, setForm] = useForm({
-    email: {
-      invalid: true,
-      touched: false,
-      value: ""
-    },
-    password: {
-      invalid: true,
-      touched: false,
-      value: ""
-    }
-  });
-
-  const [isFormValid, setFormValid] = useState(false);
-
-  useEffect(() => {
-    setFormValid(!form.email.invalid && !form.password.invalid);
-  }, [form.email.invalid, form.password.invalid]);
-
   return (
     <div className="card">
       <h1>Sudoku Battle Royale</h1>
-      <form className="container" onSubmit={onSubmit} id="form">
-        <div>
-          <TextField
-            name="email"
-            error={form.email.invalid && form.email.touched}
-            label="Email"
-            defaultValue={form.email.value}
-            onChange={event => setForm("email", event.target.value)}
-            className="textField"
-            margin="normal"
-          />
-        </div>
-        <div>
-          <TextField
-            name="password"
-            error={form.password.invalid && form.password.touched}
-            label="Password"
-            type="password"
-            defaultValue={form.password.value}
-            onChange={event => setForm("password", event.target.value)}
-            // onBlur={this.onInput}
-            className="textField"
-            margin="normal"
-          />
-        </div>
-        <Button
-          type="submit"
-          variant="outlined"
-          size="large"
-          className="mt-3 mb-3"
-          disabled={!isFormValid}
-        >
-          Sign In
-        </Button>
-      </form>
+      <Formik
+        initialValues={form}
+        validationSchema={validationSchema}
+        onSubmit={(data, { setSubmitting }) => {
+          onSubmit(data, setSubmitting);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="container">
+            <div>
+              <MyTextField label="Email" name="email" type="email" />
+            </div>
+            <div>
+              <MyTextField label="Password" name="password" type="password" />
+            </div>
+            <Button
+              type="submit"
+              variant="outlined"
+              size="large"
+              className="mt-5 mb-3"
+              disabled={isSubmitting}
+            >
+              Sign In
+            </Button>
+          </Form>
+        )}
+      </Formik>
+
       <Link to="/register">New user? Register here!</Link>
     </div>
   );
