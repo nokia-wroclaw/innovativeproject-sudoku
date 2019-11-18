@@ -1,52 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import Field from "./Field/Field";
 import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
 
-export default function Board({ fields }) {
-  const [boardModel, setBoardModel] = useState(new BoardModel(fields));
-
-  /*
-  const handleDrop = useCallback(
-    (row,column,item) => {
-      const {value} = item;
-      setBoardModel(_.set(boardModel,'rows['+row+'].['+column+'].value',value))
-    },
-    [boardModel.rows]
-  )
-*/
-  const handleDrop = (row, column, item) => {
-    const { value } = item;
-    const x = _.set(boardModel, `rows['${row}'].['${column}'].value`, value);
-    setBoardModel(x);
+export default class Board extends React.Component {
+  state = {
+    boardModel: new BoardModel(this.props.fields)
   };
 
-  const rows = boardModel.rows.map((row, idx) => {
-    return (
-      <tr key={idx}>
-        {row.map(field => (
-          <td key={field.col}>
-            <Field
-              row={field.row}
-              col={field.col}
-              value={field.value}
-              onDrop={item => handleDrop(field.row, field.col, item)}
-            />
-          </td>
-        ))}
-      </tr>
-    );
-  });
+  handleDrop = (row, column, item) => {
+    const { value } = item;
+    this.setState(prev => ({
+      boardModel: _.set(
+        prev.boardModel,
+        `rows['${row}'].['${column}'].value`,
+        value
+      )
+    }));
+  };
 
-  return (
-    <div className="background sudoku">
-      <table>
-        <tbody>{rows}</tbody>
-      </table>
-    </div>
-  );
+  render() {
+    const rows = this.state.boardModel.rows.map((row, idx) => {
+      return (
+        <tr key={idx}>
+          {row.map(field => (
+            <td key={field.col}>
+              <Field
+                row={field.row}
+                col={field.col}
+                value={field.value}
+                onDrop={item => this.handleDrop(field.row, field.col, item)}
+              />
+            </td>
+          ))}
+        </tr>
+      );
+    });
+
+    return (
+      <div className="background sudoku">
+        <table>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    );
+  }
 }
 
 Board.propTypes = {
@@ -54,5 +54,6 @@ Board.propTypes = {
 };
 
 Board.defaultProps = {
-  fields: ""
+  fields:
+    "#################################################################################"
 };

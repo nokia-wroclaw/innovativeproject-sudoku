@@ -7,7 +7,6 @@
     "@material/card": "^4.0.0",
     "bootstrap": "^4.3.1",
     "eslint": "^6.6.0",
-    "flexboxgrid2": "^7.2.1",
     "install": "^0.13.0",
     "lodash": "^4.17.15",
     "missing": "0.0.1",

@@ -4,7 +4,7 @@ export default class FieldModel {
     this.row = row;
     this.col = col;
     if (value === "#") {
-      this.value = 0;
+      this.value = "";
     } else {
       this.value = parseInt(value, 10);
     }

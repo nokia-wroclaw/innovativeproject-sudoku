@@ -22,21 +22,13 @@ export default class BoardModel {
       for (let i = 0; i < 9; i++) {
         this.columns.push([]);
       }
-      this.rows.forEach(function(row) {
-        row.forEach(function(field, idx) {
+      this.rows.forEach(row => {
+        row.forEach((field, idx) => {
           this.columns[idx].push(field);
         }, this);
       }, this);
     }
 
     return this.columns;
-  }
-
-  sameRowAs(field) {
-    return this.rows[field.row];
-  }
-
-  sameColAs(field) {
-    return this.columns()[field.col];
   }
 }
