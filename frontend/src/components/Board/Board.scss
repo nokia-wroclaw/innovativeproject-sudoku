@@ -8,18 +8,38 @@
 .card {
     border-radius: 5px;
     background: $background-color1;
-    display: flex;
     padding: 5px;
     justify-content: center;
     align-content: center;
 }  
 
+
+table {
+    border: 3px solid black;
+    border-collapse: collapse;
+    
+    td {
+      height: 2em;
+      width: 2em;
+      border: 1px solid black;
+      text-align: center;
+      outline: none;
+    }
+  
+    td:nth-child(3n) {
+      border-right: 3px solid black;
+    }
+  
+    tr:nth-child(3n) {
+      border-bottom: 3px solid black;
+    }
+  
+  }
+  
+
 .board {
     width: 40vw;
     height: 40vw;
-    display: grid;
-    grid-template-columns: 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111%;
-    grid-auto-flow: row;
     border: 2px solid black;  
     text-align: center;  
 }
@@ -30,9 +50,6 @@
         height: 45vw;
     }
 
-    .game{
-        flex-direction: column;
-    }
 }
 
 @media(max-width: 800px){
@@ -44,3 +61,4 @@
 
 
 }
+

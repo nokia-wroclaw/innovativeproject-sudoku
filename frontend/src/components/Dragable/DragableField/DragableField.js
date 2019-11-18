@@ -1,5 +1,5 @@
 import React from "react";
-import "./DragableField.scss";
+import "../../Board/Field/Field.scss";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import ItemTypes from "../ItemTypes";

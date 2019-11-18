@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import ItemTypes from "../../Dragable/ItemTypes";
 
-export default function Field({ x, y, value }) {
+export default function Field({ row, col, value }) {
   const [{ canDrop, isOver, number, didDrop }, drop] = useDrop({
     accept: ItemTypes.DRAGABLEFIELD,
     drop: () => ({ value: "DragableField" }),
@@ -29,12 +29,12 @@ export default function Field({ x, y, value }) {
 
 Field.propTypes = {
   value: PropTypes.number,
-  x: PropTypes.number,
-  y: PropTypes.number
+  row: PropTypes.number,
+  col: PropTypes.number
 };
 
 Field.defaultProps = {
-  x: 0,
-  y: 0,
+  row: 0,
+  col: 0,
   value: 0
 };

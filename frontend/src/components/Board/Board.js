@@ -1,25 +1,29 @@
 import React from "react";
-import "./Board.scss";
 import Field from "./Field/Field";
+import Board from "./Board.scss";
 
-class Board extends React.Component {
-  renderField = key => {
-    const x = key % 9;
-    const y = Math.floor(key / 9);
-    return <Field x={x} y={y} key={key} />;
-  };
-
-  generateBoard = () => {
-    const fields = [];
-    for (let x = 0; x < 81; x++) {
-      fields.push(this.renderField(x));
-    }
-    return <div className="board">{fields}</div>;
-  };
-
-  render() {
-    return <div className="card">{this.generateBoard()}</div>;
-  }
+export default function SudokuBoard() {
+  return generateBoard();
 }
 
-export default Board;
+let generateBoard = () => {
+  const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const rows = digits.map((row, idx) => {
+    return (
+      <tr key={idx}>
+        {digits.map(col => (
+          <td key={idx}>
+            <Field value={row + col} row={row} col={col} />
+          </td>
+        ))}
+      </tr>
+    );
+  });
+  return (
+    <div className="card">
+      <table className="sudoku">
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
+  );
+};
