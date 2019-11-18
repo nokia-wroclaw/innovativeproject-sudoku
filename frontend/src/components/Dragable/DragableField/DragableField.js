@@ -5,10 +5,10 @@ import { useDrag } from "react-dnd";
 import ItemTypes from "../ItemTypes";
 
 export default function DragableField({ value }) {
-  const [{ isDragging }, drag] = useDrag({
-    item: { number: 1, type: ItemTypes.DRAGABLEFIELD }
+  const [, drag] = useDrag({
+    item: { value, type: ItemTypes.DRAGABLEFIELD }
   });
-  const opacity = isDragging ? 0.9 : 1;
+
   return (
     <div className="dragableField" ref={drag}>
       <p>{value}</p>
@@ -17,15 +17,9 @@ export default function DragableField({ value }) {
 }
 
 DragableField.propTypes = {
-  value: PropTypes.number,
-  x: PropTypes.number,
-  y: PropTypes.number,
-  id: PropTypes.number
+  value: PropTypes.number
 };
 
 DragableField.defaultProps = {
-  x: 0,
-  y: 0,
-  value: 0,
-  id: 0
+  value: 0
 };

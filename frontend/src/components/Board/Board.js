@@ -1,25 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import _ from "lodash";
+import PropTypes from "prop-types";
 import Field from "./Field/Field";
+import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
 
-export default function SudokuBoard() {
-  return generateBoard();
-}
+export default function Board({ fields }) {
+  const [boardModel, setBoardModel] = useState(new BoardModel(fields));
 
-let generateBoard = () => {
-  const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  let key = 0;
-  const rows = digits.map((row, idx) => {
+  /*
+  const handleDrop = useCallback(
+    (row,column,item) => {
+      const {value} = item;
+      setBoardModel(_.set(boardModel,'rows['+row+'].['+column+'].value',value))
+    },
+    [boardModel.rows]
+  )
+*/
+  const handleDrop = (row, column, item) => {
+    const { value } = item;
+    const x = _.set(boardModel, `rows['${row}'].['${column}'].value`, value);
+    setBoardModel(x);
+  };
+
+  const rows = boardModel.rows.map((row, idx) => {
     return (
-      <tr key={key++}>
-        {digits.map(col => (
-          <td key={key++}>
-            <Field value={row + col} row={row} col={col} />
+      <tr key={idx}>
+        {row.map(field => (
+          <td key={field.col}>
+            <Field
+              row={field.row}
+              col={field.col}
+              value={field.value}
+              onDrop={item => handleDrop(field.row, field.col, item)}
+            />
           </td>
         ))}
       </tr>
     );
   });
+
   return (
     <div className="background sudoku">
       <table>
@@ -27,4 +47,12 @@ let generateBoard = () => {
       </table>
     </div>
   );
+}
+
+Board.propTypes = {
+  fields: PropTypes.string
+};
+
+Board.defaultProps = {
+  fields: ""
 };

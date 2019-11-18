@@ -4,21 +4,15 @@ import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import ItemTypes from "../../Dragable/ItemTypes";
 
-export default function Field({ row, col, value }) {
-  const [{ number, didDrop }, drop] = useDrop({
+export default function Field({ value, onDrop }) {
+  const [, drop] = useDrop({
     accept: ItemTypes.DRAGABLEFIELD,
-    drop: () => ({ value: "DragableField" }),
+    drop: onDrop,
     collect: monitor => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-      number: monitor.getDropResult(),
-      didDrop: monitor.didDrop()
+      canDrop: monitor.canDrop()
     })
   });
-  if (didDrop) {
-    value = number.value;
-    console.log("value = ", number.value);
-  }
 
   return (
     <div className="field" ref={drop}>
@@ -29,12 +23,9 @@ export default function Field({ row, col, value }) {
 
 Field.propTypes = {
   value: PropTypes.number,
-  row: PropTypes.number,
-  col: PropTypes.number
+  onDrop: PropTypes.func.isRequired
 };
 
 Field.defaultProps = {
-  row: 0,
-  col: 0,
   value: 0
 };
