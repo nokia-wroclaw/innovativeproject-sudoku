@@ -1,4 +1,4 @@
-.dragPanel{
+.dragPanel tbody{
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -7,20 +7,18 @@
     
 }
 
-// .dragPanel td{
-//     padding-top: 0.3vh;
-//     padding-bottom: 0.3vh;
-// }
-
-
+.dragPanel td{
+    margin: 0.3vw 0;
+}
 
 @media(max-width: 1000px){
-    .dragPanel{
+    .dragPanel tbody{
+        display: flex;
         flex-direction: row;
     }
-    // .dragPanel td{
-    //     padding-left: 0.3vw;
-    //     padding-right: 0.3vw;
-    // }
+
+    .dragPanel td{
+        margin: 0 0.3vw;
+    }
 }
 

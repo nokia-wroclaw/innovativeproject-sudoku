@@ -16,8 +16,7 @@
     height: 90%;
 }  
 
-
-table {
+.sudoku table {
     border: 3px solid black;
     border-collapse: collapse;
     
@@ -25,7 +24,6 @@ table {
         padding: 0;
         border: 1px solid black;
         text-align: center;
-        // outline: none;
     }
   
     td:nth-child(3n) {
@@ -35,36 +33,16 @@ table {
     tr:nth-child(3n) {
       border-bottom: 3px solid black;
     }
-  
   }
-  
 
 .board {
-    // width: 40vw;
-    // height: 40vw;
     border: 2px solid black;  
     text-align: center;  
 }
 
 @media(max-width: 1000px){
-    // .board{
-    //     width: 45vw;
-    //     height: 45vw;
-    // }
     .background{
         margin-right: 0;
         margin-bottom: 4vh;
     }
-
 }
-
-// @media(max-width: 800px){
-
-//     .board{
-//         width: 40vh;
-//         height:40vh;
-//     }
-
-
-// }
-

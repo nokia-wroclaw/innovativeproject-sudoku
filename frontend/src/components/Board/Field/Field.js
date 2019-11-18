@@ -5,7 +5,7 @@ import { useDrop } from "react-dnd";
 import ItemTypes from "../../Dragable/ItemTypes";
 
 export default function Field({ row, col, value }) {
-  const [{ canDrop, isOver, number, didDrop }, drop] = useDrop({
+  const [{ number, didDrop }, drop] = useDrop({
     accept: ItemTypes.DRAGABLEFIELD,
     drop: () => ({ value: "DragableField" }),
     collect: monitor => ({

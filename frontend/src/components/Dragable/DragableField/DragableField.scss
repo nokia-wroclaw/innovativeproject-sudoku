@@ -5,7 +5,6 @@
     min-width: 4vw;
     min-height: 4vw;
     background: $board-color;
-    margin: 0.3vw 0;
     border: 2px solid black;
     display: flex;
     align-items: center;
@@ -13,9 +12,12 @@
     
 }
 
+.dragableField p{
+    margin: 0;
+}
+
 @media(max-width: 1000px){
     .dragableField{
-        margin: 0 0.3vw;
         min-width: 4.5vh;
         min-height: 4.5vh;
     }

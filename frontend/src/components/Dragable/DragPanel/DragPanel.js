@@ -1,11 +1,6 @@
 import React from "react";
 import "./DragPanel.scss";
 import DragableField from "../DragableField/DragableField";
-import "../../Board/Board.scss";
-
-const renderField = value => {
-  return <DragableField value={value} key={value} />;
-};
 
 const generatePanel = () => {
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -18,7 +13,11 @@ const generatePanel = () => {
       </tr>
     );
   });
-  return <div className="dragPanel">{rows} </div>;
+  return (
+    <table className="dragPanel">
+      <tbody>{rows}</tbody>
+    </table>
+  );
 };
 
 export default function DragPanel() {
