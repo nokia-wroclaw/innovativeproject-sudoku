@@ -26,6 +26,7 @@ rules: {
   "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
   "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
   "react/state-in-constructor": [0, always],
+  "react/jsx-props-no-spreading": "off",
   "react/destructuring-assignment": [1, "always", { "ignoreClassFields": true }],
   "testing-library/await-async-query": "error",
   "testing-library/no-await-sync-query": "error",
