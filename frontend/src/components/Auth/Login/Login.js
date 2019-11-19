@@ -38,10 +38,8 @@ const Login = () => {
       >
         {({ isSubmitting }) => (
           <Form className="container">
-            <div>
+            <div className="wrapper">
               <MyTextField label="Email" name="email" type="email" />
-            </div>
-            <div>
               <MyTextField label="Password" name="password" type="password" />
             </div>
             <Button

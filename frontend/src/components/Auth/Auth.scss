@@ -13,6 +13,14 @@
   width: 85%;
 }
 
+.wrapper {
+  width: 400px;
+}
+
+a {
+  padding: 20px 0;
+}
+
 @media (max-width: 576px) {
   .card {
     width: 100vw;
@@ -23,8 +31,8 @@
   .textField {
     width: 100%;
   }
-}
 
-a {
-  padding: 20px 0;
+  .wrapper {
+    width: 100%;
+  }
 }

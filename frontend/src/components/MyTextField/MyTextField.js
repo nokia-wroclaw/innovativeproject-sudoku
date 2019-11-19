@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useField } from "formik";
 import TextField from "@material-ui/core/TextField";
 
-const MyTextField = ({ label, ...props }) => {
+const MyTextField = ({ label, type, ...props }) => {
   const [field, meta] = useField(props);
   const errorText = meta.error && meta.touched ? meta.error : "";
   return (
@@ -11,7 +11,8 @@ const MyTextField = ({ label, ...props }) => {
       {...field}
       label={label}
       helperText={errorText}
-      error={!!errorText}
+      error={errorText !== ""}
+      type={type}
       className="textField"
       margin="dense"
     />
