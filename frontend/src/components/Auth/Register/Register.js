@@ -20,7 +20,7 @@ const validationSchema = yup.object({
   password: yup.string().required(),
   rePassword: yup
     .string()
-    .required()
+    .required("confirm password is a required field")
     .oneOf([yup.ref("password")], "Passwords don't match")
 });
 
@@ -43,13 +43,9 @@ const Register = () => {
       >
         {({ isSubmitting }) => (
           <Form className="container">
-            <div>
+            <div className="wrapper">
               <MyTextField label="Email" name="email" type="email" />
-            </div>
-            <div>
               <MyTextField label="Password" name="password" type="password" />
-            </div>
-            <div>
               <MyTextField
                 label="Confirm password"
                 name="rePassword"
@@ -69,7 +65,7 @@ const Register = () => {
         )}
       </Formik>
 
-      <Link to="/login">Already have account?</Link>
+      <Link to="/login">Already have an account?</Link>
     </div>
   );
 };
