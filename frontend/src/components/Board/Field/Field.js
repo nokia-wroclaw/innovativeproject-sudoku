@@ -22,6 +22,6 @@ export default function Field({ value, onDrop }) {
 }
 
 Field.propTypes = {
-  value: PropTypes.isRequired,
+  value: PropTypes.any.isRequired,
   onDrop: PropTypes.func.isRequired
 };

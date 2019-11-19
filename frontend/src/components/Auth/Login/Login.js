@@ -54,11 +54,10 @@ const Login = () => {
           </Form>
         )}
       </Formik>
+
       <Link to="/register">New user? Register here!</Link>
     </div>
   );
 };
-
-
 
 export default Login;

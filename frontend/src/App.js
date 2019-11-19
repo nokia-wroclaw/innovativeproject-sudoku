@@ -11,10 +11,10 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <>
-          <Redirect exact from="/" to="/register" />        
+          {/* <Redirect exact from="/" to="/register" />         */}
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
-          <Route path="/game" />
+          <Route path="/game" component={GameView} />
         </>
       </BrowserRouter>
     </div>
