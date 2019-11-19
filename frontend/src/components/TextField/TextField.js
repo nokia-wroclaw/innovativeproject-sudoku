@@ -1,13 +1,13 @@
 import React from "react";
 import * as PropTypes from "prop-types";
 import { useField } from "formik";
-import TextField from "@material-ui/core/TextField";
+import MaterialTextField from "@material-ui/core/TextField";
 
-const MyTextField = ({ label, type, ...props }) => {
+const TextField = ({ label, type, ...props }) => {
   const [field, meta] = useField(props);
   const errorText = meta.error && meta.touched ? meta.error : "";
   return (
-    <TextField
+    <MaterialTextField
       {...field}
       label={label}
       helperText={errorText}
@@ -19,12 +19,14 @@ const MyTextField = ({ label, type, ...props }) => {
   );
 };
 
-MyTextField.propTypes = {
-  label: PropTypes.string
+TextField.propTypes = {
+  label: PropTypes.string,
+  type: PropTypes.string
 };
 
-MyTextField.defaultProps = {
-  label: ""
+TextField.defaultProps = {
+  label: "",
+  type: "text"
 };
 
-export default MyTextField;
+export default TextField;
