@@ -1,7 +1,7 @@
 
 @import "../../../Variables";
 
-.dragableField{
+.draggableField{
     min-width: 4vw;
     min-height: 4vw;
     background: $board-color;
@@ -12,12 +12,12 @@
     
 }
 
-.dragableField p{
+.draggableField p{
     margin: 0;
 }
 
 @media(max-width: 1000px){
-    .dragableField{
+    .draggableField{
         min-width: 4.5vh;
         min-height: 4.5vh;
     }
@@ -25,7 +25,7 @@
 }
 
 @media(max-width: 800px){
-    .dragableField{
+    .draggableField{
         min-width: 4vh;
         min-height: 4vh;
     }

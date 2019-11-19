@@ -1,25 +1,25 @@
 import React from "react";
-import "./DragableField.scss";
+import "./DraggableField.scss";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import ItemTypes from "../ItemTypes";
 
-export default function DragableField({ value }) {
+export default function DraggableField({ value }) {
   const [, drag] = useDrag({
-    item: { value, type: ItemTypes.DRAGABLEFIELD }
+    item: { value, type: ItemTypes.DRAGGABLEFIELD }
   });
 
   return (
-    <div className="dragableField" ref={drag}>
+    <div className="draggableField" ref={drag}>
       <p>{value}</p>
     </div>
   );
 }
 
-DragableField.propTypes = {
+DraggableField.propTypes = {
   value: PropTypes.number
 };
 
-DragableField.defaultProps = {
+DraggableField.defaultProps = {
   value: 0
 };

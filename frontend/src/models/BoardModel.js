@@ -5,14 +5,14 @@ export default class BoardModel {
     let currentRow;
     this.rows = [];
 
-    for (let idx = 0; idx < input.length; idx++) {
-      if (idx % 9 === 0) {
-        currentRow = [];
-        this.rows.push(currentRow);
+    for (let row = 0; row < 9; row++) {
+      currentRow = [];
+      this.rows.push(currentRow);
+      for (let col = 0; col < 9; col++) {
+        currentRow.push(
+          new Field(this.rows.length - 1, currentRow.length, input[row][col])
+        );
       }
-      currentRow.push(
-        new Field(this.rows.length - 1, currentRow.length, input[idx])
-      );
     }
   }
 
@@ -28,7 +28,6 @@ export default class BoardModel {
         }, this);
       }, this);
     }
-
     return this.columns;
   }
 }
