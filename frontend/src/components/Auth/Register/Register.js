@@ -29,7 +29,6 @@ const onSubmit = (data, setSubmitting) => {
   console.log(data);
   setSubmitting(false);
 };
-
 const Register = () => {
   return (
     <div className="card">
@@ -64,7 +63,6 @@ const Register = () => {
           </Form>
         )}
       </Formik>
-
       <Link to="/login">Already have an account?</Link>
     </div>
   );
