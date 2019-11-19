@@ -1,6 +1,6 @@
 import React from "react";
 import "./DragPanel.scss";
-import DragableField from "../DragableField/DragableField";
+import DraggableField from "../DraggableField/DraggableField";
 
 const generatePanel = () => {
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -8,7 +8,7 @@ const generatePanel = () => {
     return (
       <tr key={idx}>
         <td key={idx}>
-          <DragableField value={val} />
+          <DraggableField value={val} />
         </td>
       </tr>
     );
@@ -21,9 +21,5 @@ const generatePanel = () => {
 };
 
 export default function DragPanel() {
-  return (
-    <div className="background">
-      <div> {generatePanel()} </div>
-    </div>
-  );
+  return <div className="background">{generatePanel()}</div>;
 }
