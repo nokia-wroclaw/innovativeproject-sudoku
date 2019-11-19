@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
-import MyTextField from "../../MyTextField/MyTextField";
+import TextField from "../../TextField/TextField";
 
 const form = {
   email: "",
@@ -43,10 +43,10 @@ const Register = () => {
       >
         {({ isSubmitting }) => (
           <Form className="container">
-            <div className="wrapper">
-              <MyTextField label="Email" name="email" type="email" />
-              <MyTextField label="Password" name="password" type="password" />
-              <MyTextField
+            <div className="textFieldWrapper">
+              <TextField label="Email" name="email" type="email" />
+              <TextField label="Password" name="password" type="password" />
+              <TextField
                 label="Confirm password"
                 name="rePassword"
                 type="password"
