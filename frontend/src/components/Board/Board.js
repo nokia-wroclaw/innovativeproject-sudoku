@@ -50,7 +50,7 @@ export default class Board extends React.Component {
 }
 
 Board.propTypes = {
-  fields: PropTypes.array
+  fields: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number))
 };
 
 Board.defaultProps = {
