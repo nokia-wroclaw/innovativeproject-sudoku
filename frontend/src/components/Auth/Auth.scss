@@ -1,6 +1,6 @@
 @import "../../Variables";
 
-.card {
+.Auth .card {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,30 +9,30 @@
   background-color: $white;
 }
 
-.textField {
+.Auth .textField {
   width: 85%;
 }
 
-.textFieldWrapper {
+.Auth .textFieldWrapper {
   width: 400px;
 }
 
-a {
+.Auth a {
   padding: 20px 0;
 }
 
 @media (max-width: 576px) {
-  .card {
+  .Auth .card {
     width: 100vw;
     height: 100vh;
     border-radius: 0;
   }
 
-  .textField {
+  .Auth .textField {
     width: 100%;
   }
 
-  .textFieldWrapper {
+  .Auth .textFieldWrapper {
     width: 100%;
   }
 }
