@@ -31,39 +31,41 @@ const onSubmit = (data, setSubmitting) => {
 };
 const Register = () => {
   return (
-    <div className="card">
-      <h1>Sudoku Battle Royale</h1>
-      <Formik
-        initialValues={form}
-        validationSchema={validationSchema}
-        onSubmit={(data, { setSubmitting }) => {
-          onSubmit(data, setSubmitting);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form className="container">
-            <div className="textFieldWrapper">
-              <TextField label="Email" name="email" type="email" />
-              <TextField label="Password" name="password" type="password" />
-              <TextField
-                label="Confirm password"
-                name="rePassword"
-                type="password"
-              />
-            </div>
-            <Button
-              type="submit"
-              variant="outlined"
-              size="large"
-              className="mt-5 mb-3"
-              disabled={isSubmitting}
-            >
-              Sign Up
-            </Button>
-          </Form>
-        )}
-      </Formik>
-      <Link to="/login">Already have an account?</Link>
+    <div className="Auth">
+      <div className="card">
+        <h1>Sudoku Battle Royale</h1>
+        <Formik
+          initialValues={form}
+          validationSchema={validationSchema}
+          onSubmit={(data, { setSubmitting }) => {
+            onSubmit(data, setSubmitting);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="container">
+              <div className="textFieldWrapper">
+                <TextField label="Email" name="email" type="email" />
+                <TextField label="Password" name="password" type="password" />
+                <TextField
+                  label="Confirm password"
+                  name="rePassword"
+                  type="password"
+                />
+              </div>
+              <Button
+                type="submit"
+                variant="outlined"
+                size="large"
+                className="mt-5 mb-3"
+                disabled={isSubmitting}
+              >
+                Sign Up
+              </Button>
+            </Form>
+          )}
+        </Formik>
+        <Link to="/login">Already have an account?</Link>
+      </div>
     </div>
   );
 };

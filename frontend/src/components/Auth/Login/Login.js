@@ -27,35 +27,36 @@ const onSubmit = (data, setSubmitting) => {
 
 const Login = () => {
   return (
-    <div className="card">
-      <h1>Sudoku Battle Royale</h1>
-      <Formik
-        initialValues={form}
-        validationSchema={validationSchema}
-        onSubmit={(data, { setSubmitting }) => {
-          onSubmit(data, setSubmitting);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form className="container">
-            <div className="textFieldWrapper">
-              <TextField label="Email" name="email" type="email" />
-              <TextField label="Password" name="password" type="password" />
-            </div>
-            <Button
-              type="submit"
-              variant="outlined"
-              size="large"
-              className="mt-5 mb-3"
-              disabled={isSubmitting}
-            >
-              Sign In
-            </Button>
-          </Form>
-        )}
-      </Formik>
-
-      <Link to="/register">New user? Register here!</Link>
+    <div className="Auth">
+      <div className="card">
+        <h1>Sudoku Battle Royale</h1>
+        <Formik
+          initialValues={form}
+          validationSchema={validationSchema}
+          onSubmit={(data, { setSubmitting }) => {
+            onSubmit(data, setSubmitting);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="container">
+              <div className="textFieldWrapper">
+                <TextField label="Email" name="email" type="email" />
+                <TextField label="Password" name="password" type="password" />
+              </div>
+              <Button
+                type="submit"
+                variant="outlined"
+                size="large"
+                className="mt-5 mb-3"
+                disabled={isSubmitting}
+              >
+                Sign In
+              </Button>
+            </Form>
+          )}
+        </Formik>
+        <Link to="/register">New user? Register here!</Link>
+      </div>
     </div>
   );
 };
