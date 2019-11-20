@@ -1,15 +1,45 @@
 matrix:
+  stages:
+    - lint
+    - test
+
+  x-backend: &backend
+    language: python
+    python:
+      - "3.8"
+    before_install: cd backend
+    install:
+      - pip install pipenv
+      - pipenv install --dev --deploy
+  
+  x-frontend: &frontend
+    language: node_js
+    node_js:
+      - "node"
+    before_install: cd frontend
+
   include:
-    - language: python
-      python:
-        - "3.8"
-      before_install: cd backend
-      install:
-        - pip install pipenv
-        - pipenv install --dev
+    - stage: lint
+      <<: *backend
       script:
-        - black src/ --check
-        - pylint src/ -E
-        - pylint src/ --exit-zero
-        - flake8 src/
-        - bandit src/ -r
+        - black . --check
+        - pylint src tests/*
+        - flake8
+        - bandit . -r -c .bandit
+
+    - stage: test
+      <<: *backend
+      script:
+        - pytest
+
+    - stage: lint
+      <<: *frontend     
+      script:
+        - npm run eslint-check
+        - npx prettier -c src/**/*.js src/*.js
+        - npm run lint
+
+    - stage: test
+      <<: *frontend
+      script:
+        - npm test

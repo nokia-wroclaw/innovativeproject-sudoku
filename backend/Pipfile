@@ -8,6 +8,8 @@ pylint = "*"
 black = "*"
 flake8 = "*"
 bandit = "*"
+pytest = "*"
+pre-commit = "*"
 
 [packages]
 fastapi = "*"
