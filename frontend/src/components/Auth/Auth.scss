@@ -1,0 +1,38 @@
+@import "../../Variables";
+
+.Auth .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px;
+  border-radius: 5px;
+  background-color: $white;
+}
+
+.Auth .textField {
+  width: 85%;
+}
+
+.Auth .textFieldWrapper {
+  width: 400px;
+}
+
+.Auth a {
+  padding: 20px 0;
+}
+
+@media (max-width: 576px) {
+  .Auth .card {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .Auth .textField {
+    width: 100%;
+  }
+
+  .Auth .textFieldWrapper {
+    width: 100%;
+  }
+}

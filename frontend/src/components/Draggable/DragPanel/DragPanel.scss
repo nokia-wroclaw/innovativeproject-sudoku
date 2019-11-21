@@ -1,0 +1,24 @@
+.dragPanel tbody{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    
+}
+
+.dragPanel td{
+    margin: 0.3vw 0;
+}
+
+@media(max-width: 1000px){
+    .dragPanel tbody{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dragPanel td{
+        margin: 0 0.3vw;
+    }
+}
+

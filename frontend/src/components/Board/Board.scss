@@ -1,0 +1,48 @@
+@import "../../Variables";
+
+.game {
+    display: flex;
+    flex-direction: row;
+}
+
+.background {
+    border-radius: 5px;
+    display: flex;
+    background: $white;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 4vw;
+    height: 90%;
+}  
+
+.sudoku table {
+    border: 3px solid black;
+    border-collapse: collapse;
+    
+    td {
+        padding: 0;
+        border: 1px solid black;
+        text-align: center;
+    }
+  
+    td:nth-child(3n) {
+      border-right: 3px solid black;
+    }
+  
+    tr:nth-child(3n) {
+      border-bottom: 3px solid black;
+    }
+  }
+
+.board {
+    border: 2px solid black;  
+    text-align: center;  
+}
+
+@media(max-width: 1000px){
+    .background{
+        margin-right: 0;
+        margin-bottom: 4vh;
+    }
+}
