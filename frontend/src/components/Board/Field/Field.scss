@@ -1,0 +1,29 @@
+@import "../../../Variables";
+
+.field{ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $board-color;
+    padding: 0;
+    min-width: 4vw;
+    min-height: 4vw;
+}
+
+.field p{
+    margin: 0;
+}
+
+@media(max-width: 1000px){
+    .field{
+        min-width: 4.5vh;
+        min-height: 4.5vh;
+    }
+}
+
+@media(max-width: 800px){
+    .field{
+        min-width: 4vh;
+        min-height: 4vh;
+    }
+}
