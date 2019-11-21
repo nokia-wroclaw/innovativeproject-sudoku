@@ -6,23 +6,26 @@ from jwt import PyJWTError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from starlette.status import HTTP_401_UNAUTHORIZED
+import json
+from starlette.responses import Response
+from fastapi.encoders import jsonable_encoder
 
 # to get a string like this run:
 # openssl rand -hex 32
 
 # Secret key will be moved from here, development purposes only.
-SECRET_KEY = "828c887d6134838800662f164e1220af38629938f1f97def0b17166313e200d3"
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 MOCK_DB = {
     "johndoe": {
-        "username": "johndoe",
+        "username": "ada",
         "full_name": "John Doe",
         "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn\
-            96p36WQoeG6Lruj3vjPGga31lW",
+        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OX\
+ePaWxn96p36WQoeG6Lruj3vjPGga31lW",
         "disabled": False,
     }
 }
@@ -120,7 +123,8 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 @router.post("/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(MOCK_DB, form_data.username, form_data.password)
-    if user is None:
+    if not user:
+        print("User NOT verified.")
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -130,4 +134,23 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"sub": form_data.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    token = jsonable_encoder(access_token)
+
+    print("User succesfully verified.")
+    response = Response(status_code=200)
+    response.set_cookie(
+        "Authorization",
+        value=f"Bearer {token}",
+        domain="localhost:3000",
+        httponly=True,
+        max_age=1800,
+        expires=1800,
+    )  
+    return response
+
+
+
+
+@router.get("/users/me/", response_model=User)
+async def read_users_me(current_user: User = Depends(get_current_active_user)):
+    return current_user

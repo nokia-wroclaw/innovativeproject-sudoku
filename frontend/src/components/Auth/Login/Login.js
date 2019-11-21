@@ -6,22 +6,46 @@ import { Formik, Form } from "formik";
 import * as yup from "yup";
 import TextField from "../../TextField/TextField";
 
-const form = {
-  email: "",
-  password: ""
-};
+async function handleSubmit(params) {
+  var FD = new FormData();
+  FD.append("username", params.data.username);
+  FD.append("password", params.data.password);
+
+  fetch("http://127.0.0.1:8000/login", {
+    credentials: "include",
+    method: "POST",
+    body: FD
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return Promise.reject({
+          status: response.status,
+          statusText: response.statusText
+        });
+      }
+    })
+    .catch(error => {
+      if (error.status === 401) {
+        window.alert("Wrong username or password.");
+      }
+    });
+}
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email()
-    .required(),
+  username: yup.string().required(),
   password: yup.string().required()
 });
 
+const form = {
+  username: "",
+  password: ""
+};
+
 const onSubmit = (data, setSubmitting) => {
   setSubmitting(true);
-  console.log(data);
+  handleSubmit({ data });
   setSubmitting(false);
 };
 
@@ -40,7 +64,7 @@ const Login = () => {
           {({ isSubmitting }) => (
             <Form className="container">
               <div className="textFieldWrapper">
-                <TextField label="Email" name="email" type="email" />
+                <TextField label="Username" name="username" type="username" />
                 <TextField label="Password" name="password" type="password" />
               </div>
               <Button

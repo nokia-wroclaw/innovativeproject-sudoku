@@ -18,6 +18,7 @@ email-validator = "*"
 pyjwt = "*"
 python-multipart = "*"
 passlib = "*"
+bcrypt = "*"
 
 [requires]
 python_version = "3.8"
