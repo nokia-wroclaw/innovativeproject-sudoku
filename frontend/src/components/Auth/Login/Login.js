@@ -12,7 +12,6 @@ async function handleSubmit(params) {
   FD.append("password", params.data.password);
 
   fetch("http://127.0.0.1:8000/login", {
-    credentials: "include",
     method: "POST",
     body: FD
   })
