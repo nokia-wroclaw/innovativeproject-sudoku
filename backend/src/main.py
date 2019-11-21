@@ -1,4 +1,5 @@
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException
+from starlette.responses import PlainTextResponse
 from routers import login, lobby
 
 
@@ -12,6 +13,8 @@ async def get_token_header(x_token: str = Header(...)):
 
 app.include_router(login.router)
 app.include_router(lobby.router)
+
+
 @app.get("/")
 async def get():
-    return HTMLResponse(html)
+    return PlainTextResponse("test")

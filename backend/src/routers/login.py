@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import jwt
-from fastapi import Depends, FastAPI, HTTPException, APIRouter
+from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt import PyJWTError
 from passlib.context import CryptContext
@@ -9,29 +9,34 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 
 # to get a string like this run:
 # openssl rand -hex 32
+
+# Secret key will be moved from here, development purposes only.
 SECRET_KEY = "828c887d6134838800662f164e1220af38629938f1f97def0b17166313e200d3"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-mock_db = {
+MOCK_DB = {
     "johndoe": {
         "username": "johndoe",
         "full_name": "John Doe",
         "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn\
+            96p36WQoeG6Lruj3vjPGga31lW",
         "disabled": False,
     }
 }
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="/login")
 
 router = APIRouter()
 
 
 class Token(BaseModel):
+    """Token """
+
     access_token: str
     token_type: str
 
@@ -52,17 +57,18 @@ class UserInDB(User):
 
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    return PWD_CONTEXT.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    return PWD_CONTEXT.hash(password)
 
 
 def get_user(db, username: str):
     if username in db:
         user_dict = db[username]
         return UserInDB(**user_dict)
+    return None
 
 
 def authenticate_user(fake_db, username: str, password: str):
@@ -85,7 +91,7 @@ def create_access_token(*, data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Depends(OAUTH2_SCHEME)):
     credentials_exception = HTTPException(
         status_code=HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -99,7 +105,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except PyJWTError:
         raise credentials_exception
-    user = get_user(mock_db, username=token_data.username)
+    user = get_user(MOCK_DB, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
@@ -113,8 +119,8 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(mock_db, form_data.username, form_data.password)
-    if not user:
+    user = authenticate_user(MOCK_DB, form_data.username, form_data.password)
+    if user is None:
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -122,8 +128,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": form_data.username}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
-
-

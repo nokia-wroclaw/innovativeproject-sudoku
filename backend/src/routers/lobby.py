@@ -1,17 +1,10 @@
-from fastapi import Cookie, Depends, Header, APIRouter
-from starlette.responses import HTMLResponse
-from starlette.status import WS_1008_POLICY_VIOLATION
-from starlette.websockets import WebSocket
-from starlette.endpoints import WebSocketEndpoint, HTTPEndpoint
-from pydantic import BaseModel
+from fastapi import APIRouter
+from starlette.endpoints import WebSocketEndpoint
+
+SESSION_SIZE = 3
 
 
-router=APIRouter()
-
-
-class Player(BaseModel):
-    nick: str
-    token: str
+router = APIRouter()
 
 
 @router.websocket_route("/gamelobby")
@@ -25,4 +18,3 @@ class Echo(WebSocketEndpoint):
 
     async def on_disconnect(self, websocket, close_code):
         await websocket.send_text(f"Player disconnected")
-        pass
