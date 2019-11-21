@@ -6,10 +6,12 @@ extends:
   - 'airbnb'
   - 'prettier'
   - 'prettier/react'
+  - 'plugin:react/recommended'
   - 'plugin:testing-library/react'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
+"parser": "babel-eslint"
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -23,7 +25,12 @@ plugins:
 rules: {
   "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
   "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+  "react/state-in-constructor": [0, always],
+  "react/jsx-props-no-spreading": "off",
+  "react/destructuring-assignment": [1, "always", { "ignoreClassFields": true }],
   "testing-library/await-async-query": "error",
   "testing-library/no-await-sync-query": "error",
-  "testing-library/no-debug": "warn"
+  "testing-library/no-debug": "warn",
+  "no-plusplus": [2,{allowForLoopAfterthoughts: true}],
+  "react/no-array-index-key": [0, always],
 }
