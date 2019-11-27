@@ -5,15 +5,11 @@
     flex-direction: row;
 }
 
-.background {
+.sudoku-background {
     border-radius: 5px;
-    display: flex;
     background: $white;
     padding: 5px;
-    justify-content: center;
-    align-items: center;
     margin-right: 4vw;
-    height: 90%;
 }  
 
 .sudoku table {
@@ -41,7 +37,7 @@
 }
 
 @media(max-width: 1000px){
-    .background{
+    .sudoku-background{
         margin-right: 0;
         margin-bottom: 4vh;
     }
