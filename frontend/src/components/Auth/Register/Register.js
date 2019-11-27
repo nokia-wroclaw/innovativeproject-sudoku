@@ -5,14 +5,48 @@ import Button from "@material-ui/core/Button";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import TextField from "../../TextField/TextField";
+import Login from "../Login/Login";
+
+async function handleRegister(params) {
+  fetch("http://127.0.0.1:8000/register", {
+    method: "POST",
+    body: JSON.stringify(params.data)
+  })
+    .then(res => {
+      if (res.ok) {
+        window.alert(
+          "You registered succesfully. Now login to your new account!"
+        );
+        window.location.replace("/login");
+      } else {
+        return Promise.reject({
+          status: res.status,
+          statusText: res.statusText
+        });
+      }
+    })
+    .catch(error => {
+      switch (error.status) {
+        case 409:
+          window.alert("Username or email already taken.");
+          break;
+        case 417:
+          window.alert(
+            "You've manage to modify formik verification, you dirty hackerman!"
+          );
+      }
+    });
+}
 
 const form = {
+  username: "",
   email: "",
   password: "",
   rePassword: ""
 };
 
 const validationSchema = yup.object({
+  username: yup.string().required(),
   email: yup
     .string()
     .email()
@@ -26,7 +60,7 @@ const validationSchema = yup.object({
 
 const onSubmit = (data, setSubmitting) => {
   setSubmitting(true);
-  console.log(data);
+  handleRegister({ data });
   setSubmitting(false);
 };
 const Register = () => {
@@ -44,6 +78,7 @@ const Register = () => {
           {({ isSubmitting }) => (
             <Form className="container">
               <div className="textFieldWrapper">
+                <TextField label="Username" name="username" type="username" />
                 <TextField label="Email" name="email" type="email" />
                 <TextField label="Password" name="password" type="password" />
                 <TextField

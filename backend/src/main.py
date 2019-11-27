@@ -1,7 +1,7 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Header, HTTPException
-from routers import login, lobby
-
+from routers import login, lobby, register
+from starlette.responses import JSONResponse
 
 app = FastAPI()
 
@@ -26,3 +26,4 @@ async def get_token_header(x_token: str = Header(...)):
 
 app.include_router(login.router)
 app.include_router(lobby.router)
+app.include_router(register.router)

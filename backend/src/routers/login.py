@@ -3,12 +3,12 @@ import jwt
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt import PyJWTError
-from passlib.context import CryptContext
 from pydantic import BaseModel
 from starlette.status import HTTP_401_UNAUTHORIZED
 import json
 from starlette.responses import Response
 from fastapi.encoders import jsonable_encoder
+from passlib.context import CryptContext
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -138,17 +138,15 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     print("User succesfully verified.")
     response = Response(status_code=200)
+    
     response.set_cookie(
-        "Authorization",
+        key="Authorization",
         value=f"Bearer {token}",
-        domain="localhost:3000",
         httponly=True,
         max_age=1800,
         expires=1800,
     )  
     return response
-
-
 
 
 @router.get("/users/me/", response_model=User)
