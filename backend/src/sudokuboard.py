@@ -1,6 +1,8 @@
+from copy import deepcopy
 from dataclasses import dataclass
+from enum import Enum
 from functools import singledispatchmethod
-from random import shuffle
+from random import shuffle, randint
 from typing import Final, List, Set
 
 
@@ -8,6 +10,13 @@ from typing import Final, List, Set
 class Coord:
     x: int = 0
     y: int = 0
+
+
+class Difficulty(Enum):
+    EASY = 32
+    MEDIUM = 27
+    HARD = 22
+    DIABOLIC = 17
 
 
 @dataclass
@@ -38,7 +47,7 @@ class SudokuCell:
 
 
 class SudokuBoard:
-    def __init__(self, SIZE=3):
+    def __init__(self, SIZE=3, difficulty: Difficulty = Difficulty.MEDIUM):
         self.SIZE = SIZE
         self.VALID_VALUES = {x + 1 for x in range(SIZE ** 2)}
         self.cells = [
@@ -46,6 +55,7 @@ class SudokuBoard:
             for x in range(SIZE ** 2)
             for y in range(SIZE ** 2)
         ]
+        self.difficulty = difficulty
         self.fill_cells(0)
 
     def reset(self):
@@ -70,6 +80,36 @@ class SudokuBoard:
                 return True
 
         cell.value = 0
+        return False
+
+    def make_puzzle(self):
+        puzzle = deepcopy(self.cells)
+        clues = self.SIZE ** 4
+        while clues >= self.difficulty.value:
+            index = randint(1, self.SIZE ** 4)  # nosec
+            value1 = puzzle[index - 1].value
+            while value1 == 0:
+                index = randint(1, self.SIZE ** 4)  # nosec
+            puzzle[index - 1].value = 0
+            self.cells = deepcopy(puzzle)
+            if not self.solve_sudoku():
+                puzzle[index - 1].value = value1
+            else:
+                clues -= 1
+
+    def solve_sudoku(self) -> bool:
+        cell = next((c for c in self.cells if c.value == 0), None)
+        if cell is None:
+            return True
+        neighbor_values: Set[int] = {
+            self.at(neighbor).value for neighbor in cell.neighbors
+        }
+        options: List[int] = list(self.VALID_VALUES.difference(neighbor_values))
+        for option in options:
+            cell.value = option
+            if self.solve_sudoku():
+                return True
+            cell.value = 0
         return False
 
     def resolve_index(self, index: int) -> Coord:

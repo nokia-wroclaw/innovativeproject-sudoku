@@ -13,4 +13,5 @@ async def root():
 @app.get("/sudoku")
 async def sudoku():
     board = SudokuBoard()
+    board.make_puzzle()
     return {"sudokuBoard": board.get_board_matrix()}
