@@ -19,16 +19,12 @@ export default function GameView() {
     [1, 2, 3, 4, 5, 6, 7, 8, 9],
     [1, 2, 3, 4, 5, 6, 7, 8, 9]
   ];
+
   const mockTime = { max_time: 300, current_time: 6 };
 
   return (
     <div className="gameView">
-      <div>
-        <Timer
-          currentTime={mockTime.current_time}
-          maxTime={mockTime.max_time}
-        />
-      </div>
+      <Timer currentTime={mockTime.current_time} maxTime={mockTime.max_time} />
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
           <Board fields={mockBoard} />
