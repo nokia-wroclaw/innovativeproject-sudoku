@@ -6,6 +6,7 @@ import Timer from "./Timer/Timer";
 import "../../Variables.scss";
 import Board from "../Board/Board";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
+import GoBack from "../GoBack/GoBack";
 
 export default function GameView() {
   const mockBoard = [
@@ -27,6 +28,7 @@ export default function GameView() {
       <Timer {...mockTime} />
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
+          <GoBack />
           <Board fields={mockBoard} />
           <DragPanel />
         </div>

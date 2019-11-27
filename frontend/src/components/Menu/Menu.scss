@@ -1,0 +1,26 @@
+@import "../../Variables";
+
+.Menu .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px;
+  border-radius: 5px;
+  background-color: $white;
+}
+
+.Menu h1 {
+  margin-bottom: 40px;
+}
+
+.Menu a {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 576px) {
+  .Menu .card {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+}
