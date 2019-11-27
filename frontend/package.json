@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.5.2",
-    "formik": "^2.0.4",
     "@material/card": "^4.0.0",
     "bootstrap": "^4.3.1",
     "eslint": "^6.6.0",
+    "formik": "^2.0.4",
     "install": "^0.13.0",
     "lodash": "^4.17.15",
     "missing": "0.0.1",
