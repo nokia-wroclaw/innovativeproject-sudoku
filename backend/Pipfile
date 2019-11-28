@@ -15,7 +15,7 @@ pre-commit = "*"
 fastapi = "*"
 uvicorn = "*"
 email-validator = "*"
-pymongo = "*"
+mongoengine = "*"
 
 [requires]
 python_version = "3.8"
