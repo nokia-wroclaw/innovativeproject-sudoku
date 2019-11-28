@@ -1,10 +1,9 @@
+from datetime import datetime, timedelta
+from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
-from fastapi.encoders import jsonable_encoder
 import jwt
 from pydantic import BaseModel
-from fastapi import HTTPException
 from starlette.status import HTTP_403_FORBIDDEN
 
 # to get a string like this run:
@@ -71,18 +70,17 @@ def create_token(*, data: dict, expires_delta: timedelta = None):
 
 
 def verify_refresh_token(token):
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if not get_user(MOCK_DB, username):
-            raise HTTPException(
-                status_code=HTTP_403_FORBIDDEN,
-                detail="Session has expired, please login.",
-            )
-            return None
-        return username
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    username: str = payload.get("sub")
+    if not get_user(MOCK_DB, username):
+        raise HTTPException(
+            status_code=HTTP_403_FORBIDDEN, detail="Session has expired, please login.",
+        )
+    return username
 
 
 def verify_acces(token):
     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    return True
-    
+    if payload is not None:
+        return True
+    return False

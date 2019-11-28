@@ -17,12 +17,9 @@ async function handleRegister(params) {
           "You registered succesfully. Now login to your new account!"
         );
         window.location.replace("/login");
-      } else {
-        return Promise.reject({
-          status: res.status,
-          statusText: res.statusText
-        });
+        return res.json();
       }
+      return Promise.reject(new Error("Something is not yes."));
     })
     .catch(error => {
       switch (error.status) {

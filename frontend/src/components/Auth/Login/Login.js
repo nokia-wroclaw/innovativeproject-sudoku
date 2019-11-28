@@ -7,7 +7,7 @@ import * as yup from "yup";
 import TextField from "../../TextField/TextField";
 
 async function handleSubmit(params) {
-  var FD = new FormData();
+  const FD = new FormData();
   FD.append("username", params.data.username);
   FD.append("password", params.data.password);
 
@@ -18,12 +18,8 @@ async function handleSubmit(params) {
     .then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        return Promise.reject({
-          status: response.status,
-          statusText: response.statusText
-        });
       }
+      return Promise.reject(new Error("Something is not yes."));
     })
     .catch(error => {
       if (error.status === 401) {
