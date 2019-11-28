@@ -12,7 +12,7 @@ export default function Timer({ currentTime, maxTime }) {
   let strokeColor = timer.base;
   const red = "#cc0000";
 
-  if (seconds < 60) {
+  if (seconds < 10) {
     seconds = `0${seconds}`;
   }
 
