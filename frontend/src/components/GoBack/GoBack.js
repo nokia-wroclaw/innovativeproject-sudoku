@@ -1,15 +1,17 @@
 import "./GoBack.scss";
-import { Link } from "react-router-dom";
 import React from "react";
+import { IconButton } from "@material-ui/core";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 
 const defaultBack = (
-  <Link to="/menu" replace>
+  <IconButton onClick={() => window.history.back()}>
     <i className="fas fa-arrow-left" />
-  </Link>
+  </IconButton>
 );
 
-const handleSuccess = () => {};
+const handleSuccess = () => {
+  window.history.back();
+};
 
 const gameBack = (
   <div>
