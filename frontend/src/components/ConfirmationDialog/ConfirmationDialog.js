@@ -74,8 +74,8 @@ ConfirmationDialog.propTypes = {
 ConfirmationDialog.defaultProps = {
   title: "Confirmation",
   children: "Are you sure?",
-  success: {},
-  fail: {}
+  success: () => {},
+  fail: () => {}
 };
 
 export default ConfirmationDialog;
