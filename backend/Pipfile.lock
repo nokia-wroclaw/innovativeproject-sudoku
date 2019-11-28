@@ -1,9 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "83fe235d930958ab417c346cba3cf8ee4d25d10cc62a7395db01ceeb859e2ec7"
-
-
+            "sha256": "2ab2fe6acfec8406600b462ae54bdb0cc271176b81b3f2252e1b52ae503f50e6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -58,7 +56,6 @@
             "hashes": [
                 "sha256:e00cbd7ba01ff748e494248183abc6e153f49181169d8a3d41bb49132ca01dfc"
             ],
-            "markers": "sys_platform != 'win32' and sys_platform != 'cygwin' and platform_python_implementation != 'pypy'",
             "version": "==0.0.13"
         },
         "idna": {
@@ -160,12 +157,7 @@
                 "sha256:e7514d7a48c063226b7d06617cbb12a14278d4323a065a8d46a7962686ce2e95",
                 "sha256:f07909cd9fc08c52d294b1570bba92186181ca01fe3dc9ffba68955273dd7362"
             ],
-<<<<<<< HEAD
-            "markers": "sys_platform != 'win32' and sys_platform != 'cygwin' and platform_python_implementation != 'pypy'",
-            "version": "==0.14.0rc2"
-=======
             "version": "==0.14.0"
->>>>>>> fe40677... Resolved outdated pipfile-lock
         },
         "websockets": {
             "hashes": [
