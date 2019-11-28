@@ -1,9 +1,8 @@
 from fastapi import Depends, HTTPException, APIRouter
 from starlette.status import HTTP_417_EXPECTATION_FAILED, HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT
-from starlette.responses import RedirectResponse
-from .login import *
 from pydantic import BaseModel
-
+from .utils import *
+from starlette.responses import Response
 
 router = APIRouter()
 
@@ -24,7 +23,7 @@ def check_user_uniqueness(db, user: User):
 
     
 def add_user_to_db(db, user: User):
-    #There will be adding to database.
+    #There will be adding to database, but db is required.
     print("User: ", user["username"], "added.")
 
 

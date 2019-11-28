@@ -1,32 +1,20 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from starlette.requests import Request
 from starlette.responses import Response, RedirectResponse
-from .login import *
 import jwt
 from starlette.status import HTTP_403_FORBIDDEN
+from datetime import datetime, timedelta
+from starlette.responses import Response
+from .utils import *
 
 
 router = APIRouter()
 
 
-def verify_refresh_token(token):
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if not get_user(MOCK_DB, username):
-            raise HTTPException(
-                status_code=HTTP_403_FORBIDDEN,
-                detail="Session has expired, please login.",
-            )
-            return None
-        return username
-
-
 @router.get("/get-acces-token")
 async def get_acces_token(request: Request, previous_url = None):
     refresh_token=request.cookies.get('refresh_token')
-    response = RedirectResponse("/menu")
-    if previous_url != None:
-        response = RedirectResponse(previous_url)
+    response = Response()
 
     username = verify_refresh_token(refresh_token)
     if username:

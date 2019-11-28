@@ -19,6 +19,10 @@ pyjwt = "*"
 python-multipart = "*"
 passlib = "*"
 bcrypt = "*"
+jwt = "*"
+datetime = "*"
+pydantic = "*"
+starlette = "*"
 
 [requires]
 python_version = "3.8"

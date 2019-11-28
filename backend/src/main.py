@@ -1,15 +1,14 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Header, HTTPException
-from routers import login, lobby, register, get_token
-from starlette.responses import JSONResponse
+from routers.user_auth import login, register, get_token
 
 app = FastAPI()
 
+# Development puprose only
 origins = [
     "http:localhost",
     "http:localhost:8080",
 ]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -25,6 +24,5 @@ async def get_token_header(x_token: str = Header(...)):
 
 
 app.include_router(login.router)
-app.include_router(lobby.router)
 app.include_router(register.router)
 app.include_router(get_token.router)

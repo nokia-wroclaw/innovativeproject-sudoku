@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import TextField from "../../TextField/TextField";
-import Login from "../Login/Login";
 
 async function handleRegister(params) {
   fetch("http://127.0.0.1:8000/register", {
@@ -34,6 +33,9 @@ async function handleRegister(params) {
           window.alert(
             "You've manage to modify formik verification, you dirty hackerman!"
           );
+          break;
+        default:
+          window.alert("Some other error, nice");
       }
     });
 }
