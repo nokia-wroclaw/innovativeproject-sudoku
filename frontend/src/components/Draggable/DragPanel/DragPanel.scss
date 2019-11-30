@@ -1,10 +1,17 @@
+@import "../../../Variables";
+
+.dragPanel-background  {
+    border-radius: 5px;
+    background: $white;
+    padding: 5px;
+}  
+
 .dragPanel tbody{
     display: flex;
     flex-direction: column;
     text-align: center;
     height: 100%;
     width: 100%;
-
 }
 
 .dragPanel td{

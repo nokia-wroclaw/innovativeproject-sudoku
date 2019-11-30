@@ -40,7 +40,7 @@ export default class Board extends React.Component {
     });
 
     return (
-      <div className="background sudoku">
+      <div className="sudoku sudoku-background">
         <table>
           <tbody>{rows}</tbody>
         </table>
