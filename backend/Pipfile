@@ -16,6 +16,7 @@ fastapi = "*"
 uvicorn = "*"
 email-validator = "*"
 mongoengine = "*"
+atomicwrites = "*"
 
 [requires]
 python_version = "3.8"
