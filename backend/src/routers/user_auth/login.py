@@ -1,4 +1,5 @@
 from datetime import timedelta
+import logging
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
@@ -12,7 +13,6 @@ from .utils import (
     ACCES_TOKEN_EXPIRES_MINUTES,
     create_token,
 )
-import logging
 
 router = APIRouter()
 
@@ -48,14 +48,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     ref_token = jsonable_encoder(refresh_token)
     acc_token = jsonable_encoder(acces_token)
 
-    logging.info("User: %s  verified" % form_data.username)
+    logging.info("User: %s  verified", form_data.username)
     response = Response(status_code=200)
 
     response.set_cookie(
-        key="refresh_token", value=ref_token, httponly=True, expires = 36000,
+        key="refresh_token", value=ref_token, httponly=True, expires=36000,
     )
     response.set_cookie(
-        key="access_token", value=acc_token, httponly=True, expires = 1000,
+        key="access_token", value=acc_token, httponly=True, expires=1000,
     )
 
     return response

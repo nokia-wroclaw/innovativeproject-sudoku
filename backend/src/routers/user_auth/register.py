@@ -1,9 +1,9 @@
+import logging
 from fastapi import HTTPException, APIRouter
 from starlette.status import HTTP_400_BAD_REQUEST
 from starlette.responses import Response
 from pydantic import BaseModel
 from .utils import MOCK_DB, get_password_hash, User
-import logging
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ def check_user_uniqueness(db, user: User):
 
 def add_user_to_db(user: User):
     # There will be adding to database, but db is required.
-    logging.info("User: %s  added to DB (curretnly mocked)" % user["username"])
+    logging.info("User: %s  added to DB (curretnly mocked)", user["username"])
 
 
 @router.post("/register")
@@ -36,8 +36,7 @@ async def register(form_data: RegisterForm):
     if form_data.password != form_data.rePassword:
         logging.info("Passwords were not the same.")
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
-            detail="Repeat password correctly.",
+            status_code=HTTP_400_BAD_REQUEST, detail="Repeat password correctly.",
         )
 
     hashed_password = get_password_hash(form_data.password)
@@ -48,7 +47,7 @@ async def register(form_data: RegisterForm):
         "disabled": False,
     }
     if not check_user_uniqueness(MOCK_DB, user):
-        logging.info("User: %s already taken" % user["username"])
+        logging.info("User: %s already taken", user["username"])
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Username or email already taken.",
         )
