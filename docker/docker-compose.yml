@@ -1,0 +1,41 @@
+version: '3'
+services:
+  backend:
+    container_name: backend-container
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    command: pipenv run uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
+    volumes:
+      - '../backend:/app'
+    ports:
+      - "80:80"
+    links:
+      - database
+  database:
+    image: 'mongo'
+    container_name: 'mongo-container'
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ./mongo-volume:/data/db
+    ports:
+      - '27017-27019:27017-27019'
+  frontend:
+    container_name: frontend-container
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    command: npm start  
+    volumes:
+      - '../frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - '3000:3000'
+    links:
+      - database
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
