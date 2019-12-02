@@ -1,4 +1,3 @@
-from copy import deepcopy
 from dataclasses import dataclass
 from enum import Enum
 from functools import singledispatchmethod
@@ -83,19 +82,13 @@ class SudokuBoard:
         return False
 
     def make_puzzle(self):
-        puzzle = deepcopy(self.cells)
         clues = self.SIZE ** 4
         while clues >= self.difficulty.value:
-            index = randint(1, self.SIZE ** 4)  # nosec
-            value1 = puzzle[index - 1].value
-            while value1 == 0:
-                index = randint(1, self.SIZE ** 4)  # nosec
-            puzzle[index - 1].value = 0
-            self.cells = deepcopy(puzzle)
-            if not self.solve_sudoku():
-                puzzle[index - 1].value = value1
-            else:
-                clues -= 1
+            index = randint(0, self.SIZE ** 4 - 1)  # nosec
+            while self.cells[index].value == 0:
+                index = randint(0, self.SIZE ** 4 - 1)  # nosec
+            self.cells[index].value = 0
+            clues -= 1
 
     def solve_sudoku(self) -> bool:
         cell = next((c for c in self.cells if c.value == 0), None)
