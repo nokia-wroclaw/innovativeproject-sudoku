@@ -22,6 +22,8 @@ datetime = "*"
 pydantic = "*"
 starlette = "*"
 pyjwt = "*"
+mongoengine = "*"
+atomicwrites = "*"
 
 [requires]
 python_version = "3.8"
