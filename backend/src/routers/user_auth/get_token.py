@@ -30,7 +30,7 @@ async def get_acces_token(request: Request):
         )
         acc_token = jsonable_encoder(acces_token)
         response.set_cookie(
-            key="access_token", value=f"{acc_token}", httponly=True,
+            key="access_token", value=f"{acc_token}", httponly=True, expires=1000,
         )
 
     return response

@@ -12,7 +12,7 @@ from .utils import (
     ACCES_TOKEN_EXPIRES_MINUTES,
     create_token,
 )
-
+import logging
 
 router = APIRouter()
 
@@ -30,7 +30,6 @@ def authenticate_user(fake_db, username: str, password: str):
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(MOCK_DB, form_data.username, form_data.password)
     if not user:
-        print("User NOT verified.")
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -49,14 +48,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     ref_token = jsonable_encoder(refresh_token)
     acc_token = jsonable_encoder(acces_token)
 
-    print("User succesfully verified.")
+    logging.info("User: %s  verified" % form_data.username)
     response = Response(status_code=200)
 
     response.set_cookie(
-        key="refresh_token", value=f"{ref_token}", httponly=True,
+        key="refresh_token", value=ref_token, httponly=True, expires = 36000,
     )
     response.set_cookie(
-        key="access_token", value=f"{acc_token}", httponly=True,
+        key="access_token", value=acc_token, httponly=True, expires = 1000,
     )
 
     return response
