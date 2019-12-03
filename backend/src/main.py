@@ -1,14 +1,16 @@
 from starlette.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Header, HTTPException
-from routers.user_auth import login, register, get_token
+from fastapi import FastAPI
+from routers.user_auth import login, register, get_token, utils
+
+utils.connect_to_db()
 
 app = FastAPI()
 
-# Development puprose only
 origins = [
     "http:localhost",
     "http:localhost:8080",
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -16,12 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-async def get_token_header(x_token: str = Header(...)):
-    if x_token != "fake-super-secret-token":
-        raise HTTPException(status_code=400, detail="X-Token header invalid")
-
 
 app.include_router(login.router)
 app.include_router(register.router)

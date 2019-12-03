@@ -6,7 +6,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from .utils import (
     verify_refresh_token,
-    ACCES_TOKEN_EXPIRES_MINUTES,
+    ACCESS_TOKEN_EXPIRES_MINUTES,
     create_token,
 )
 
@@ -14,7 +14,7 @@ from .utils import (
 router = APIRouter()
 
 
-@router.get("/get-acces-token")
+@router.get("/get-access-token")
 async def get_acces_token(request: Request):
     refresh_token = request.cookies.get("refresh_token")
     response = Response()
@@ -23,14 +23,18 @@ async def get_acces_token(request: Request):
             status_code=HTTP_403_FORBIDDEN, detail="No rights to refresh token.",
         )
     username = verify_refresh_token(refresh_token)
-    if username:
-        access_token_expires = timedelta(minutes=ACCES_TOKEN_EXPIRES_MINUTES)
-        acces_token = create_token(
-            data={"sub": username}, expires_delta=access_token_expires
+    if username is None:
+        raise HTTPException(
+            status_code=HTTP_403_FORBIDDEN, detail="Username not found.",
         )
-        acc_token = jsonable_encoder(acces_token)
-        response.set_cookie(
-            key="access_token", value=f"{acc_token}", httponly=True, expires=1000,
-        )
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES)
+    acces_token = create_token(
+        data={"sub": username}, expires_delta=access_token_expires
+    )
+    acc_token = jsonable_encoder(acces_token)
+    response.set_cookie(
+        key="access_token", value=acc_token, httponly=True, expires=1000,
+    )
 
     return response

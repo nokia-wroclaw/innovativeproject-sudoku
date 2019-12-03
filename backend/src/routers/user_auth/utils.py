@@ -1,46 +1,51 @@
+import logging
+from getpass import getpass
 from datetime import datetime, timedelta
-from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from pydantic import BaseModel  # pylint: disable=E0611
 import jwt
-from starlette.status import HTTP_403_FORBIDDEN
+from mongoengine import (
+    connect,
+    StringField,
+    BooleanField,
+    Document,
+    DoesNotExist,
+    MultipleObjectsReturned,
+)
 
-# to get a string like this run:
-# openssl rand -hex 32
-
-# Secret key will be moved from here, development purposes only.
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 
 ALGORITHM = "HS256"
 REFRESH_TOKEN_EXPIRE_MINUTES = 360
-ACCES_TOKEN_EXPIRES_MINUTES = 15
-
-MOCK_DB = {
-    "johndoe": {
-        "username": "ada",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OX\
-ePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "disabled": False,
-    }
-}
+ACCESS_TOKEN_EXPIRES_MINUTES = 15
 
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="/login")
 
 
-class User(BaseModel):  # pylint: disable=R0903
-    username: str
-    email: str = None
-    full_name: str = None
-    disabled: bool = None
+class User(Document):
+    username = StringField(required=True, max_length=200)
+    email = StringField(required=True, max_length=200)
+    hashed_password = StringField(required=True, max_length=200)
+    disabled = BooleanField(required=True)
 
 
-class UserInDB(User):  # pylint: disable=R0903
-    hashed_password: str
+def connect_to_db():
+    print("Database login: ")
+    username = input()  # nosec
+    password = getpass()
+    try:
+        connect(
+            "usersdb",
+            username=username,
+            password=password,
+            authentication_source="admin",
+        )
+    except ConnectionError as ex:
+        logging.error(
+            "%s.Connection to database failed - authentication endpoints wont work.", ex
+        )
 
 
 def verify_password(plain_password, hashed_password):
@@ -51,11 +56,14 @@ def get_password_hash(password):
     return PWD_CONTEXT.hash(password)
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
-    return None
+def get_user(username: str):
+    try:
+        user = User.objects.get(username=username)
+    except DoesNotExist:
+        return None
+    except MultipleObjectsReturned:
+        logging.error("%s - critical error in database, multiple instances of user.")
+    return user
 
 
 def create_token(*, data: dict, expires_delta: timedelta = None):
@@ -72,10 +80,9 @@ def create_token(*, data: dict, expires_delta: timedelta = None):
 def verify_refresh_token(token):
     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     username: str = payload.get("sub")
-    if not get_user(MOCK_DB, username):
-        raise HTTPException(
-            status_code=HTTP_403_FORBIDDEN, detail="Session has expired, please login.",
-        )
+
+    if get_user(username) is None:
+        return None
     return username
 
 
