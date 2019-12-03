@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
+from pydantic import BaseModel  # pylint: disable=E0611
 import jwt
-from pydantic import BaseModel
 from starlette.status import HTTP_403_FORBIDDEN
 
 # to get a string like this run:
@@ -32,14 +32,14 @@ PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="/login")
 
 
-class User(BaseModel):
+class User(BaseModel):  # pylint: disable=R0903
     username: str
     email: str = None
     full_name: str = None
     disabled: bool = None
 
 
-class UserInDB(User):
+class UserInDB(User):  # pylint: disable=R0903
     hashed_password: str
 
 

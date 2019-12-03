@@ -2,13 +2,13 @@ import logging
 from fastapi import HTTPException, APIRouter
 from starlette.status import HTTP_400_BAD_REQUEST
 from starlette.responses import Response
-from pydantic import BaseModel
+from pydantic import BaseModel  # pylint: disable=E0611
 from .utils import MOCK_DB, get_password_hash, User
 
 router = APIRouter()
 
 
-class RegisterForm(BaseModel):
+class RegisterForm(BaseModel):  # pylint: disable=R0903
     username: str
     email: str
     password: str
@@ -33,7 +33,7 @@ def add_user_to_db(user: User):
 
 @router.post("/register")
 async def register(form_data: RegisterForm):
-    if form_data.password != form_data.rePassword:
+    if form_data.password != form_data.re_password:
         logging.info("Passwords were not the same.")
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Repeat password correctly.",
