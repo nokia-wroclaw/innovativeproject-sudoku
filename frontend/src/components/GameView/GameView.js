@@ -4,7 +4,7 @@ import { DndProvider } from "react-dnd";
 import "./GameView.scss";
 import Board from "../Board/Board";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
-import GoBack from "../GoBack/GoBack";
+import GoBackButton from "../GoBackButton/GoBackButton";
 
 export default function GameView() {
   const mockBoard = [
@@ -22,7 +22,7 @@ export default function GameView() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="gamePanel">
-        <GoBack />
+        <GoBackButton />
         <Board fields={mockBoard} />
         <DragPanel />
       </div>

@@ -10,7 +10,7 @@ const Menu = () => {
         <Link to="/game">
           <h3>Play</h3>
         </Link>
-        <Link to="/stats">
+        <Link to="/game">
           <h3>Stats</h3>
         </Link>
         <Link to="/settings">
