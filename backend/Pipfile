@@ -11,6 +11,7 @@ bandit = "*"
 pytest = "*"
 pre-commit = "*"
 isort = "*"
+pylint-mongoengine = "*"
 
 [packages]
 fastapi = "*"
@@ -25,7 +26,6 @@ atomicwrites = "*"
 pydantic = "*"
 starlette = "*"
 python-multipart = "*"
-pylint-mongoengine = "*"
 
 [requires]
 python_version = "3.8"

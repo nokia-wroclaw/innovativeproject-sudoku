@@ -11,4 +11,3 @@ COPY backend/Pipfile.lock Pipfile.lock
 RUN pipenv install --dev
 
 EXPOSE 80
-
