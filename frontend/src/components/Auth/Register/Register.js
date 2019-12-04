@@ -4,37 +4,24 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
+import ky from "ky";
 import TextField from "../../TextField/TextField";
 
 async function handleRegister(params) {
-  fetch("http://127.0.0.1:8000/register", {
-    method: "POST",
-    body: JSON.stringify(params.data)
-  })
-    .then(res => {
-      if (res.ok) {
-        window.alert(
-          "You registered succesfully. Now login to your new account!"
-        );
-        window.location.replace("/login");
-        return res.json();
-      }
-      return Promise.reject(new Error("Something is not yes."));
-    })
-    .catch(error => {
-      switch (error.status) {
-        case 409:
-          window.alert("Username or email already taken.");
-          break;
-        case 417:
-          window.alert(
-            "You've manage to modify formik verification, you dirty hackerman!"
-          );
-          break;
-        default:
-          window.alert("Some other error, nice");
-      }
-    });
+  const formData = new FormData();
+  formData.append("username", params.data.username);
+  formData.append("email", params.data.email);
+  formData.append("password", params.data.password);
+  formData.append("re_password", params.data.rePassword);
+  (async () => {
+    try {
+      await ky.post("http://127.0.0.1:8000/register", {
+        body: formData
+      });
+    } catch (e) {
+      this.setStatus({ error: "RegisterError" });
+    }
+  })();
 }
 
 const form = {

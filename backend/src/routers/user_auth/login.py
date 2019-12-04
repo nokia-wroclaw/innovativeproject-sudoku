@@ -3,7 +3,7 @@ import logging
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
-from starlette.status import HTTP_401_UNAUTHORIZED
+from starlette.status import HTTP_400_BAD_REQUEST
 from starlette.responses import Response
 from .utils import (
     get_user,
@@ -30,9 +30,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if user is None:
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
+            status_code=HTTP_400_BAD_REQUEST, detail="Incorrect username or password",
         )
 
     refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)

@@ -4,28 +4,22 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
+import ky from "ky";
 import TextField from "../../TextField/TextField";
 
 async function handleSubmit(params) {
-  const FD = new FormData();
-  FD.append("username", params.data.username);
-  FD.append("password", params.data.password);
-
-  fetch("http://127.0.0.1:8000/login", {
-    method: "POST",
-    body: FD
-  })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error("Something is not yes."));
-    })
-    .catch(error => {
-      if (error.status === 401) {
-        window.alert("Wrong username or password.");
-      }
-    });
+  const formData = new FormData();
+  formData.append("username", params.data.username);
+  formData.append("password", params.data.password);
+  (async () => {
+    try {
+      await ky.post("http://127.0.0.1:8000/login", {
+        body: formData
+      });
+    } catch (e) {
+      this.setStatus({ error: "loginError" });
+    }
+  })();
 }
 
 const validationSchema = yup.object({
