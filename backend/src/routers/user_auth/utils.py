@@ -68,7 +68,7 @@ def get_user(username: str):
 
 def create_token(*, data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    if expires_delta:
+    if expires_delta is None:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)

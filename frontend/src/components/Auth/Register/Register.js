@@ -7,7 +7,7 @@ import * as yup from "yup";
 import ky from "ky";
 import TextField from "../../TextField/TextField";
 
-async function handleRegister(params) {
+async function handleRegister(params, setStatus) {
   const formData = new FormData();
   formData.append("username", params.data.username);
   formData.append("email", params.data.email);
@@ -19,7 +19,7 @@ async function handleRegister(params) {
         body: formData
       });
     } catch (e) {
-      this.setStatus({ error: "RegisterError" });
+      setStatus({ error: "registerError" });
     }
   })();
 }
@@ -44,9 +44,9 @@ const validationSchema = yup.object({
     .oneOf([yup.ref("password")], "Passwords don't match")
 });
 
-const onSubmit = (data, setSubmitting) => {
+const onSubmit = (data, setSubmitting, setStatus) => {
   setSubmitting(true);
-  handleRegister({ data });
+  handleRegister({ data }, setStatus);
   setSubmitting(false);
 };
 const Register = () => {
@@ -57,8 +57,8 @@ const Register = () => {
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
-            onSubmit(data, setSubmitting);
+          onSubmit={(data, { setSubmitting, setStatus }) => {
+            onSubmit(data, setSubmitting, setStatus);
           }}
         >
           {({ isSubmitting }) => (

@@ -7,7 +7,7 @@ import * as yup from "yup";
 import ky from "ky";
 import TextField from "../../TextField/TextField";
 
-async function handleSubmit(params) {
+async function handleSubmit(params, setStatus) {
   const formData = new FormData();
   formData.append("username", params.data.username);
   formData.append("password", params.data.password);
@@ -17,7 +17,7 @@ async function handleSubmit(params) {
         body: formData
       });
     } catch (e) {
-      this.setStatus({ error: "loginError" });
+      setStatus({ error: "loginError" });
     }
   })();
 }
@@ -32,9 +32,9 @@ const form = {
   password: ""
 };
 
-const onSubmit = (data, setSubmitting) => {
+const onSubmit = (data, setSubmitting, setStatus) => {
   setSubmitting(true);
-  handleSubmit({ data });
+  handleSubmit({ data }, setStatus);
   setSubmitting(false);
 };
 
@@ -46,8 +46,8 @@ const Login = () => {
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
-            onSubmit(data, setSubmitting);
+          onSubmit={(data, { setSubmitting, setStatus }) => {
+            onSubmit(data, setSubmitting, setStatus);
           }}
         >
           {({ isSubmitting }) => (
