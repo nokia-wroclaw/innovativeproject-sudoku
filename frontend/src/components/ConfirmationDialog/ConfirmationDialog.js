@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   Dialog,
@@ -7,30 +8,19 @@ import {
 } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const ConfirmationDialog = ({ title, success, fail, children }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
+const ConfirmationDialog = ({ open, title, success, fail, children }) => {
   const handleClose = succ => {
-    setOpen(false);
     // eslint-disable-next-line no-unused-expressions
     succ ? success() : fail();
   };
 
   return (
     <div className="ConfirmationDialog">
-      <Button color="primary" onClick={handleClickOpen} size="large">
-        Exit
-      </Button>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -65,6 +55,7 @@ const ConfirmationDialog = ({ title, success, fail, children }) => {
 };
 
 ConfirmationDialog.propTypes = {
+  open: PropTypes.bool,
   title: PropTypes.string,
   children: PropTypes.string,
   success: PropTypes.func,
@@ -72,6 +63,7 @@ ConfirmationDialog.propTypes = {
 };
 
 ConfirmationDialog.defaultProps = {
+  open: true,
   title: "Confirmation",
   children: "Are you sure?",
   success: () => {},

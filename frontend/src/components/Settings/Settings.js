@@ -1,11 +1,11 @@
 import "./Settings.scss";
 import React from "react";
-import GoBack from "../GoBack/GoBack";
+import GoBackButton from "../GoBackButton/GoBackButton";
 
 const Settings = () => {
   return (
     <div className="Settings">
-      <GoBack />
+      <GoBackButton />
       <div className="card">
         <h1>Settings</h1>
       </div>

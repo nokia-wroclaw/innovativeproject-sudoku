@@ -6,7 +6,7 @@ import Timer from "./Timer/Timer";
 import "../../Variables.scss";
 import Board from "../Board/Board";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
-import GoBack from "../GoBack/GoBack";
+import GoBackButton from "../GoBackButton/GoBackButton";
 
 export default function GameView() {
   const mockBoard = [

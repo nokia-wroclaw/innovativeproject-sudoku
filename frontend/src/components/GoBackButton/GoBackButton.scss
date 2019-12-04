@@ -1,0 +1,17 @@
+.GoBackButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 30px;
+  z-index: 1000;
+}
+
+.GoBackButton i {
+  color: white;
+}
+
+@media (max-width: 576px) {
+  .GoBackButton i {
+    color: inherit;
+  }
+}
