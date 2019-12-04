@@ -10,6 +10,8 @@ router = APIRouter()
 # R0903 gives too-few-public-methods, but class is needed and in correct form.
 # C0330 is bad-continuation, which is false positive due
 # to splitting init arguments to more readable format.
+
+
 class RegisterForm:  # pylint: disable=R0903
     def __init__(
         self,  # pylint: disable=C0330
