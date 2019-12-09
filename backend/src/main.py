@@ -5,6 +5,7 @@ from .routes.auth import auth_router
 from .auth import connect_to_db
 
 connect_to_db()
+from .sudokuboard import SudokuBoard
 
 app = FastAPI()
 
@@ -22,3 +23,13 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+@app.get("/")
+async def root():
+    return {"message": "Hello World!"}
+
+
+@app.get("/sudoku")
+async def sudoku():
+    board = SudokuBoard()
+    board.make_puzzle()
+    return {"sudokuBoard": board.get_board_matrix()}
