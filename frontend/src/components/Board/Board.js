@@ -1,16 +1,34 @@
 import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import LongPress from "react-long";
 import Field from "./Field/Field";
 import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
-import LongPress from "react-long";
 import CircularMenu from "../CircularMenu/CircularMenu";
 
 export default class Board extends React.Component {
   state = {
     boardModel: new BoardModel(this.props.fields),
     suggestions: null
+  };
+
+  getPosition = element => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.left, y: rect.top };
+  };
+
+  hideSuggestions = () => {
+    this.setState({ suggestions: null });
+  };
+
+  displaySuggestions = (row, column) => {
+    const coords = this.getPosition(
+      document.getElementById(`${row}x${column}`)
+    );
+    this.setState({
+      suggestions: { x: coords.x, y: coords.y, row, column }
+    });
   };
 
   handleDrop = (row, column, item) => {
@@ -24,22 +42,6 @@ export default class Board extends React.Component {
     }));
   };
 
-  displaySuggestions = (row, column) => {
-    var coords = this.getPosition(document.getElementById(row + "x" + column));
-    this.setState({
-      suggestions: { x: coords.x, y: coords.y, row: row, column: column }
-    });
-  };
-
-  hideSuggestions = () => {
-    this.setState({ suggestions: null });
-  };
-
-  getPosition(element) {
-    var rect = element.getBoundingClientRect();
-    return { x: rect.left, y: rect.top };
-  }
-
   updateBoard = (row, column, value) => {
     this.setState(prev => ({
       boardModel: _.set(
@@ -48,9 +50,11 @@ export default class Board extends React.Component {
         value
       )
     }));
+    this.hideSuggestions();
   };
 
   render() {
+    // const pressedFieldStyle = {backround: this.state.suggestions ? "green" : "purple"};
     const rows = this.state.boardModel.rows.map((row, idx) => {
       return (
         <tr key={idx}>
@@ -61,8 +65,9 @@ export default class Board extends React.Component {
               onLongPress={() => this.displaySuggestions(field.row, field.col)}
               onPress={() => this.hideSuggestions()}
             >
-              <td key={field.col} id={field.row + "x" + field.col}>
+              <td key={field.col} id={`${field.row}x${field.col}`}>
                 <Field
+                  // style = {pressedFieldStyle}
                   row={field.row}
                   col={field.col}
                   value={field.value}
@@ -85,6 +90,7 @@ export default class Board extends React.Component {
             row={this.state.suggestions.row}
             column={this.state.suggestions.column}
             updateBoard={this.updateBoard}
+            hideMenu={this.hideSuggestions}
           />
         ) : null}
         <table>
