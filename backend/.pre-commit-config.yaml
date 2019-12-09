@@ -26,13 +26,13 @@ repos:
         exclude: test.*
     -   id: pylint
         name: pylint
-        entry: pylint
+        entry: pylint --rcfile=backend/.pylintrc
         language: python
         types: [python]
         exclude: test.*
     -   id: pytest
         name: pytest
-        entry: pytest
+        entry: pytest backend/
         language: python
         always_run: true
         pass_filenames: false
