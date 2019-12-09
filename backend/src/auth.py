@@ -10,7 +10,7 @@ from mongoengine import (
     connect,
     DoesNotExist,
 )
-from ..models import User
+from .models import User
 
 
 SECRET_KEY = environ["SUDOKUBR_SECRET_KEY"]

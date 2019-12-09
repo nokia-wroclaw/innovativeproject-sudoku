@@ -9,7 +9,7 @@ from starlette.responses import Response
 from starlette.requests import Request
 from mongoengine import SaveConditionError, NotUniqueError
 
-from ..auth.auth import (
+from ..auth import (
     REFRESH_TOKEN_EXPIRE_MINUTES,
     ACCESS_TOKEN_EXPIRES_MINUTES,
     REFRESH_COOKIE_LIFETIME,
@@ -27,7 +27,6 @@ auth_router = APIRouter()
 
 @auth_router.post("/register")
 async def register(form_data: RegisterForm = Depends()):
-    print("DUP")
     if form_data.password != form_data.re_password:
         logging.info("Passwords were not the same.")
         raise HTTPException(

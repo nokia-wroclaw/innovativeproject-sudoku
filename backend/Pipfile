@@ -23,8 +23,6 @@ datetime = "*"
 pyjwt = "*"
 mongoengine = "*"
 atomicwrites = "*"
-pydantic = "*"
-starlette = "*"
 python-multipart = "*"
 
 [requires]

@@ -1,8 +1,8 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
-from .routers.auth import auth_router
-from .auth.auth import connect_to_db
+from .routes.auth import auth_router
+from .auth import connect_to_db
 
 connect_to_db()
 
