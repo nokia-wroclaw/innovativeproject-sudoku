@@ -1,4 +1,4 @@
-// @import "https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css";
+@import "../../Variables";
 
 .circular-menu {
   width: 120px;
@@ -23,30 +23,22 @@
 
 .open.circle {
   opacity: 1;
-
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   transform: scale(1);
 }
 
-.circle a {
+.circle button {
   text-decoration: none;
-  color: white;
   display: block;
   height: 30px;
   width: 30px;
-  line-height: 40px;
   margin-left: -20px;
   margin-top: -20px;
   position: absolute;
   text-align: center;
-  border-radius: 20px;
-  background: #eef;
+  border-radius: 20px;  
 
-}
-
-.circle a:hover {
-  color: #eef;
 }
 
 .menu-button {
@@ -62,8 +54,4 @@
   width: 40px;
   line-height: 40px;
   padding: 10px;
-}
-
-.menu-button:hover {
-  background-color: #eef;
 }
