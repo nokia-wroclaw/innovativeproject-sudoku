@@ -1,13 +1,35 @@
 import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import LongPress from "react-long";
 import Field from "./Field/Field";
 import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
+import CircularMenu from "../CircularMenu/CircularMenu";
 
 export default class Board extends React.Component {
   state = {
-    boardModel: new BoardModel(this.props.fields)
+    boardModel: new BoardModel(this.props.fields),
+    suggestions: null
+  };
+
+  getPosition = element => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.left, y: rect.top };
+  };
+
+  hideSuggestions = () => {
+    this.setState({ suggestions: null });
+  };
+
+  displaySuggestions = (row, column) => {
+    this.setState({ suggestions: null });
+    const coords = this.getPosition(
+      document.getElementById(`${row}x${column}`)
+    );
+    this.setState({
+      suggestions: { x: coords.x, y: coords.y, row, column }
+    });
   };
 
   handleDrop = (row, column, item) => {
@@ -21,19 +43,49 @@ export default class Board extends React.Component {
     }));
   };
 
+  blockField = () => {};
+
+  updateBoard = (row, column, value) => {
+    this.setState(prev => ({
+      boardModel: _.set(
+        prev.boardModel,
+        `rows['${row}'].['${column}'].value`,
+        value
+      )
+    }));
+    this.hideSuggestions();
+  };
+
   render() {
-    const rows = this.state.boardModel.rows.map((row, idx) => {
+    const { boardModel, suggestions } = this.state;
+    const rows = boardModel.rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
-            <td key={field.col}>
-              <Field
-                row={field.row}
-                col={field.col}
-                value={field.value}
-                onDrop={item => this.handleDrop(field.row, field.col, item)}
-              />
-            </td>
+            <LongPress
+              key={field.col}
+              time={0.1}
+              onLongPress={
+                field.recived
+                  ? () => this.hideSuggestions()
+                  : () => this.displaySuggestions(field.row, field.col)
+              }
+            >
+              <td key={field.col} id={`${field.row}x${field.col}`}>
+                <Field
+                  row={field.row}
+                  col={field.col}
+                  value={field.value}
+                  onDrop={item => this.handleDrop(field.row, field.col, item)}
+                  isSelected={
+                    suggestions &&
+                    suggestions.row === idx &&
+                    suggestions.column === field.col
+                  }
+                  recived={field.recived}
+                />
+              </td>
+            </LongPress>
           ))}
         </tr>
       );
@@ -41,6 +93,14 @@ export default class Board extends React.Component {
 
     return (
       <div className="sudoku sudoku-background">
+        {suggestions && (
+          <CircularMenu
+            itemsAmount={9}
+            suggestions={suggestions}
+            updateBoard={this.updateBoard}
+            hideMenu={this.hideSuggestions}
+          />
+        )}
         <table>
           <tbody>{rows}</tbody>
         </table>
@@ -50,7 +110,9 @@ export default class Board extends React.Component {
 }
 
 Board.propTypes = {
-  fields: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number))
+  fields: PropTypes.arrayOf(
+    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
+  )
 };
 
 Board.defaultProps = {
