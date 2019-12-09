@@ -19,12 +19,12 @@
 }
 
 @media(max-width: 1000px){
-    .dragPanel tbody{
-        display: flex;
-        flex-direction: row;
+
+    .dragPanel-background  {
+        display: none;
     }
 
-    .dragPanel td{
-        margin: 0 0.3vw;
+    .dragPanel tbody{
+        display: none;
     }
 }
