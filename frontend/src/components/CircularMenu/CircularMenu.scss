@@ -1,8 +1,8 @@
 @import "../../Variables";
 
 .circular-menu {
-  width: 120px;
-  height: 120px;
+  width: 220px;
+  height: 220px;
   margin: 0 auto;
   position: relative;
 }
@@ -31,27 +31,88 @@
 .circle button {
   text-decoration: none;
   display: block;
-  height: 30px;
-  width: 30px;
-  margin-left: -20px;
-  margin-top: -20px;
   position: absolute;
   text-align: center;
-  border-radius: 20px;  
-
+  background: grey;
+  opacity: 0.95;
 }
 
 .menu-button {
   position: absolute;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
+  margin:5px;
   text-decoration: none;
   text-align: center;
-  opacity: 0.0;
-  border-radius: 50%;
   display: block;
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  padding: 10px;
+  opacity: 0.0;
+}
+
+@media(max-width: 1024px){
+  .circle {
+    width: 320px;
+    height: 320px;
+  }
+
+  .circle button {
+    height: 6vh;
+    width: 6vh;
+    margin-left: -110px;
+    margin-top: -110px;
+    border-radius: 40px;  
+    font-size: 25px;
+  }
+
+  .menu-button {
+    top: calc(50% - 130px);
+    left: calc(50% - 130px);
+    height: 6.5vh;
+    width: 6.5vh;
+  }
+}
+
+@media(max-width: 800px){
+  .circle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .circle button {
+    height: 5vh;
+    width: 5vh;
+    margin-left: -65px;
+    margin-top: -65px;
+    border-radius: 2.5vh;    
+    font-size: 13px;
+  }
+
+  .menu-button {
+    display: block;
+    top: calc(50% - 80px);
+    left: calc(50% - 80px);
+    height: 6vh;
+    width: 6vh;
+  }
+}
+
+@media(max-width: 600px){
+  .circle {
+    width: 120px;
+    height: 120px;
+  }
+
+  .circle button {
+    height: 3.5vh;
+    width: 3.5vh;
+    margin-left: -20px;
+    margin-top: -20px;
+    border-radius: 20px;    
+    font-size: 10px;
+  }
+
+  .menu-button {
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    display: block;
+    height: 4vh;
+    width: 4vh;
+  }
 }

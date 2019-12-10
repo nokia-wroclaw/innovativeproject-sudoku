@@ -12,21 +12,20 @@ const CircularMenu = ({
   hideMenu
 }) => {
   const tilesArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const [opened, setOpened] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const displayMenu = () => {
-    if (opened) {
+    if (isOpen) {
       hideMenu();
-      setOpened(false);
+      setIsOpen(false);
     } else {
-      document.getElementById("circle").classList.toggle("open");
-      setOpened(true);
+      setIsOpen(true);
     }
   };
 
   return (
     <div style={{ position: "absolute", left: x, top: y }}>
-      <div className="circle" id="circle">
+      <div id="circle" className={`circle ${isOpen ? "open" : ""}`}>
         {tilesArray.map((tileValue, key) => {
           return (
             <button
@@ -39,14 +38,14 @@ const CircularMenu = ({
               style={{
                 position: "absolute",
                 left: `${(
-                  45 -
+                  48 -
                   35 *
                     Math.cos(
                       -0.5 * Math.PI - 2 * (1 / itemsAmount) * key * Math.PI
                     )
                 ).toFixed(4)}%`,
                 top: `${(
-                  47 +
+                  48 +
                   35 *
                     Math.sin(
                       -0.5 * Math.PI - 2 * (1 / itemsAmount) * key * Math.PI
