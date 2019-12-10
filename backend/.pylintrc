@@ -2,7 +2,7 @@
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint_mongoengine
 
 [MESSAGES CONTROL]
 
@@ -16,7 +16,9 @@ load-plugins=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=missing-class-docstring,
+disable=bad-continuation,
+        too-few-public-methods,
+        missing-class-docstring,
         missing-module-docstring,
         invalid-name,
         missing-function-docstring,

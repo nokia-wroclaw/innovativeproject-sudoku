@@ -4,15 +4,35 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
+import ky from "ky";
 import TextField from "../../TextField/TextField";
 
+async function handleRegister(params, setStatus) {
+  const formData = new FormData();
+  formData.append("username", params.data.username);
+  formData.append("email", params.data.email);
+  formData.append("password", params.data.password);
+  formData.append("re_password", params.data.rePassword);
+  (async () => {
+    try {
+      await ky.post("http://127.0.0.1:8000/register", {
+        body: formData
+      });
+    } catch (e) {
+      setStatus({ error: "registerError" });
+    }
+  })();
+}
+
 const form = {
+  username: "",
   email: "",
   password: "",
   rePassword: ""
 };
 
 const validationSchema = yup.object({
+  username: yup.string().required(),
   email: yup
     .string()
     .email()
@@ -24,9 +44,9 @@ const validationSchema = yup.object({
     .oneOf([yup.ref("password")], "Passwords don't match")
 });
 
-const onSubmit = (data, setSubmitting) => {
+const onSubmit = (data, setSubmitting, setStatus) => {
   setSubmitting(true);
-  console.log(data);
+  handleRegister({ data }, setStatus);
   setSubmitting(false);
 };
 const Register = () => {
@@ -37,13 +57,14 @@ const Register = () => {
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
-            onSubmit(data, setSubmitting);
+          onSubmit={(data, { setSubmitting, setStatus }) => {
+            onSubmit(data, setSubmitting, setStatus);
           }}
         >
           {({ isSubmitting }) => (
             <Form className="container">
               <div className="textFieldWrapper">
+                <TextField label="Username" name="username" type="username" />
                 <TextField label="Email" name="email" type="email" />
                 <TextField label="Password" name="password" type="password" />
                 <TextField

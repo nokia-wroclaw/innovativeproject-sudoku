@@ -4,24 +4,37 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
+import ky from "ky";
 import TextField from "../../TextField/TextField";
 
-const form = {
-  email: "",
-  password: ""
-};
+async function handleSubmit(params, setStatus) {
+  const formData = new FormData();
+  formData.append("username", params.data.username);
+  formData.append("password", params.data.password);
+  (async () => {
+    try {
+      await ky.post("http://127.0.0.1:8000/login", {
+        body: formData
+      });
+    } catch (e) {
+      setStatus({ error: "loginError" });
+    }
+  })();
+}
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email()
-    .required(),
+  username: yup.string().required(),
   password: yup.string().required()
 });
 
-const onSubmit = (data, setSubmitting) => {
+const form = {
+  username: "",
+  password: ""
+};
+
+const onSubmit = (data, setSubmitting, setStatus) => {
   setSubmitting(true);
-  console.log(data);
+  handleSubmit({ data }, setStatus);
   setSubmitting(false);
 };
 
@@ -33,14 +46,14 @@ const Login = () => {
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
-          onSubmit={(data, { setSubmitting }) => {
-            onSubmit(data, setSubmitting);
+          onSubmit={(data, { setSubmitting, setStatus }) => {
+            onSubmit(data, setSubmitting, setStatus);
           }}
         >
           {({ isSubmitting }) => (
             <Form className="container">
               <div className="textFieldWrapper">
-                <TextField label="Email" name="email" type="email" />
+                <TextField label="Username" name="username" type="username" />
                 <TextField label="Password" name="password" type="password" />
               </div>
               <Button

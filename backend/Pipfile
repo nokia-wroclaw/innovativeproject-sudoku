@@ -10,13 +10,20 @@ flake8 = "*"
 bandit = "*"
 pytest = "*"
 pre-commit = "*"
+isort = "*"
+pylint-mongoengine = "*"
 
 [packages]
 fastapi = "*"
 uvicorn = "*"
 email-validator = "*"
+passlib = "*"
+bcrypt = "*"
+datetime = "*"
+pyjwt = "*"
 mongoengine = "*"
 atomicwrites = "*"
+python-multipart = "*"
 
 [requires]
 python_version = "3.8"
