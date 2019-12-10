@@ -33,13 +33,14 @@
   }
 
 .board {
-    border: 2px solid black;
-    text-align: center;
+    border: 3px solid black;    
+    text-align: center;  
 }
 
-@media(max-width: 1000px){
+@media(max-width: 1024px){
     .sudoku-background{
         margin-right: 0;
         margin-bottom: 4vh;
     }
+    
 }

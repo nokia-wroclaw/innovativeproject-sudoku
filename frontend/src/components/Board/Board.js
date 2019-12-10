@@ -54,20 +54,18 @@ export default class Board extends React.Component {
   };
 
   render() {
-    // const pressedFieldStyle = {backround: this.state.suggestions ? "green" : "purple"};
     const rows = this.state.boardModel.rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
             <LongPress
               key={field.col}
-              time={200}
+              time={300}
               onLongPress={() => this.displaySuggestions(field.row, field.col)}
               onPress={() => this.hideSuggestions()}
             >
               <td key={field.col} id={`${field.row}x${field.col}`}>
                 <Field
-                  // style = {pressedFieldStyle}
                   row={field.row}
                   col={field.col}
                   value={field.value}
@@ -82,7 +80,7 @@ export default class Board extends React.Component {
 
     return (
       <div className="sudoku sudoku-background">
-        {this.state.suggestions ? (
+        {this.state.suggestions && (
           <CircularMenu
             itemsAmount={9}
             x={this.state.suggestions.x - 35}
@@ -92,7 +90,7 @@ export default class Board extends React.Component {
             updateBoard={this.updateBoard}
             hideMenu={this.hideSuggestions}
           />
-        ) : null}
+        )}
         <table>
           <tbody>{rows}</tbody>
         </table>
