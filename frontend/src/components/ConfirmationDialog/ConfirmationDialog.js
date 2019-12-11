@@ -14,38 +14,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const ConfirmationDialog = ({ open, title, success, fail, children }) => {
-  const handleClose = succ => {
-    // eslint-disable-next-line no-unused-expressions
-    succ ? success() : fail();
-  };
-
   return (
     <div className="ConfirmationDialog">
       <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">{title}</DialogTitle>
         <DialogContent>{children}</DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              handleClose(false);
-            }}
-            color="primary"
-          >
+          <Button onClick={fail} color="primary">
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              handleClose(true);
-            }}
-            color="secondary"
-          >
+          <Button onClick={success} color="secondary">
             OK
           </Button>
         </DialogActions>
