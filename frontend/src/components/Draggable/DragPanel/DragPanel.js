@@ -21,5 +21,5 @@ const generatePanel = () => {
 };
 
 export default function DragPanel() {
-  return <div className="background">{generatePanel()}</div>;
+  return <div className="dragBackground">{generatePanel()}</div>;
 }
