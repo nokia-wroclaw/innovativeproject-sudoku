@@ -5,17 +5,15 @@ const useNavigation = modalPath => {
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
-  const handler = newValue => {
-    if (newValue) {
-      if (history.location.pathname === modalPath) {
-        return true;
-      }
-      history.goBack();
+  const goBack = () => {
+    if (history.location.pathname === modalPath) {
+      return open ? history.goBack() : setOpen(true);
     }
-    return false;
+    history.goBack();
+    return setOpen(false);
   };
 
-  return [open, newValue => setOpen(handler(newValue))];
+  return [open, newValue => setOpen(newValue), goBack];
 };
 
 export default useNavigation;
