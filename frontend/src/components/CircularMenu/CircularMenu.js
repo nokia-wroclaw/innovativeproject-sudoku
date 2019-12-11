@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CircularMenu.scss";
 import PropTypes from "prop-types";
+import { isIOS } from "react-device-detect";
 
 const CircularMenu = ({
   itemsAmount,
@@ -22,6 +23,13 @@ const CircularMenu = ({
       setIsOpen(true);
     }
   };
+
+  useEffect(() => {
+    if (isIOS) {
+      displayMenu();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div style={{ position: "absolute", left: x, top: y }}>
@@ -61,7 +69,7 @@ const CircularMenu = ({
       <button
         type="button"
         label="field"
-        className="menu-button fa fa-bars fa-2x"
+        className="menu-button"
         onClick={displayMenu}
       />
     </div>

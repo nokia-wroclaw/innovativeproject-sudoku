@@ -33,4 +33,5 @@ rules: {
   "testing-library/no-debug": "warn",
   "no-plusplus": [2,{allowForLoopAfterthoughts: true}],
   "react/no-array-index-key": [0, always],
+  "react/forbid-prop-types": [0,always],
 }

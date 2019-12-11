@@ -23,6 +23,7 @@ export default class Board extends React.Component {
   };
 
   displaySuggestions = (row, column) => {
+    this.setState({ suggestions: null });
     const coords = this.getPosition(
       document.getElementById(`${row}x${column}`)
     );
@@ -54,13 +55,14 @@ export default class Board extends React.Component {
   };
 
   render() {
+    const fieldStyle = { background: this.state.suggestions ? "#a8a7a4" : "" };
     const rows = this.state.boardModel.rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
             <LongPress
               key={field.col}
-              time={300}
+              time={200}
               onLongPress={() => this.displaySuggestions(field.row, field.col)}
               onPress={() => this.hideSuggestions()}
             >
@@ -70,6 +72,13 @@ export default class Board extends React.Component {
                   col={field.col}
                   value={field.value}
                   onDrop={item => this.handleDrop(field.row, field.col, item)}
+                  style={
+                    this.state.suggestions &&
+                    this.state.suggestions.row === idx &&
+                    this.state.suggestions.column === field.col
+                      ? fieldStyle
+                      : null
+                  }
                 />
               </td>
             </LongPress>

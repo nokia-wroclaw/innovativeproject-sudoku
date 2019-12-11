@@ -16,13 +16,14 @@
     "rc-progress": "^2.5.2",
     "react": "^16.11.0",
     "react-bootstrap": "^1.0.0-beta.14",
+    "react-device-detect": "^1.11.14",
     "react-dnd": "^9.4.0",
     "react-dnd-html5-backend": "^9.4.0",
     "react-dnd-touch-backend": "^9.4.0",
     "react-dom": "^16.11.0",
     "react-long": "^1.1.9",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
+    "react-scripts": "^3.3.0",
     "yup": "^0.27.0"
   },
   "scripts": {
