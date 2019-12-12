@@ -24,5 +24,9 @@ export default function Field({ value, onDrop, style }) {
 Field.propTypes = {
   value: PropTypes.number.isRequired,
   onDrop: PropTypes.func.isRequired,
-  style: PropTypes.object.isRequired
+  style: PropTypes.object
+};
+
+Field.defaultProps = {
+  style: {}
 };
