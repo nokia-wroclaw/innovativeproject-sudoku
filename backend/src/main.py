@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from .auth import connect_to_db
 from .sudokuboard import SudokuBoard
 from .routes.auth import auth_router
+from .routes.lobby import lobby_router
 
 connect_to_db()
 
@@ -23,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(lobby_router)
 
 
 @app.get("/")
