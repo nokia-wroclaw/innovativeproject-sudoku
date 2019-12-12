@@ -45,3 +45,11 @@
         font-size: 20px;
     }
 }
+
+@media(max-width: 370px){
+    .field{
+        min-width: 5vh;
+        min-height: 5vh;
+        font-size: 20px;
+    }
+}
