@@ -1,6 +1,6 @@
 import "../Auth.scss";
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -29,7 +29,7 @@ const Login = () => {
   return (
     <div className="Auth">
       <div className="card">
-        <h1>Sudoku Battle Royale</h1>
+        <h1 style={{ color: "white" }}>Sudoku Battle Royale</h1>
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
@@ -45,8 +45,8 @@ const Login = () => {
               </div>
               <Button
                 type="submit"
-                variant="outlined"
-                size="large"
+                variant="outline-light"
+                size="lg"
                 className="mt-5 mb-3"
                 disabled={isSubmitting}
               >

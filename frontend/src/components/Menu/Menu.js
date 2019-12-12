@@ -1,20 +1,27 @@
 import "./Menu.scss";
 import { Link } from "react-router-dom";
 import React from "react";
+import Button from "react-bootstrap/Button";
 
 const Menu = () => {
   return (
     <div className="Menu">
       <div className="card">
-        <h1>Sudoku Battle Royale</h1>
+        <h1 style={{ color: "white" }}>Sudoku Battle Royale</h1>
         <Link to="/game">
-          <h3>Play</h3>
+          <Button size="lg" variant="outline-light">
+            Play
+          </Button>
         </Link>
         <Link to="/game">
-          <h3>Stats</h3>
+          <Button size="lg" variant="outline-light">
+            Stats
+          </Button>
         </Link>
         <Link to="/settings">
-          <h3>Settings</h3>
+          <Button size="lg" variant="outline-light">
+            Settings
+          </Button>
         </Link>
       </div>
     </div>
