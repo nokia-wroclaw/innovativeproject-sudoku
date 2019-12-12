@@ -26,9 +26,8 @@ const CircularMenu = ({
 
   useEffect(() => {
     if (isIOS) {
-      displayMenu();
+      setIsOpen(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

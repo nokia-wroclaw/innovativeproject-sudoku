@@ -62,7 +62,7 @@ export default class Board extends React.Component {
           {row.map(field => (
             <LongPress
               key={field.col}
-              time={200}
+              time={10}
               onLongPress={() => this.displaySuggestions(field.row, field.col)}
               onPress={() => this.hideSuggestions()}
             >
