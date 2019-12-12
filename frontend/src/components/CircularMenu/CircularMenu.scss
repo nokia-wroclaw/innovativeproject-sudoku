@@ -88,7 +88,7 @@
     margin-left: -65px;
     margin-top: -65px;
     border-radius: 2.5vh;    
-    font-size: 13px;
+    font-size: 18px;
   }
 
   .menu-button {
@@ -102,8 +102,8 @@
 
 @media(max-width: 600px){
   .circle {
-    width: 140px;
-    height: 140px;
+    width: 135px;
+    height: 135px;
   }
 
   .circle button {
@@ -128,15 +128,15 @@
 
 @media(max-width: 370px){
   .circle {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
   }
 
   .circle button {
     height: 5vh;
     width: 5vh;
-    margin-left: -20px;
-    margin-top: -20px;
+    margin-left: -25px;
+    margin-top: -25px;
     border-radius: 20px;    
     font-size: 15px;
     padding: 0;
@@ -148,6 +148,5 @@
     display: block;
     min-height: 5vh;
     min-width: 5vh;
-    
   }
 }
