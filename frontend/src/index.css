@@ -25,3 +25,7 @@ input:-webkit-autofill:active  {
 input:-webkit-autofill {
   -webkit-text-fill-color: white !important;
 }
+
+/*Removes blue border on buttons click*/
+button:focus {outline: none !important;}
+

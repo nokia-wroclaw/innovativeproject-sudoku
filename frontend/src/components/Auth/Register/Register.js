@@ -1,7 +1,7 @@
 import "../Auth.scss";
 import React from "react";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+import { Button } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import TextField from "../../TextField/TextField";
@@ -54,8 +54,8 @@ const Register = () => {
               </div>
               <Button
                 type="submit"
-                variant="outline-light"
-                size="lg"
+                variant="outlined"
+                size="large"
                 className="mt-5 mb-3"
                 disabled={isSubmitting}
               >

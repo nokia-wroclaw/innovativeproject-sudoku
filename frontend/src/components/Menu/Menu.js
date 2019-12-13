@@ -1,7 +1,7 @@
 import "./Menu.scss";
 import { Link } from "react-router-dom";
+import { Button } from "@material-ui/core";
 import React from "react";
-import Button from "react-bootstrap/Button";
 
 const Menu = () => {
   return (
@@ -9,17 +9,17 @@ const Menu = () => {
       <div className="card">
         <h1 style={{ color: "white" }}>Sudoku Battle Royale</h1>
         <Link to="/game">
-          <Button size="lg" variant="outline-light">
+          <Button size="large" variant="outlined">
             Play
           </Button>
         </Link>
         <Link to="/game">
-          <Button size="lg" variant="outline-light">
+          <Button size="large" variant="outlined">
             Stats
           </Button>
         </Link>
         <Link to="/settings">
-          <Button size="lg" variant="outline-light">
+          <Button size="large" variant="outlined">
             Settings
           </Button>
         </Link>

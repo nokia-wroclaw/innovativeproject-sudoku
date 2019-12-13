@@ -1,6 +1,6 @@
 import "../Auth.scss";
 import React from "react";
-import Button from "react-bootstrap/Button";
+import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -45,9 +45,10 @@ const Login = () => {
               </div>
               <Button
                 type="submit"
-                variant="outline-light"
-                size="lg"
                 className="mt-5 mb-3"
+                size="large"
+                variant="outlined"
+                color="default"
                 disabled={isSubmitting}
               >
                 Sign In
