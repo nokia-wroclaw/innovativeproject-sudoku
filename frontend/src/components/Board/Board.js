@@ -43,6 +43,8 @@ export default class Board extends React.Component {
     }));
   };
 
+  blockField = () => {};
+
   updateBoard = (row, column, value) => {
     this.setState(prev => ({
       boardModel: _.set(
@@ -55,16 +57,18 @@ export default class Board extends React.Component {
   };
 
   render() {
-    const fieldStyle = { background: this.state.suggestions ? "#a8a7a4" : "" };
     const rows = this.state.boardModel.rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
             <LongPress
               key={field.col}
-              time={10}
-              onLongPress={() => this.displaySuggestions(field.row, field.col)}
-              onPress={() => this.hideSuggestions()}
+              time={0.1}
+              onLongPress={
+                field.recived
+                  ? () => this.hideSuggestions()
+                  : () => this.displaySuggestions(field.row, field.col)
+              }
             >
               <td key={field.col} id={`${field.row}x${field.col}`}>
                 <Field
@@ -72,13 +76,12 @@ export default class Board extends React.Component {
                   col={field.col}
                   value={field.value}
                   onDrop={item => this.handleDrop(field.row, field.col, item)}
-                  style={
+                  isSelected={
                     this.state.suggestions &&
                     this.state.suggestions.row === idx &&
                     this.state.suggestions.column === field.col
-                      ? fieldStyle
-                      : {}
                   }
+                  recived={field.recived}
                 />
               </td>
             </LongPress>

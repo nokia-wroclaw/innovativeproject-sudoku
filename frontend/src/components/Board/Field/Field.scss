@@ -1,5 +1,5 @@
 @import "../../../Variables";
-:export { boardColor: $board-color; }
+:export { boardColor: $board-color; fieldHighlight: $field-highlight }
 
 .field{
     display: flex;
