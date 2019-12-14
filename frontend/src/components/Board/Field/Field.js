@@ -1,11 +1,12 @@
 import React from "react";
-import "./Field.scss";
+import styles from "./Field.scss";
 import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import ItemTypes from "../../Draggable/ItemTypes";
 
 export default function Field({ value, onDrop, style }) {
-  const [, drop] = useDrop({
+  
+  const [{canDrop, isOver}, drop] = useDrop({
     accept: ItemTypes.DRAGGABLEFIELD,
     drop: onDrop,
     collect: monitor => ({
@@ -14,8 +15,19 @@ export default function Field({ value, onDrop, style }) {
     })
   });
 
+  const darker = (color, amount) => {
+    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+  }
+
+  let background = styles.boardColor
+
+  if(isOver && canDrop){
+    background = darker(styles.boardColor, -80)
+
+  }
+
   return (
-    <div className="field" ref={drop} style={style}>
+    <div className="field" ref={drop} style={{...style, background}}>
       <p>{value}</p>
     </div>
   );

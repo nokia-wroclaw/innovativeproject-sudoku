@@ -77,7 +77,7 @@ export default class Board extends React.Component {
                     this.state.suggestions.row === idx &&
                     this.state.suggestions.column === field.col
                       ? fieldStyle
-                      : null
+                      : {}
                   }
                 />
               </td>

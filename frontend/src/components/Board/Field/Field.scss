@@ -1,10 +1,11 @@
 @import "../../../Variables";
+:export { boardColor: $board-color; }
 
 .field{
     display: flex;
     align-items: center;
     justify-content: center;
-    background: $white;
+    background: $board-color;
     padding: 0;
     min-width: 4vw;
     min-height: 4vw;
