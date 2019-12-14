@@ -17,7 +17,8 @@ const ParticlesComponent = () => {
         params={{
           particles: {
             number: {
-              value: 80,
+              // value: 80,
+              value: 60,
               density: {
                 enable: true,
                 value_area: 800
@@ -27,7 +28,7 @@ const ParticlesComponent = () => {
               value: "#ffffff"
             },
             shape: {
-              type: "circle",
+              type: "images",
               stroke: {
                 width: 0,
                 color: "#000000"
@@ -35,11 +36,53 @@ const ParticlesComponent = () => {
               polygon: {
                 nb_sides: 5
               },
-              image: {
-                src: "img/github.svg",
-                width: 100,
-                height: 100
-              }
+              images: [
+                {
+                  src: "/numbers/1.svg",
+                  width: 100,
+                  height: 170
+                },
+                {
+                  src: "/numbers/2.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/3.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/4.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/5.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/6.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/7.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/8.svg",
+                  width: 100,
+                  height: 160
+                },
+                {
+                  src: "/numbers/9.svg",
+                  width: 100,
+                  height: 160
+                }
+              ]
             },
             opacity: {
               value: 0.5,
@@ -52,7 +95,8 @@ const ParticlesComponent = () => {
               }
             },
             size: {
-              value: 3,
+              // value: 3,
+              value: 10,
               random: true,
               anim: {
                 enable: false,
@@ -62,7 +106,8 @@ const ParticlesComponent = () => {
               }
             },
             line_linked: {
-              enable: true,
+              // enable: true,
+              enable: false,
               distance: 150,
               color: "#ffffff",
               opacity: 0.4,
