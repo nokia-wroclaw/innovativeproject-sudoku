@@ -61,21 +61,19 @@ function App() {
       <div className="foreground">
         <MuiThemeProvider theme={theme}>
           <BrowserRouter>
-            <>
-              <Switch>
-                <Route exact path="/">
-                  <Redirect to="register" />
-                </Route>
-                <Route path="/register" component={Register} />
-                <Route path="/login" component={Login} />
-                <Route path="/menu" component={Menu} />
-                <Route path="/game" component={GameView} />
-                <Route path="/settings" component={Settings} />
-                <Route path="*">
-                  <Redirect to="register" />
-                </Route>
-              </Switch>
-            </>
+            <Switch>
+              <Route exact path="/">
+                <Redirect to="register" />
+              </Route>
+              <Route path="/register" component={Register} />
+              <Route path="/login" component={Login} />
+              <Route path="/menu" component={Menu} />
+              <Route path="/game" component={GameView} />
+              <Route path="/settings" component={Settings} />
+              <Route path="*">
+                <Redirect to="register" />
+              </Route>
+            </Switch>
           </BrowserRouter>
         </MuiThemeProvider>
       </div>

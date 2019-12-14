@@ -4,16 +4,9 @@ import Particles from "react-particles-js";
 
 const ParticlesComponent = () => {
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%"
-      }}
-    >
+    <div className="ParticlesComponent">
       <Particles
+        style={{ width: "100vw", height: "100vh" }}
         params={{
           particles: {
             number: {
