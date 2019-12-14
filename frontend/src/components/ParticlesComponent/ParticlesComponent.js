@@ -6,7 +6,6 @@ const ParticlesComponent = () => {
   return (
     <div className="ParticlesComponent">
       <Particles
-        style={{ width: "100vw", height: "100vh" }}
         params={{
           particles: {
             number: {
