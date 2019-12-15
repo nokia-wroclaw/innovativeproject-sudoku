@@ -28,7 +28,7 @@ export default function GameView() {
       <Timer {...mockTime} />
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
-          <GoBack />
+          <GoBackButton />
           <Board fields={mockBoard} />
           <DragPanel />
         </div>
