@@ -1,0 +1,148 @@
+@import "../../Variables";
+
+.circular-menu {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.circle {
+  width: 120px;
+  height: 120px;
+  opacity: 0;
+  
+  -webkit-transform: scale(0);
+  -moz-transform: scale(0);
+  transform: scale(0);
+
+  -webkit-transition: all 0.4s ease-out;
+  -moz-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+}
+
+.open.circle {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  transform: scale(1);
+}
+
+.circle .circle-button {
+  text-decoration: none;
+  display: block;
+  position: absolute;
+  text-align: center;
+  background: $circular-menu-color;
+  color: $white;
+  opacity: 0.95;
+  border: 1px solid $white;
+}
+
+.circle .circle-button:active {
+  background-color: $circular-menu-choice-color;
+}
+
+.menu-button {
+  position: absolute;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  opacity: 0;
+}
+
+@media(max-width: 1025px){
+  .circle {
+    width: 320px;
+    height: 320px;
+  }
+
+  .circle .circle-button {
+    height: 6vh;
+    width: 6vh;
+    margin-left: -110px;
+    margin-top: -110px;
+    border-radius: 40px;  
+    font-size: 25px;
+  }
+
+  .menu-button {
+    top: calc(50% - 123px);
+    left: calc(50% - 123px);
+    height: 6.5vh;
+    width: 6.5vh;
+    font-size: 30px;
+  }
+}
+
+@media(max-width: 800px){
+  .circle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .circle .circle-button {
+    height: 5vh;
+    width: 5vh;
+    margin-left: -65px;
+    margin-top: -65px;
+    border-radius: 2.5vh;    
+    font-size: 18px;
+  }
+
+  .menu-button {
+    top: calc(50% - 73px);
+    left: calc(50% - 73px);
+    height: 6vh;
+    width: 6vh;
+  }
+}
+
+@media(max-width: 600px){
+  .circle {
+    width: 135px;
+    height: 135px;
+  }
+
+  .circle .circle-button {
+    height: 4vh;
+    width: 4vh;
+    margin-left: -30px;
+    margin-top: -30px;
+    border-radius: 20px;    
+    font-size: 15px;
+    padding: 0;
+  }
+  
+
+  .menu-button {
+    top: calc(50% - 32px);
+    left: calc(50% - 30px);
+    height: 4vh;
+    width: 4vh;
+  }
+}
+
+@media(max-width: 370px){
+  .circle {
+    width: 130px;
+    height: 130px;
+  }
+
+  .circle .circle-button {
+    height: 5vh;
+    width: 5vh;
+    margin-left: -25px;
+    margin-top: -25px;
+    border-radius: 20px;    
+    font-size: 15px;
+    padding: 0;
+  }
+
+  .menu-button {
+    top: calc(50% - 28px);
+    left: calc(50% - 28px);
+    min-height: 5vh;
+    min-width: 5vh;
+  }
+}

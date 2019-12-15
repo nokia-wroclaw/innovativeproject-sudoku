@@ -1,3 +1,4 @@
 export default {
-  DRAGGABLEFIELD: "DraggableField"
+  DRAGGABLEFIELD: "DraggableField",
+  BLOCKEDFIELD: ""
 };
