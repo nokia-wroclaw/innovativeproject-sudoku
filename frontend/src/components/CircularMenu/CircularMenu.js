@@ -84,10 +84,7 @@ const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
 };
 
 CircularMenu.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  row: PropTypes.number.isRequired,
-  column: PropTypes.number.isRequired,
+  suggestions: PropTypes.object.isRequired,
   updateBoard: PropTypes.func.isRequired,
   itemsAmount: PropTypes.number.isRequired,
   hideMenu: PropTypes.func.isRequired
