@@ -83,6 +83,13 @@ export default class Board extends React.Component {
                     suggestions.column === field.col
                   }
                   recived={field.recived}
+                  onClick={
+                    field.recived
+                      ? null
+                      : () => {
+                          this.updateBoard(field.row, field.col, "");
+                        }
+                  }
                 />
               </td>
             </LongPress>
