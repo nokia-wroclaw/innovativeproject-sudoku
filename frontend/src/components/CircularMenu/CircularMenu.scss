@@ -116,12 +116,10 @@
   
 
   .menu-button {
-    top: calc(50% - 40px);
-    left: calc(50% - 40px);
-    display: block;
-    min-height: 5vh;
-    min-width: 5vh;
-    
+    top: calc(50% - 32px);
+    left: calc(50% - 30px);
+    height: 4vh;
+    width: 4vh;
   }
 }
 
