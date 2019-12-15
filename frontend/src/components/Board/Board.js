@@ -57,7 +57,8 @@ export default class Board extends React.Component {
   };
 
   render() {
-    const rows = this.state.boardModel.rows.map((row, idx) => {
+    const { boardModel, suggestions } = this.state;
+    const rows = boardModel.rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
@@ -77,9 +78,9 @@ export default class Board extends React.Component {
                   value={field.value}
                   onDrop={item => this.handleDrop(field.row, field.col, item)}
                   isSelected={
-                    this.state.suggestions &&
-                    this.state.suggestions.row === idx &&
-                    this.state.suggestions.column === field.col
+                    suggestions &&
+                    suggestions.row === idx &&
+                    suggestions.column === field.col
                   }
                   recived={field.recived}
                 />
@@ -92,13 +93,10 @@ export default class Board extends React.Component {
 
     return (
       <div className="sudoku sudoku-background">
-        {this.state.suggestions && (
+        {suggestions && (
           <CircularMenu
             itemsAmount={9}
-            x={this.state.suggestions.x - 35}
-            y={this.state.suggestions.y - 35}
-            row={this.state.suggestions.row}
-            column={this.state.suggestions.column}
+            suggestions={suggestions}
             updateBoard={this.updateBoard}
             hideMenu={this.hideSuggestions}
           />
@@ -112,7 +110,9 @@ export default class Board extends React.Component {
 }
 
 Board.propTypes = {
-  fields: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number))
+  fields: PropTypes.arrayOf(
+    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
+  )
 };
 
 Board.defaultProps = {

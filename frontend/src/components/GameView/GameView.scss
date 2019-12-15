@@ -3,9 +3,15 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    
 }
 
-@media(max-width: 1000px){
+@media(max-width: 1024px){
+
+    .gameView{
+        margin-top: -20vh;
+    }
+
     .gamePanel{
         flex-direction: none;
     }
