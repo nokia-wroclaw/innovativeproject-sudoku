@@ -30,10 +30,10 @@ const theme = createMuiTheme({
         color: "white"
       },
       underline: {
-        "&$focused:after": {
+        "&:after": {
           borderBottomColor: "white"
         },
-        "&:after": {
+        "&$focused:after": {
           borderBottomColor: "white"
         },
         "&:before": {
