@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import styles from "./Field.scss";
 import ItemTypes from "../../Draggable/ItemTypes";
 
-export default function Field({ value, onDrop, isSelected, recived }) {
+export default function Field({ value, onDrop, isSelected, blocked, onClick }) {
   const [{ canDrop, isOver }, drop] = useDrop({
-    accept: recived ? ItemTypes.BLOCKEDFIELD : ItemTypes.DRAGGABLEFIELD,
+    accept: blocked ? ItemTypes.BLOCKEDFIELD : ItemTypes.DRAGGABLEFIELD,
     drop: onDrop,
     collect: monitor => ({
       isOver: monitor.isOver(),
@@ -14,8 +14,9 @@ export default function Field({ value, onDrop, isSelected, recived }) {
     })
   });
 
+  const [isMouseOver, setIsMouseOver] = useState(false);
+
   let background;
-  let opacity;
 
   const darker = (hexColor, amount) => {
     return `#${hexColor
@@ -29,8 +30,10 @@ export default function Field({ value, onDrop, isSelected, recived }) {
 
   if ((isOver && canDrop) || isSelected) {
     background = styles.fieldHighlight;
-  } else if (recived) {
+  } else if (blocked) {
     background = darker(styles.boardColor, -30);
+  } else if (isMouseOver && value) {
+    background = styles.fieldDeleteHighlight;
   }
 
   return (
@@ -38,9 +41,26 @@ export default function Field({ value, onDrop, isSelected, recived }) {
       className="field"
       ref={drop}
       style={{
-        background,
-        opacity
+        background
       }}
+      onKeyDown={onClick}
+      onMouseEnter={
+        blocked
+          ? null
+          : () => {
+              setIsMouseOver(true);
+            }
+      }
+      onMouseLeave={
+        blocked
+          ? null
+          : () => {
+              setIsMouseOver(false);
+            }
+      }
+      role="button"
+      tabIndex="0"
+      onClick={onClick}
     >
       <p> {value} </p>
     </div>
@@ -51,10 +71,12 @@ Field.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onDrop: PropTypes.func,
   isSelected: PropTypes.bool,
-  recived: PropTypes.bool.isRequired
+  blocked: PropTypes.bool.isRequired,
+  onClick: PropTypes.func
 };
 
 Field.defaultProps = {
   onDrop: null,
-  isSelected: null
+  isSelected: false,
+  onClick: null
 };

@@ -1,5 +1,7 @@
 @import "../../Variables";
 
+:export {timer: $timer-color}
+
 .game {
     display: flex;
     flex-direction: row;
@@ -37,10 +39,41 @@
     text-align: center;  
 }
 
+.gamePanel{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.Timer .progressBar{
+    padding: 0 0 20px 0;
+}
+
+.Timer p{
+    margin: 0;
+    color: $white;
+    font-size: 40px;
+    float: right;
+    font-family: 'Exo 2', sans-serif;
+}
+
+
 @media(max-width: 1024px){
     .sudoku-background{
         margin-right: 0;
         margin-bottom: 4vh;
     }
-    
+    .gameView{
+        margin-top: -20vh;
+    }
+
+    .gamePanel{
+        flex-direction: none;
+    }
+    .Timer p{
+        float: none;
+        text-align: center;
+    }
 }
