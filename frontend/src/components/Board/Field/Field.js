@@ -58,9 +58,10 @@ export default function Field({ value, onDrop, isSelected, recived, onClick }) {
       }
       role="button"
       tabIndex="0"
+      onClick={onClick}
     >
       {displayTrash && value ? (
-        <i className="fas fa-trash trash" onClick={onClick} />
+        <i className="fas fa-trash trash" />
       ) : (
         <p> {value} </p>
       )}
