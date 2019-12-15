@@ -6,7 +6,7 @@
   justify-content: center;
   padding: 10px 40px;
   border-radius: 5px;
-  background-color: $white;
+  background: rgba($card-color, 0.6);
 }
 
 .Menu h1 {
@@ -14,13 +14,24 @@
 }
 
 .Menu a {
-  margin-bottom: 10px;
+  padding: 10px 0;
+  width: 40%;
+  text-decoration: none;
+}
+
+button {
+  width: 100%;
 }
 
 @media (max-width: 576px) {
   .Menu .card {
     width: 100vw;
     height: 100vh;
+    background: rgba($card-color, 0.4);
     border-radius: 0;
+  }
+
+  .Menu a {
+    width: 90%;
   }
 }

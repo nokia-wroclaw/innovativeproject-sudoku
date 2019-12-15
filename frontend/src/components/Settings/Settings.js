@@ -7,7 +7,7 @@ const Settings = () => {
     <div className="Settings">
       <GoBackButton />
       <div className="card">
-        <h1>Settings</h1>
+        <h1 style={{ color: "white" }}>Settings</h1>
       </div>
     </div>
   );
