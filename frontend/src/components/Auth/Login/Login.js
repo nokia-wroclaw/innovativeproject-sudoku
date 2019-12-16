@@ -42,7 +42,7 @@ const Login = () => {
   return (
     <div className="Auth">
       <div className="card">
-        <h1 style={{ color: "white" }}>Sudoku Battle Royale</h1>
+        <img src="logo.png" alt="logo_image" />
         <Formik
           initialValues={form}
           validationSchema={validationSchema}

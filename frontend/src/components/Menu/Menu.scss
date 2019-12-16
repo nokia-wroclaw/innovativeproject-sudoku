@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 40px;
+  padding: 0 40px 20px 40px;
   border-radius: 5px;
   background: rgba($card-color, 0.6);
 }
@@ -15,11 +15,18 @@
 
 .Menu a {
   padding: 10px 0;
-  width: 40%;
+  width: 70%;
   text-decoration: none;
 }
 
-button {
+.Menu img {
+  margin-top: -95px;
+  margin-bottom: 30px;
+  width: 265px;
+  height: 208px;
+}
+
+.Menu button {
   width: 100%;
 }
 
@@ -29,6 +36,11 @@ button {
     height: 100vh;
     background: rgba($card-color, 0.4);
     border-radius: 0;
+  }
+
+  .Menu img {
+    margin-top: 0;
+    margin-bottom: 30px;
   }
 
   .Menu a {

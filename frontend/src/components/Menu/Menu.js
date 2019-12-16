@@ -7,7 +7,7 @@ const Menu = () => {
   return (
     <div className="Menu">
       <div className="card">
-        <h1 style={{ color: "white" }}>Sudoku Battle Royale</h1>
+        <img src="logo.png" alt="logo_image" />
         <Link to="/game">
           <Button size="large" variant="outlined">
             Play
