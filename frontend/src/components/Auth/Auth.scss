@@ -54,3 +54,10 @@
     width: 100%;
   }
 }
+
+@media (max-height: 812px) {
+  .Auth img {
+    width: 225px;
+    height: 166px;
+  }
+}
