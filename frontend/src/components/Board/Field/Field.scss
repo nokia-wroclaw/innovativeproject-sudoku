@@ -1,5 +1,5 @@
 @import "../../../Variables";
-:export { boardColor: $board-color; fieldHighlight: $field-highlight }
+:export { boardColor: $board-color; fieldHighlight: $field-highlight; fieldDeleteHighlight: $field-delete-highlight}
 
 .field{
     display: flex;
@@ -16,9 +16,7 @@
     margin: 0;
 }
 
-.field .trash{
-    color: #cc0033
-}
+
 
 
 @media(max-width: 1024px){

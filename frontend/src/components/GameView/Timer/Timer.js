@@ -2,28 +2,26 @@ import React from "react";
 import { Line } from "rc-progress";
 import PropTypes from "prop-types";
 import timer from "./Timer.scss";
+import useTimer from "../../../hooks/useTimer";
 
-export default function Timer({ currentTime, maxTime }) {
-  const progress = Math.floor((currentTime / maxTime) * 100);
-  const minutes = Math.floor(currentTime / 60);
-  let seconds = currentTime - minutes * 60;
+export default function Timer({ start, gameEndCallback }) {
+  const [timeLeft, gameEnd] = useTimer(start);
 
-  let textColor = timer.white;
-  let strokeColor = timer.base;
-  const red = "#cc0000";
+  const { progress, minutes, seconds } = timeLeft;
 
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
+  let timerColor = timer.timer;
+
+  if (minutes === 0 && seconds < 30) {
+    timerColor = "#cc0033";
   }
 
-  if (currentTime < 30) {
-    textColor = red;
-    strokeColor = red;
+  if (gameEnd) {
+    gameEndCallback();
   }
 
   return (
     <div className="Timer">
-      <p style={{ color: textColor }}>
+      <p style={{ color: timerColor }}>
         {minutes}:{seconds}
       </p>
       <Line
@@ -31,13 +29,13 @@ export default function Timer({ currentTime, maxTime }) {
         percent={progress}
         strokeWidth="2"
         trailWidth="2"
-        strokeColor={strokeColor}
+        strokeColor={timerColor}
       />
     </div>
   );
 }
 
 Timer.propTypes = {
-  currentTime: PropTypes.number.isRequired,
-  maxTime: PropTypes.number.isRequired
+  start: PropTypes.number.isRequired,
+  gameEndCallback: PropTypes.func.isRequired
 };

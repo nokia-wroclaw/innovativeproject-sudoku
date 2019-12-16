@@ -66,7 +66,7 @@ export default class Board extends React.Component {
               key={field.col}
               time={0.1}
               onLongPress={
-                field.recived
+                field.blocked
                   ? () => this.hideSuggestions()
                   : () => this.displaySuggestions(field.row, field.col)
               }
@@ -82,9 +82,9 @@ export default class Board extends React.Component {
                     suggestions.row === idx &&
                     suggestions.column === field.col
                   }
-                  recived={field.recived}
+                  blocked={field.blocked}
                   onClick={
-                    field.recived
+                    field.blocked
                       ? null
                       : () => {
                           this.updateBoard(field.row, field.col, "");
