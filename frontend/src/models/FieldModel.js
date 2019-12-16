@@ -5,10 +5,10 @@ export default class FieldModel {
     this.col = col;
     if (value === "#") {
       this.value = "";
-      this.recived = false;
+      this.blocked = false;
     } else {
       this.value = parseInt(value, 10);
-      this.recived = true;
+      this.blocked = true;
     }
   }
 }

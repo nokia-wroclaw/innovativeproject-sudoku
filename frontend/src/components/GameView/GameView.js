@@ -9,27 +9,30 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 
 export default function GameView() {
-  const mockBoard = [
-    ["#", 2, 3, 4, 5, "#", 7, 8, 9],
-    [1, 2, "#", 4, 5, 6, "#", "#", 9],
+  const board = [
+    [1, 2, 3, 4, 5, 1, 7, 8, 9],
+    [1, 2, 1, 4, 5, 6, 1, 1, 9],
     [1, 2, 3, "#", 5, 6, 7, 8, 9],
-    [1, "#", 3, 4, "#", 6, "#", 8, 9],
-    ["#", 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, "#", 5, 6, 7, 8, 9],
-    [1, "#", 3, "#", 5, "#", 7, "#", 9],
-    [1, 2, "#", 4, 5, 6, 7, "#", 9],
-    [1, "#", 3, 4, 5, "#", 7, 8, "#"]
+    [1, 1, 3, 4, 1, 6, 1, 8, 9],
+    [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    [1, 2, 3, 1, 5, 6, 7, 8, 9],
+    [1, 1, 3, 1, 5, 1, 7, 1, 9],
+    [1, 2, 1, 4, 5, 6, 7, 1, 9],
+    [1, 1, 3, 4, 5, 1, 7, 8, 1]
   ];
-
-  const mockTime = { maxTime: 300, currentTime: 6 };
 
   return (
     <div className="gameView">
-      <Timer {...mockTime} />
+      <Timer
+        start={275}
+        gameEndCallback={() => {
+          console.log("GAME END");
+        }}
+      />
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
           <GoBackButton />
-          <Board fields={mockBoard} />
+          <Board fields={board} />
           <DragPanel />
         </div>
       </DndProvider>
