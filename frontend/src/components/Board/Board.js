@@ -1,15 +1,14 @@
 import React from "react";
 import _ from "lodash";
-import PropTypes from "prop-types";
 import LongPress from "react-long";
 import { isMobile } from "react-device-detect";
+import HTML5Backend from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 import Field from "./Field/Field";
 import "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
-import HTML5Backend from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import Timer from "../GameView/Timer/Timer";
+import Timer from "../Timer/Timer";
 import "../../Variables.scss";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
@@ -19,8 +18,7 @@ export default class Board extends React.Component {
     super(props);
     this.state = {
       rows: this.createRows(this.downloadNewBoard()),
-      suggestions: null,
-      boardComplete: false
+      suggestions: null
     };
   }
 
@@ -51,20 +49,7 @@ export default class Board extends React.Component {
   };
 
   reloadNewBoard = () => {
-    const REMOVE_THIS = [
-      [1, 2, 3, 4, 5, 1, 7, 8, 9],
-      [1, 2, 1, "#", 3, 6, "#", 1, 9],
-      [1, 2, 3, 4, 3, 6, 7, 8, 9],
-      [1, 1, 3, 4, 1, 6, 1, 8, 9],
-      [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      [1, 2, 3, 1, 5, 6, 7, 8, 9],
-      [1, 1, 3, 1, 5, 1, 7, 1, 9],
-      [1, 2, 1, 4, 5, 6, 7, 1, 9],
-      [1, 1, 3, 4, 5, 1, 7, 8, 1]
-    ];
-    this.setState({ rows: this.createRows(REMOVE_THIS) });
-    //After remove uncomment this line
-    // this.setState({rows : this.createRows(this.downloadNewBoard())})
+    this.setState({ rows: this.createRows(this.downloadNewBoard()) });
   };
 
   parseBoard = rows => {
@@ -78,7 +63,7 @@ export default class Board extends React.Component {
   };
 
   createRows = fields => {
-    let rows = [];
+    const rows = [];
     let currentRow;
     for (let row = 0; row < 9; row++) {
       currentRow = [];
@@ -165,6 +150,7 @@ export default class Board extends React.Component {
             >
               <td key={field.col} id={`${field.row}x${field.col}`}>
                 <Field
+                  key={field.value}
                   row={field.row}
                   col={field.col}
                   value={field.value}
@@ -192,12 +178,7 @@ export default class Board extends React.Component {
 
     return (
       <div className="gameView">
-        <Timer
-          start={275}
-          gameEndCallback={() => {
-            console.log("GAME END");
-          }}
-        />
+        <Timer start={275} gameEndCallback={() => {}} />
         <DndProvider backend={HTML5Backend}>
           <div className="gamePanel">
             <GoBackButton />
@@ -221,23 +202,3 @@ export default class Board extends React.Component {
     );
   }
 }
-
-Board.propTypes = {
-  fields: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
-  )
-};
-
-Board.defaultProps = {
-  fields: [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  ]
-};
