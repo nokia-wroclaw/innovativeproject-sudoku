@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import HTML5Backend from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import "./GameView.scss";
@@ -9,7 +9,7 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 
 export default function GameView() {
-  const board = [
+  let mockBoard = [
     [1, 2, 3, 4, 5, 1, 7, 8, 9],
     [1, 2, 1, 4, 5, 6, 1, 1, 9],
     [1, 2, 3, "#", 5, 6, 7, 8, 9],
@@ -20,6 +20,27 @@ export default function GameView() {
     [1, 2, 1, 4, 5, 6, 7, 1, 9],
     [1, 1, 3, 4, 5, 1, 7, 8, 1]
   ];
+
+  const [board, setBoard] = useState(mockBoard);
+
+  const loadNewBoard = () => {
+    const newBoard = [
+      ["#", 2, 3, 4, 5, 1, 7, 8, 9],
+      ["#", 2, 1, 4, 5, 6, 1, 1, 9],
+      ["#", 2, 3, "#", "#", "#", "#", "#", "#"],
+      ["#", 1, 3, 4, 1, 6, 1, 8, 9],
+      ["#", 2, 3, 4, 5, 6, 7, 8, 9],
+      [1, 2, 3, 1, 5, 6, 7, 8, 9],
+      [1, 1, 3, 1, 5, 1, 7, 1, 9],
+      [1, 2, 1, 4, 5, 6, 7, 1, 9],
+      [1, 1, 3, 4, 5, 1, 7, 8, 1]
+    ];
+    setBoard(newBoard);
+  };
+
+  useEffect(() => {
+    console.log(board);
+  }, [board]);
 
   return (
     <div className="gameView">
@@ -32,7 +53,7 @@ export default function GameView() {
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
           <GoBackButton />
-          <Board fields={board} />
+          <Board fields={board} loadNewBoard={loadNewBoard} />
           <DragPanel />
         </div>
       </DndProvider>

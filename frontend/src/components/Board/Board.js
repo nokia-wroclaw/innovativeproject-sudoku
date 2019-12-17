@@ -36,29 +36,40 @@ export default class Board extends React.Component {
 
   handleDrop = (row, column, item) => {
     const { value } = item;
-    this.setState(prev => ({
-      boardModel: _.set(
-        prev.boardModel,
-        `rows['${row}'].['${column}'].value`,
-        value
-      )
-    }));
-    this.checkBoardComplete();
+    this.setState(
+      prev => ({
+        boardModel: _.set(
+          prev.boardModel,
+          `rows['${row}'].['${column}'].value`,
+          value
+        )
+      }),
+      () => {
+        this.checkBoardComplete();
+      }
+    );
   };
-
-  blockField = () => {};
 
   updateBoard = (row, column, value) => {
-    this.setState(prev => ({
-      boardModel: _.set(
-        prev.boardModel,
-        `rows['${row}'].['${column}'].value`,
-        value
-      )
-    }));
-    this.hideSuggestions();
-    this.checkBoardComplete();
+    this.setState(
+      prev => ({
+        boardModel: _.set(
+          prev.boardModel,
+          `rows['${row}'].['${column}'].value`,
+          value
+        )
+      }),
+      () => {
+        this.checkBoardComplete();
+      }
+    );
   };
+
+  // componentDidUpdate(prevProps){
+  //   if(prevProps.fields !== this.props.fields){
+  //       this.setState({boardModel : new BoardModel(this.props.fields)})
+  //     }
+  //   }
 
   checkBoardComplete = () => {
     let complete = true;
@@ -69,7 +80,9 @@ export default class Board extends React.Component {
         }
       });
     });
-    this.setState({ boardComplete: complete });
+    if (complete) {
+      this.props.loadNewBoard();
+    }
   };
 
   render() {
