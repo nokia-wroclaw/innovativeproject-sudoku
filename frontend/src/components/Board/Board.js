@@ -2,6 +2,7 @@ import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import LongPress from "react-long";
+import { isMobile } from "react-device-detect";
 import Field from "./Field/Field";
 import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
@@ -10,7 +11,8 @@ import CircularMenu from "../CircularMenu/CircularMenu";
 export default class Board extends React.Component {
   state = {
     boardModel: new BoardModel(this.props.fields),
-    suggestions: null
+    suggestions: null,
+    boardComplete: false
   };
 
   getPosition = element => {
@@ -41,6 +43,7 @@ export default class Board extends React.Component {
         value
       )
     }));
+    this.checkBoardComplete();
   };
 
   blockField = () => {};
@@ -54,6 +57,19 @@ export default class Board extends React.Component {
       )
     }));
     this.hideSuggestions();
+    this.checkBoardComplete();
+  };
+
+  checkBoardComplete = () => {
+    let complete = true;
+    this.state.boardModel.rows.forEach(row => {
+      row.forEach(field => {
+        if (field.value === "") {
+          complete = false;
+        }
+      });
+    });
+    this.setState({ boardComplete: complete });
   };
 
   render() {
@@ -84,7 +100,7 @@ export default class Board extends React.Component {
                   }
                   blocked={field.blocked}
                   onClick={
-                    field.blocked
+                    field.blocked || isMobile
                       ? null
                       : () => {
                           this.updateBoard(field.row, field.col, "");
