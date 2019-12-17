@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import Register from "./components/Auth/Register/Register";
 import Login from "./components/Auth/Login/Login";
 import Menu from "./components/Menu/Menu";
-import GameView from "./components/GameView/GameView";
+import Board from "./components/Board/Board";
 import Settings from "./components/Settings/Settings";
 import ParticlesComponent from "./components/ParticlesComponent/ParticlesComponent";
 
@@ -71,7 +71,7 @@ function App() {
               <Route path="/register" component={Register} />
               <Route path="/login" component={Login} />
               <Route path="/menu" component={Menu} />
-              <Route path="/game" component={GameView} />
+              <Route path="/game" component={Board} />
               <Route path="/settings" component={Settings} />
               <Route path="*">
                 <Redirect to="register" />

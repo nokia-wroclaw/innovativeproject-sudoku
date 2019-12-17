@@ -1,18 +1,80 @@
 import React from "react";
 import _ from "lodash";
-import PropTypes from "prop-types";
 import LongPress from "react-long";
 import { isMobile } from "react-device-detect";
+import HTML5Backend from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 import Field from "./Field/Field";
-import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
+import FieldModel from "../../models/FieldModel";
+import Timer from "../Timer/Timer";
+import "../../Variables.scss";
+import DragPanel from "../Draggable/DragPanel/DragPanel";
+import GoBackButton from "../GoBackButton/GoBackButton";
 
 export default class Board extends React.Component {
-  state = {
-    boardModel: new BoardModel(this.props.fields),
-    suggestions: null,
-    boardComplete: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      rows: this.createRows(this.downloadNewBoard()),
+      suggestions: null
+    };
+  }
+
+  checkBoardCorrect = () => {
+    // Send this board to server
+    const boardForServer = this.parseBoard(this.state.rows);
+    // Response from server
+    const boardCorrect = true;
+    if (boardCorrect) {
+      this.reloadNewBoard();
+    }
+  };
+
+  downloadNewBoard = () => {
+    // Assign downloaded board to this variable
+    const newBoard = [
+      [1, 2, 3, 4, 5, 1, 7, 8, 9],
+      [1, 2, 1, 4, 5, 6, 1, 1, 9],
+      [1, 2, 3, "#", "#", 6, 7, 8, 9],
+      [1, 1, 3, 4, 1, 6, 1, 8, 9],
+      [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      [1, 2, 3, 1, 5, 6, 7, 8, 9],
+      [1, 1, 3, 1, 5, 1, 7, 1, 9],
+      [1, 2, 1, 4, 5, 6, 7, 1, 9],
+      [1, 1, 3, 4, 5, 1, 7, 8, 1]
+    ];
+    return newBoard;
+  };
+
+  reloadNewBoard = () => {
+    this.setState({ rows: this.createRows(this.downloadNewBoard()) });
+  };
+
+  parseBoard = rows => {
+    const userCompleteBoard = [];
+    rows.forEach(row => {
+      row.forEach(field => {
+        userCompleteBoard.push(field.value);
+      });
+    });
+    return userCompleteBoard;
+  };
+
+  createRows = fields => {
+    const rows = [];
+    let currentRow;
+    for (let row = 0; row < 9; row++) {
+      currentRow = [];
+      rows.push(currentRow);
+      for (let col = 0; col < 9; col++) {
+        currentRow.push(
+          new FieldModel(rows.length - 1, currentRow.length, fields[row][col])
+        );
+      }
+    }
+    return rows;
   };
 
   getPosition = element => {
@@ -38,11 +100,7 @@ export default class Board extends React.Component {
     const { value } = item;
     this.setState(
       prev => ({
-        boardModel: _.set(
-          prev.boardModel,
-          `rows['${row}'].['${column}'].value`,
-          value
-        )
+        rows: _.set(prev.rows, `['${row}'].['${column}'].value`, value)
       }),
       () => {
         this.checkBoardComplete();
@@ -53,11 +111,7 @@ export default class Board extends React.Component {
   updateBoard = (row, column, value) => {
     this.setState(
       prev => ({
-        boardModel: _.set(
-          prev.boardModel,
-          `rows['${row}'].['${column}'].value`,
-          value
-        )
+        rows: _.set(prev.rows, `['${row}'].['${column}'].value`, value)
       }),
       () => {
         this.checkBoardComplete();
@@ -65,15 +119,9 @@ export default class Board extends React.Component {
     );
   };
 
-  // componentDidUpdate(prevProps){
-  //   if(prevProps.fields !== this.props.fields){
-  //       this.setState({boardModel : new BoardModel(this.props.fields)})
-  //     }
-  //   }
-
   checkBoardComplete = () => {
     let complete = true;
-    this.state.boardModel.rows.forEach(row => {
+    this.state.rows.forEach(row => {
       row.forEach(field => {
         if (field.value === "") {
           complete = false;
@@ -81,13 +129,13 @@ export default class Board extends React.Component {
       });
     });
     if (complete) {
-      this.props.loadNewBoard();
+      this.checkBoardCorrect(this.state.rows);
     }
   };
 
   render() {
-    const { boardModel, suggestions } = this.state;
-    const rows = boardModel.rows.map((row, idx) => {
+    const { rows, suggestions } = this.state;
+    const boardRows = rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
@@ -102,6 +150,7 @@ export default class Board extends React.Component {
             >
               <td key={field.col} id={`${field.row}x${field.col}`}>
                 <Field
+                  key={field.value}
                   row={field.row}
                   col={field.col}
                   value={field.value}
@@ -128,39 +177,28 @@ export default class Board extends React.Component {
     });
 
     return (
-      <div className="sudoku sudoku-background">
-        {suggestions && (
-          <CircularMenu
-            itemsAmount={9}
-            suggestions={suggestions}
-            updateBoard={this.updateBoard}
-            hideMenu={this.hideSuggestions}
-          />
-        )}
-        <table>
-          <tbody>{rows}</tbody>
-        </table>
+      <div className="gameView">
+        <Timer start={275} gameEndCallback={() => {}} />
+        <DndProvider backend={HTML5Backend}>
+          <div className="gamePanel">
+            <GoBackButton />
+            <div className="sudoku sudoku-background">
+              {suggestions && (
+                <CircularMenu
+                  itemsAmount={9}
+                  suggestions={suggestions}
+                  updateBoard={this.updateBoard}
+                  hideMenu={this.hideSuggestions}
+                />
+              )}
+              <table>
+                <tbody>{boardRows}</tbody>
+              </table>
+            </div>
+            <DragPanel />
+          </div>
+        </DndProvider>
       </div>
     );
   }
 }
-
-Board.propTypes = {
-  fields: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
-  )
-};
-
-Board.defaultProps = {
-  fields: [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  ]
-};

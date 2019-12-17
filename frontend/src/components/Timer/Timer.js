@@ -2,7 +2,7 @@ import React from "react";
 import { Line } from "rc-progress";
 import PropTypes from "prop-types";
 import timer from "./Timer.scss";
-import useTimer from "../../../hooks/useTimer";
+import useTimer from "../../hooks/useTimer";
 
 export default function Timer({ start, gameEndCallback }) {
   const [timeLeft, gameEnd] = useTimer(start);
