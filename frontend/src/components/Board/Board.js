@@ -7,19 +7,77 @@ import Field from "./Field/Field";
 import "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
+import HTML5Backend from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import Timer from "../GameView/Timer/Timer";
+import "../../Variables.scss";
+import DragPanel from "../Draggable/DragPanel/DragPanel";
+import GoBackButton from "../GoBackButton/GoBackButton";
 
 export default class Board extends React.Component {
   constructor(props) {
     super(props);
-    this.rows = this.createRows();
     this.state = {
-      rows: this.rows,
+      rows: this.createRows(this.downloadNewBoard()),
       suggestions: null,
       boardComplete: false
     };
   }
 
-  createRows = () => {
+  checkBoardCorrect = () => {
+    // Send this board to server
+    const boardForServer = this.parseBoard(this.state.rows);
+    // Response from server
+    const boardCorrect = true;
+    if (boardCorrect) {
+      this.reloadNewBoard();
+    }
+  };
+
+  downloadNewBoard = () => {
+    // Assign downloaded board to this variable
+    const newBoard = [
+      [1, 2, 3, 4, 5, 1, 7, 8, 9],
+      [1, 2, 1, 4, 5, 6, 1, 1, 9],
+      [1, 2, 3, "#", "#", 6, 7, 8, 9],
+      [1, 1, 3, 4, 1, 6, 1, 8, 9],
+      [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      [1, 2, 3, 1, 5, 6, 7, 8, 9],
+      [1, 1, 3, 1, 5, 1, 7, 1, 9],
+      [1, 2, 1, 4, 5, 6, 7, 1, 9],
+      [1, 1, 3, 4, 5, 1, 7, 8, 1]
+    ];
+    return newBoard;
+  };
+
+  reloadNewBoard = () => {
+    const REMOVE_THIS = [
+      [1, 2, 3, 4, 5, 1, 7, 8, 9],
+      [1, 2, 1, "#", 3, 6, "#", 1, 9],
+      [1, 2, 3, 4, 3, 6, 7, 8, 9],
+      [1, 1, 3, 4, 1, 6, 1, 8, 9],
+      [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      [1, 2, 3, 1, 5, 6, 7, 8, 9],
+      [1, 1, 3, 1, 5, 1, 7, 1, 9],
+      [1, 2, 1, 4, 5, 6, 7, 1, 9],
+      [1, 1, 3, 4, 5, 1, 7, 8, 1]
+    ];
+    this.setState({ rows: this.createRows(REMOVE_THIS) });
+    //After remove uncomment this line
+    // this.setState({rows : this.createRows(this.downloadNewBoard())})
+  };
+
+  parseBoard = rows => {
+    const userCompleteBoard = [];
+    rows.forEach(row => {
+      row.forEach(field => {
+        userCompleteBoard.push(field.value);
+      });
+    });
+    return userCompleteBoard;
+  };
+
+  createRows = fields => {
     let rows = [];
     let currentRow;
     for (let row = 0; row < 9; row++) {
@@ -27,11 +85,7 @@ export default class Board extends React.Component {
       rows.push(currentRow);
       for (let col = 0; col < 9; col++) {
         currentRow.push(
-          new FieldModel(
-            rows.length - 1,
-            currentRow.length,
-            this.props.fields[row][col]
-          )
+          new FieldModel(rows.length - 1, currentRow.length, fields[row][col])
         );
       }
     }
@@ -90,7 +144,7 @@ export default class Board extends React.Component {
       });
     });
     if (complete) {
-      this.props.getBoard(this.state.rows);
+      this.checkBoardCorrect(this.state.rows);
     }
   };
 
@@ -137,18 +191,32 @@ export default class Board extends React.Component {
     });
 
     return (
-      <div className="sudoku sudoku-background">
-        {suggestions && (
-          <CircularMenu
-            itemsAmount={9}
-            suggestions={suggestions}
-            updateBoard={this.updateBoard}
-            hideMenu={this.hideSuggestions}
-          />
-        )}
-        <table>
-          <tbody>{boardRows}</tbody>
-        </table>
+      <div className="gameView">
+        <Timer
+          start={275}
+          gameEndCallback={() => {
+            console.log("GAME END");
+          }}
+        />
+        <DndProvider backend={HTML5Backend}>
+          <div className="gamePanel">
+            <GoBackButton />
+            <div className="sudoku sudoku-background">
+              {suggestions && (
+                <CircularMenu
+                  itemsAmount={9}
+                  suggestions={suggestions}
+                  updateBoard={this.updateBoard}
+                  hideMenu={this.hideSuggestions}
+                />
+              )}
+              <table>
+                <tbody>{boardRows}</tbody>
+              </table>
+            </div>
+            <DragPanel />
+          </div>
+        </DndProvider>
       </div>
     );
   }

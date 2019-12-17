@@ -75,7 +75,11 @@ export default function GameView() {
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
           <GoBackButton />
-          <Board fields={serverBoard} getBoard={getUserBoard} />
+          <Board
+            key={boardCounter}
+            fields={serverBoard}
+            getBoard={getUserBoard}
+          />
           <DragPanel />
         </div>
       </DndProvider>
