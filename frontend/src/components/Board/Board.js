@@ -24,7 +24,7 @@ export default class Board extends React.Component {
 
   checkBoardCorrect = () => {
     // Send this board to server
-    const boardForServer = this.parseBoard(this.state.rows);
+    // const boardForServer = this.parseBoard(this.state.rows);
     // Response from server
     const boardCorrect = true;
     if (boardCorrect) {
