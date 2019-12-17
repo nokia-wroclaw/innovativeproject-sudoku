@@ -4,15 +4,38 @@ import PropTypes from "prop-types";
 import LongPress from "react-long";
 import { isMobile } from "react-device-detect";
 import Field from "./Field/Field";
-import BoardModel from "../../models/BoardModel";
 import "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
+import FieldModel from "../../models/FieldModel";
 
 export default class Board extends React.Component {
-  state = {
-    boardModel: new BoardModel(this.props.fields),
-    suggestions: null,
-    boardComplete: false
+  constructor(props) {
+    super(props);
+    this.rows = this.createRows();
+    this.state = {
+      rows: this.rows,
+      suggestions: null,
+      boardComplete: false
+    };
+  }
+
+  createRows = () => {
+    let rows = [];
+    let currentRow;
+    for (let row = 0; row < 9; row++) {
+      currentRow = [];
+      rows.push(currentRow);
+      for (let col = 0; col < 9; col++) {
+        currentRow.push(
+          new FieldModel(
+            rows.length - 1,
+            currentRow.length,
+            this.props.fields[row][col]
+          )
+        );
+      }
+    }
+    return rows;
   };
 
   getPosition = element => {
@@ -38,11 +61,7 @@ export default class Board extends React.Component {
     const { value } = item;
     this.setState(
       prev => ({
-        boardModel: _.set(
-          prev.boardModel,
-          `rows['${row}'].['${column}'].value`,
-          value
-        )
+        rows: _.set(prev.rows, `['${row}'].['${column}'].value`, value)
       }),
       () => {
         this.checkBoardComplete();
@@ -53,11 +72,7 @@ export default class Board extends React.Component {
   updateBoard = (row, column, value) => {
     this.setState(
       prev => ({
-        boardModel: _.set(
-          prev.boardModel,
-          `rows['${row}'].['${column}'].value`,
-          value
-        )
+        rows: _.set(prev.rows, `['${row}'].['${column}'].value`, value)
       }),
       () => {
         this.checkBoardComplete();
@@ -65,15 +80,9 @@ export default class Board extends React.Component {
     );
   };
 
-  // componentDidUpdate(prevProps){
-  //   if(prevProps.fields !== this.props.fields){
-  //       this.setState({boardModel : new BoardModel(this.props.fields)})
-  //     }
-  //   }
-
   checkBoardComplete = () => {
     let complete = true;
-    this.state.boardModel.rows.forEach(row => {
+    this.state.rows.forEach(row => {
       row.forEach(field => {
         if (field.value === "") {
           complete = false;
@@ -81,13 +90,13 @@ export default class Board extends React.Component {
       });
     });
     if (complete) {
-      this.props.loadNewBoard();
+      this.props.getBoard(this.state.rows);
     }
   };
 
   render() {
-    const { boardModel, suggestions } = this.state;
-    const rows = boardModel.rows.map((row, idx) => {
+    const { rows, suggestions } = this.state;
+    const boardRows = rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
@@ -138,7 +147,7 @@ export default class Board extends React.Component {
           />
         )}
         <table>
-          <tbody>{rows}</tbody>
+          <tbody>{boardRows}</tbody>
         </table>
       </div>
     );

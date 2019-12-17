@@ -12,7 +12,7 @@ export default function GameView() {
   let mockBoard = [
     [1, 2, 3, 4, 5, 1, 7, 8, 9],
     [1, 2, 1, 4, 5, 6, 1, 1, 9],
-    [1, 2, 3, "#", 5, 6, 7, 8, 9],
+    [1, 2, 3, "#", "#", 6, 7, 8, 9],
     [1, 1, 3, 4, 1, 6, 1, 8, 9],
     [1, 2, 3, 4, 5, 6, 7, 8, 9],
     [1, 2, 3, 1, 5, 6, 7, 8, 9],
@@ -21,26 +21,48 @@ export default function GameView() {
     [1, 1, 3, 4, 5, 1, 7, 8, 1]
   ];
 
-  const [board, setBoard] = useState(mockBoard);
+  const [serverBoard, setServerBoard] = useState(mockBoard);
+  const [userBoard, setUserBoard] = useState(null);
+  const [boardCounter, setBoardCounter] = useState(0);
 
-  const loadNewBoard = () => {
-    const newBoard = [
-      ["#", 2, 3, 4, 5, 1, 7, 8, 9],
-      ["#", 2, 1, 4, 5, 6, 1, 1, 9],
-      ["#", 2, 3, "#", "#", "#", "#", "#", "#"],
-      ["#", 1, 3, 4, 1, 6, 1, 8, 9],
-      ["#", 2, 3, 4, 5, 6, 7, 8, 9],
-      [1, 2, 3, 1, 5, 6, 7, 8, 9],
-      [1, 1, 3, 1, 5, 1, 7, 1, 9],
-      [1, 2, 1, 4, 5, 6, 7, 1, 9],
-      [1, 1, 3, 4, 5, 1, 7, 8, 1]
-    ];
-    setBoard(newBoard);
+  const getUserBoard = rows => {
+    const userCompleteBoard = [];
+    rows.forEach(row => {
+      row.forEach(field => {
+        userCompleteBoard.push(field.value);
+      });
+    });
+    setUserBoard(userCompleteBoard);
   };
 
   useEffect(() => {
-    console.log(board);
-  }, [board]);
+    if (userBoard != null) {
+      //wysyłamy userBoard
+      console.log("WYSYŁAM DO SERWERA SPRAWDZENIE");
+      //otrzymane od serwera sprawdzenie
+      const correct = true;
+      if (correct) {
+        console.log("ODBIERAM NOWĄ PLANSZĘ");
+        const newBoard = [
+          ["#", 2, 3, 4, 5, 1, 7, 8, 9],
+          [1, 2, 1, 4, 5, 6, 1, 1, 9],
+          [1, 2, 3, 5, 4, 6, 7, 8, 9],
+          [1, 1, 3, 4, 1, 6, 1, 8, 9],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          [1, 2, 3, 1, 5, 6, 7, 8, 9],
+          [1, 1, 3, 1, 5, 1, 7, 1, 9],
+          [1, 2, 1, 4, 5, 6, 7, 1, 9],
+          [1, 1, 3, 4, 5, 1, 7, 8, 1]
+        ];
+        setServerBoard(newBoard);
+        setBoardCounter(prev => {
+          return prev + 1;
+        });
+      }
+    }
+  }, [userBoard]);
+
+  useEffect(() => {}, [serverBoard]);
 
   return (
     <div className="gameView">
@@ -53,7 +75,7 @@ export default function GameView() {
       <DndProvider backend={HTML5Backend}>
         <div className="gamePanel">
           <GoBackButton />
-          <Board fields={board} loadNewBoard={loadNewBoard} />
+          <Board fields={serverBoard} getBoard={getUserBoard} />
           <DragPanel />
         </div>
       </DndProvider>
