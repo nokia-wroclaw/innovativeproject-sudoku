@@ -12,6 +12,10 @@ services:
       - "80:80"
     links:
       - database
+    environment:
+      - SUDOKUBR_SECRET_KEY=${SUDOKUBR_SECRET_KEY}
+      - SUDOKUBR_DB_USERNAME=${SUDOKUBR_DB_USERNAME} 
+      - SUDOKUBR_DB_PASSWORD=${SUDOKUBR_DB_PASSWORD}
   database:
     image: 'mongo'
     container_name: 'mongo-container'
