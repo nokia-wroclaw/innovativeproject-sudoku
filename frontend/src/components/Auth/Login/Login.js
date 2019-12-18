@@ -1,6 +1,7 @@
 import "../Auth.scss";
 import React from "react";
 import { Button } from "@material-ui/core";
+import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -32,17 +33,20 @@ const form = {
   password: ""
 };
 
-const onSubmit = (data, setSubmitting, setStatus) => {
-  setSubmitting(true);
-  handleSubmit({ data }, setStatus);
-  setSubmitting(false);
-};
-
 const Login = () => {
+  const history = useHistory();
+
+  const onSubmit = (data, setSubmitting, setStatus) => {
+    setSubmitting(true);
+    handleSubmit({ data }, setStatus);
+    history.push("/menu");
+    setSubmitting(false);
+  };
+
   return (
     <div className="Auth">
       <div className="card">
-        <h1 style={{ color: "white" }}>Sudoku Battle Royale</h1>
+        <img src="logo.png" alt="logo_image" />
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
