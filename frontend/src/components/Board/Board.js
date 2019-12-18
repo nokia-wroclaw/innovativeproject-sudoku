@@ -4,6 +4,7 @@ import LongPress from "react-long";
 import { isMobile } from "react-device-detect";
 import HTML5Backend from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { Line } from "rc-progress";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
@@ -12,7 +13,6 @@ import "../../Variables.scss";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
-import { Line } from "rc-progress";
 
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
@@ -36,21 +36,12 @@ const Board = () => {
     fetch("https://sudokubr.me/api/sudoku")
       .then(res => res.json())
       .then(board => {
-        console.log(board);
         setBoardArray(board.sudokuBoard);
       })
       .then(() => {
         setTimeLeft(40);
       });
   };
-
-  useEffect(() => {
-    if (boardArray) {
-      setRows(createRows(boardArray));
-    } else {
-      downloadNewBoard();
-    }
-  }, [boardArray]);
 
   const createRows = board => {
     const newRows = [];
@@ -67,9 +58,18 @@ const Board = () => {
     return newRows;
   };
 
+  useEffect(() => {
+    if (boardArray) {
+      setRows(createRows(boardArray));
+    } else {
+      downloadNewBoard();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardArray]);
+
   const checkBoardCorrect = () => {
     // Send this board to server
-    const boardForServer = parseBoard(rows);
+    // const boardForServer = parseBoard(rows);
     // Response from server
     const boardCorrect = true;
     if (boardCorrect) {
@@ -77,15 +77,16 @@ const Board = () => {
     }
   };
 
-  const parseBoard = board => {
-    const userCompleteBoard = [];
-    board.forEach(row => {
-      row.forEach(field => {
-        userCompleteBoard.push(field.value);
-      });
-    });
-    return userCompleteBoard;
-  };
+  // Function disabled coz of eslint, prepared for board check in server
+  // const parseBoard = board => {
+  //   const userCompleteBoard = [];
+  //   board.forEach(row => {
+  //     row.forEach(field => {
+  //       userCompleteBoard.push(field.value);
+  //     });
+  //   });
+  //   return userCompleteBoard;
+  // };
 
   const getPosition = element => {
     const rect = element.getBoundingClientRect();
@@ -102,6 +103,7 @@ const Board = () => {
     setSuggestions({ x: coords.x, y: coords.y, row, column });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkBoardComplete = () => {
     let complete = true;
     rows.forEach(row => {
