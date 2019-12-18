@@ -18,19 +18,12 @@ const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
 
   const downloadNewBoard = () => {
-    // fetch("https://sudokubr.me/api/sudoku")
-    //   .then(board => setBoardArray(board.json()))
-    setBoardArray([
-      [1, 2, 3, 4, 5, 1, 7, 8, 9],
-      [1, 2, 1, 4, 5, 6, 1, 1, 9],
-      [1, 2, 3, "#", "#", 6, 7, 8, 9],
-      [1, 1, 3, 4, 1, 6, 1, 8, 9],
-      [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      [1, 2, 3, 1, 5, 6, 7, 8, 9],
-      [1, 1, 3, 1, 5, 1, 7, 1, 9],
-      [1, 2, 1, 4, 5, 6, 7, 1, 9],
-      [1, 1, 3, 4, 5, 1, 7, 8, 1]
-    ]);
+    fetch("https://sudokubr.me/api/sudoku")
+      .then(res => res.json())
+      .then(board => {
+        console.log(board);
+        setBoardArray(board.sudokuBoard);
+      });
   };
 
   useEffect(() => {

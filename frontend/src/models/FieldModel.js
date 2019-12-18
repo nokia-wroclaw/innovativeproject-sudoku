@@ -3,7 +3,7 @@ export default class FieldModel {
     this.value = value;
     this.row = row;
     this.col = col;
-    if (value === "#") {
+    if (value === 0) {
       this.value = "";
       this.blocked = false;
     } else {
