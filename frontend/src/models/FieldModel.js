@@ -3,12 +3,12 @@ export default class FieldModel {
     this.value = value;
     this.row = row;
     this.col = col;
-    if (value === "#") {
+    if (value === 0) {
       this.value = "";
-      this.recived = false;
+      this.blocked = false;
     } else {
       this.value = parseInt(value, 10);
-      this.recived = true;
+      this.blocked = true;
     }
   }
 }

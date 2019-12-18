@@ -1,4 +1,4 @@
-import Field from "./FieldModel";
+import FieldModel from "./FieldModel";
 
 export default class BoardModel {
   constructor(input) {
@@ -10,7 +10,11 @@ export default class BoardModel {
       this.rows.push(currentRow);
       for (let col = 0; col < 9; col++) {
         currentRow.push(
-          new Field(this.rows.length - 1, currentRow.length, input[row][col])
+          new FieldModel(
+            this.rows.length - 1,
+            currentRow.length,
+            input[row][col]
+          )
         );
       }
     }

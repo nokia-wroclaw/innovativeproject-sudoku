@@ -1,64 +1,137 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import PropTypes from "prop-types";
 import LongPress from "react-long";
+import { isMobile } from "react-device-detect";
+import HTML5Backend from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import { Line } from "rc-progress";
 import Field from "./Field/Field";
-import BoardModel from "../../models/BoardModel";
-import "./Board.scss";
+import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
+import FieldModel from "../../models/FieldModel";
+import "../../Variables.scss";
+import DragPanel from "../Draggable/DragPanel/DragPanel";
+import GoBackButton from "../GoBackButton/GoBackButton";
+import useTimer from "../../hooks/useTimer";
 
-export default class Board extends React.Component {
-  state = {
-    boardModel: new BoardModel(this.props.fields),
-    suggestions: null
+const Board = () => {
+  const [boardArray, setBoardArray] = useState(null);
+  const [rows, setRows] = useState();
+  const [suggestions, setSuggestions] = useState(null);
+  const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
+
+  const { progress, minutes, seconds } = timeLeft;
+
+  let timerColor = styles.timer;
+
+  if (minutes === 0 && seconds < 20) {
+    timerColor = "#cc0033";
+  }
+
+  if (gameEnd) {
+    console.log("GAME END");
+  }
+
+  const downloadNewBoard = () => {
+    fetch("https://sudokubr.me/api/sudoku")
+      .then(res => res.json())
+      .then(board => {
+        setBoardArray(board.sudokuBoard);
+      })
+      .then(() => {
+        setTimeLeft(40);
+      });
   };
 
-  getPosition = element => {
+  const createRows = board => {
+    const newRows = [];
+    let currentRow;
+    for (let row = 0; row < 9; row++) {
+      currentRow = [];
+      newRows.push(currentRow);
+      for (let col = 0; col < 9; col++) {
+        currentRow.push(
+          new FieldModel(newRows.length - 1, currentRow.length, board[row][col])
+        );
+      }
+    }
+    return newRows;
+  };
+
+  useEffect(() => {
+    if (boardArray) {
+      setRows(createRows(boardArray));
+    } else {
+      downloadNewBoard();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardArray]);
+
+  const checkBoardCorrect = () => {
+    // Send this board to server
+    // const boardForServer = parseBoard(rows);
+    // Response from server
+    const boardCorrect = true;
+    if (boardCorrect) {
+      downloadNewBoard();
+    }
+  };
+
+  // Function disabled coz of eslint, prepared for board check in server
+  // const parseBoard = board => {
+  //   const userCompleteBoard = [];
+  //   board.forEach(row => {
+  //     row.forEach(field => {
+  //       userCompleteBoard.push(field.value);
+  //     });
+  //   });
+  //   return userCompleteBoard;
+  // };
+
+  const getPosition = element => {
     const rect = element.getBoundingClientRect();
     return { x: rect.left, y: rect.top };
   };
 
-  hideSuggestions = () => {
-    this.setState({ suggestions: null });
+  const hideSuggestions = () => {
+    setSuggestions(null);
   };
 
-  displaySuggestions = (row, column) => {
-    this.setState({ suggestions: null });
-    const coords = this.getPosition(
-      document.getElementById(`${row}x${column}`)
-    );
-    this.setState({
-      suggestions: { x: coords.x, y: coords.y, row, column }
+  const displaySuggestions = (row, column) => {
+    setSuggestions(null);
+    const coords = getPosition(document.getElementById(`${row}x${column}`));
+    setSuggestions({ x: coords.x, y: coords.y, row, column });
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const checkBoardComplete = () => {
+    let complete = true;
+    rows.forEach(row => {
+      row.forEach(field => {
+        if (field.value === "") {
+          complete = false;
+        }
+      });
     });
+    if (complete) {
+      checkBoardCorrect(rows);
+    }
   };
 
-  handleDrop = (row, column, item) => {
-    const { value } = item;
-    this.setState(prev => ({
-      boardModel: _.set(
-        prev.boardModel,
-        `rows['${row}'].['${column}'].value`,
-        value
-      )
-    }));
+  useEffect(() => {
+    if (rows) {
+      checkBoardComplete();
+    }
+  }, [rows, checkBoardComplete]);
+
+  const updateBoard = (row, column, item) => {
+    const value = _.get(item, "value", item);
+    setRows(prev => _.set(prev, `['${row}'].['${column}'].value`, value));
   };
 
-  blockField = () => {};
-
-  updateBoard = (row, column, value) => {
-    this.setState(prev => ({
-      boardModel: _.set(
-        prev.boardModel,
-        `rows['${row}'].['${column}'].value`,
-        value
-      )
-    }));
-    this.hideSuggestions();
-  };
-
-  render() {
-    const { boardModel, suggestions } = this.state;
-    const rows = boardModel.rows.map((row, idx) => {
+  let boardRows = null;
+  if (rows) {
+    boardRows = rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
@@ -66,23 +139,31 @@ export default class Board extends React.Component {
               key={field.col}
               time={0.1}
               onLongPress={
-                field.recived
-                  ? () => this.hideSuggestions()
-                  : () => this.displaySuggestions(field.row, field.col)
+                field.blocked
+                  ? () => hideSuggestions()
+                  : () => displaySuggestions(field.row, field.col)
               }
             >
               <td key={field.col} id={`${field.row}x${field.col}`}>
                 <Field
+                  key={field.value}
                   row={field.row}
                   col={field.col}
                   value={field.value}
-                  onDrop={item => this.handleDrop(field.row, field.col, item)}
+                  onDrop={item => updateBoard(field.row, field.col, item)}
                   isSelected={
                     suggestions &&
                     suggestions.row === idx &&
                     suggestions.column === field.col
                   }
-                  recived={field.recived}
+                  blocked={field.blocked}
+                  onClick={
+                    field.blocked || isMobile
+                      ? null
+                      : () => {
+                          updateBoard(field.row, field.col, "");
+                        }
+                  }
                 />
               </td>
             </LongPress>
@@ -90,41 +171,43 @@ export default class Board extends React.Component {
         </tr>
       );
     });
-
-    return (
-      <div className="sudoku sudoku-background">
-        {suggestions && (
-          <CircularMenu
-            itemsAmount={9}
-            suggestions={suggestions}
-            updateBoard={this.updateBoard}
-            hideMenu={this.hideSuggestions}
-          />
-        )}
-        <table>
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
-    );
   }
-}
 
-Board.propTypes = {
-  fields: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
-  )
+  return (
+    <div className="gameView">
+      <div className="Timer">
+        <p style={{ color: timerColor }}>
+          {minutes}:{seconds}
+        </p>
+        <Line
+          className="progressBar"
+          percent={progress}
+          strokeWidth="2"
+          trailWidth="2"
+          strokeColor={timerColor}
+        />
+      </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className="gamePanel">
+          <GoBackButton />
+          <div className="sudoku sudoku-background">
+            {suggestions && (
+              <CircularMenu
+                itemsAmount={9}
+                suggestions={suggestions}
+                updateBoard={updateBoard}
+                hideMenu={hideSuggestions}
+              />
+            )}
+            <table>
+              <tbody>{boardRows}</tbody>
+            </table>
+          </div>
+          <DragPanel />
+        </div>
+      </DndProvider>
+    </div>
+  );
 };
 
-Board.defaultProps = {
-  fields: [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  ]
-};
+export default Board;
