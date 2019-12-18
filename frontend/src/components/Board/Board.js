@@ -1,40 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import LongPress from "react-long";
 import { isMobile } from "react-device-detect";
 import HTML5Backend from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import Field from "./Field/Field";
-import "./Board.scss";
+import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
-import Timer from "../Timer/Timer";
 import "../../Variables.scss";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
+import useTimer from "../../hooks/useTimer";
+import { Line } from "rc-progress";
 
-export default class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      rows: this.createRows(this.downloadNewBoard()),
-      suggestions: null
-    };
-  }
+const Board = () => {
+  const [boardArray, setBoardArray] = useState(null);
 
-  checkBoardCorrect = () => {
-    // Send this board to server
-    // const boardForServer = this.parseBoard(this.state.rows);
-    // Response from server
-    const boardCorrect = true;
-    if (boardCorrect) {
-      this.reloadNewBoard();
-    }
-  };
-
-  downloadNewBoard = () => {
-    // Assign downloaded board to this variable
-    const newBoard = [
+  const downloadNewBoard = () => {
+    // fetch("https://sudokubr.me/api/sudoku")
+    //   .then(board => setBoardArray(board.json()))
+    setBoardArray([
       [1, 2, 3, 4, 5, 1, 7, 8, 9],
       [1, 2, 1, 4, 5, 6, 1, 1, 9],
       [1, 2, 3, "#", "#", 6, 7, 8, 9],
@@ -44,17 +30,62 @@ export default class Board extends React.Component {
       [1, 1, 3, 1, 5, 1, 7, 1, 9],
       [1, 2, 1, 4, 5, 6, 7, 1, 9],
       [1, 1, 3, 4, 5, 1, 7, 8, 1]
-    ];
-    return newBoard;
+    ]);
   };
 
-  reloadNewBoard = () => {
-    this.setState({ rows: this.createRows(this.downloadNewBoard()) });
+  useEffect(() => {
+    if (boardArray) {
+      setRows(createRows(boardArray));
+    } else {
+      downloadNewBoard();
+    }
+  }, [boardArray]);
+
+  const createRows = board => {
+    const newRows = [];
+    let currentRow;
+    for (let row = 0; row < 9; row++) {
+      currentRow = [];
+      newRows.push(currentRow);
+      for (let col = 0; col < 9; col++) {
+        currentRow.push(
+          new FieldModel(newRows.length - 1, currentRow.length, board[row][col])
+        );
+      }
+    }
+    return newRows;
   };
 
-  parseBoard = rows => {
+  const checkBoardCorrect = () => {
+    // Send this board to server
+    const boardForServer = parseBoard(rows);
+    // Response from server
+    const boardCorrect = true;
+    if (boardCorrect) {
+      downloadNewBoard();
+      setTimeLeft(40);
+    }
+  };
+
+  const [rows, setRows] = useState();
+  const [suggestions, setSuggestions] = useState(null);
+  const [timeLeft, setTimeLeft, gameEnd] = useTimer(10);
+
+  const { progress, minutes, seconds } = timeLeft;
+
+  let timerColor = styles.timer;
+
+  if (minutes === 0 && seconds < 20) {
+    timerColor = "#cc0033";
+  }
+
+  if (gameEnd) {
+    console.log("GAME END");
+  }
+
+  const parseBoard = board => {
     const userCompleteBoard = [];
-    rows.forEach(row => {
+    board.forEach(row => {
       row.forEach(field => {
         userCompleteBoard.push(field.value);
       });
@@ -62,66 +93,24 @@ export default class Board extends React.Component {
     return userCompleteBoard;
   };
 
-  createRows = fields => {
-    const rows = [];
-    let currentRow;
-    for (let row = 0; row < 9; row++) {
-      currentRow = [];
-      rows.push(currentRow);
-      for (let col = 0; col < 9; col++) {
-        currentRow.push(
-          new FieldModel(rows.length - 1, currentRow.length, fields[row][col])
-        );
-      }
-    }
-    return rows;
-  };
-
-  getPosition = element => {
+  const getPosition = element => {
     const rect = element.getBoundingClientRect();
     return { x: rect.left, y: rect.top };
   };
 
-  hideSuggestions = () => {
-    this.setState({ suggestions: null });
+  const hideSuggestions = () => {
+    setSuggestions(null);
   };
 
-  displaySuggestions = (row, column) => {
-    this.setState({ suggestions: null });
-    const coords = this.getPosition(
-      document.getElementById(`${row}x${column}`)
-    );
-    this.setState({
-      suggestions: { x: coords.x, y: coords.y, row, column }
-    });
+  const displaySuggestions = (row, column) => {
+    setSuggestions(null);
+    const coords = getPosition(document.getElementById(`${row}x${column}`));
+    setSuggestions({ x: coords.x, y: coords.y, row, column });
   };
 
-  handleDrop = (row, column, item) => {
-    const { value } = item;
-    this.setState(
-      prev => ({
-        rows: _.set(prev.rows, `['${row}'].['${column}'].value`, value)
-      }),
-      () => {
-        this.checkBoardComplete();
-      }
-    );
-  };
-
-  updateBoard = (row, column, value) => {
-    this.setState(
-      prev => ({
-        rows: _.set(prev.rows, `['${row}'].['${column}'].value`, value)
-      }),
-      () => {
-        this.checkBoardComplete();
-      }
-    );
-  };
-
-  checkBoardComplete = () => {
+  const checkBoardComplete = () => {
     let complete = true;
-    this.state.rows.forEach(row => {
+    rows.forEach(row => {
       row.forEach(field => {
         if (field.value === "") {
           complete = false;
@@ -129,13 +118,24 @@ export default class Board extends React.Component {
       });
     });
     if (complete) {
-      this.checkBoardCorrect(this.state.rows);
+      checkBoardCorrect(rows);
     }
   };
 
-  render() {
-    const { rows, suggestions } = this.state;
-    const boardRows = rows.map((row, idx) => {
+  useEffect(() => {
+    if (rows) {
+      checkBoardComplete();
+    }
+  }, [rows, checkBoardComplete]);
+
+  const updateBoard = (row, column, item) => {
+    const value = _.get(item, "value", item);
+    setRows(prev => _.set(prev, `['${row}'].['${column}'].value`, value));
+  };
+
+  let boardRows = null;
+  if (rows) {
+    boardRows = rows.map((row, idx) => {
       return (
         <tr key={idx}>
           {row.map(field => (
@@ -144,8 +144,8 @@ export default class Board extends React.Component {
               time={0.1}
               onLongPress={
                 field.blocked
-                  ? () => this.hideSuggestions()
-                  : () => this.displaySuggestions(field.row, field.col)
+                  ? () => hideSuggestions()
+                  : () => displaySuggestions(field.row, field.col)
               }
             >
               <td key={field.col} id={`${field.row}x${field.col}`}>
@@ -154,7 +154,7 @@ export default class Board extends React.Component {
                   row={field.row}
                   col={field.col}
                   value={field.value}
-                  onDrop={item => this.handleDrop(field.row, field.col, item)}
+                  onDrop={item => updateBoard(field.row, field.col, item)}
                   isSelected={
                     suggestions &&
                     suggestions.row === idx &&
@@ -165,7 +165,7 @@ export default class Board extends React.Component {
                     field.blocked || isMobile
                       ? null
                       : () => {
-                          this.updateBoard(field.row, field.col, "");
+                          updateBoard(field.row, field.col, "");
                         }
                   }
                 />
@@ -175,30 +175,43 @@ export default class Board extends React.Component {
         </tr>
       );
     });
-
-    return (
-      <div className="gameView">
-        <Timer start={275} gameEndCallback={() => {}} />
-        <DndProvider backend={HTML5Backend}>
-          <div className="gamePanel">
-            <GoBackButton />
-            <div className="sudoku sudoku-background">
-              {suggestions && (
-                <CircularMenu
-                  itemsAmount={9}
-                  suggestions={suggestions}
-                  updateBoard={this.updateBoard}
-                  hideMenu={this.hideSuggestions}
-                />
-              )}
-              <table>
-                <tbody>{boardRows}</tbody>
-              </table>
-            </div>
-            <DragPanel />
-          </div>
-        </DndProvider>
-      </div>
-    );
   }
-}
+
+  return (
+    <div className="gameView">
+      <div className="Timer">
+        <p style={{ color: timerColor }}>
+          {minutes}:{seconds}
+        </p>
+        <Line
+          className="progressBar"
+          percent={progress}
+          strokeWidth="2"
+          trailWidth="2"
+          strokeColor={timerColor}
+        />
+      </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className="gamePanel">
+          <GoBackButton />
+          <div className="sudoku sudoku-background">
+            {suggestions && (
+              <CircularMenu
+                itemsAmount={9}
+                suggestions={suggestions}
+                updateBoard={updateBoard}
+                hideMenu={hideSuggestions}
+              />
+            )}
+            <table>
+              <tbody>{boardRows}</tbody>
+            </table>
+          </div>
+          <DragPanel />
+        </div>
+      </DndProvider>
+    </div>
+  );
+};
+
+export default Board;

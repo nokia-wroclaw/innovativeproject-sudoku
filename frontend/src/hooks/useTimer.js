@@ -5,7 +5,7 @@ const useTimer = startTime => {
   const [timeEnd, setTimeEnd] = useState(false);
 
   const parseTime = time => {
-    const progress = Math.floor((time / startTime) * 1000);
+    const progress = Math.floor((time / startTime) * 100);
     const minutes = Math.floor(time / 60);
     let seconds = time - minutes * 60;
 
@@ -21,16 +21,27 @@ const useTimer = startTime => {
   };
 
   useEffect(() => {
-    if (timeLeft > 0) {
-      setTimeout(() => {
-        setTimeLeft(timeLeft - 1);
-      }, 1000);
-    } else {
+    if (timeLeft === 0) {
       setTimeEnd(true);
     }
   }, [timeLeft]);
 
-  return [parseTime(timeLeft), timeEnd];
+  useEffect(() => {
+    const interval = setInterval(
+      () =>
+        setTimeLeft(currentTimeLeft =>
+          currentTimeLeft > 0 ? currentTimeLeft - 1 : 0
+        ),
+      1000
+    );
+    return () => clearInterval(interval);
+  }, []);
+
+  return [
+    parseTime(timeLeft),
+    newValue => setTimeLeft(timeLeft + newValue),
+    timeEnd
+  ];
 };
 
 export default useTimer;
