@@ -16,6 +16,21 @@ import { Line } from "rc-progress";
 
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
+  const [rows, setRows] = useState();
+  const [suggestions, setSuggestions] = useState(null);
+  const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
+
+  const { progress, minutes, seconds } = timeLeft;
+
+  let timerColor = styles.timer;
+
+  if (minutes === 0 && seconds < 20) {
+    timerColor = "#cc0033";
+  }
+
+  if (gameEnd) {
+    console.log("GAME END");
+  }
 
   const downloadNewBoard = () => {
     fetch("https://sudokubr.me/api/sudoku")
@@ -23,6 +38,9 @@ const Board = () => {
       .then(board => {
         console.log(board);
         setBoardArray(board.sudokuBoard);
+      })
+      .then(() => {
+        setTimeLeft(40);
       });
   };
 
@@ -56,25 +74,8 @@ const Board = () => {
     const boardCorrect = true;
     if (boardCorrect) {
       downloadNewBoard();
-      setTimeLeft(40);
     }
   };
-
-  const [rows, setRows] = useState();
-  const [suggestions, setSuggestions] = useState(null);
-  const [timeLeft, setTimeLeft, gameEnd] = useTimer(10);
-
-  const { progress, minutes, seconds } = timeLeft;
-
-  let timerColor = styles.timer;
-
-  if (minutes === 0 && seconds < 20) {
-    timerColor = "#cc0033";
-  }
-
-  if (gameEnd) {
-    console.log("GAME END");
-  }
 
   const parseBoard = board => {
     const userCompleteBoard = [];
