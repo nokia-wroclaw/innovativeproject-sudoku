@@ -1,4 +1,4 @@
-import json
+import logging
 
 from typing import List
 from starlette.websockets import WebSocket
@@ -26,8 +26,8 @@ class Lobby:
         self.connections.append(websocket)
         self.usernames.append(username)
         if len(self.connections) >= LOBBY_SIZE:
-            print("start")
-            await self.generator.asend("game start")
+            logging.info("Game start")
+            await self.generator.asend("start_game_1234")
 
     def remove(self, websocket: WebSocket, username):
         self.connections.remove(websocket)
@@ -38,6 +38,5 @@ class Lobby:
         while len(self.connections) > 0:
             websocket = self.connections.pop()
             await websocket.send_text(data)
-            await websocket.send_json(json.dumps(self.usernames))
             living_connections.append(websocket)
         self.connections = living_connections

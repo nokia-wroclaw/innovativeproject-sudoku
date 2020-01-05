@@ -1,0 +1,27 @@
+@import "../../Variables";
+
+.Lobby .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px;
+  border-radius: 5px;
+  background: rgba($card-color, 0.6);
+}
+
+.Lobby h1 {
+  margin-bottom: 40px;
+}
+
+.Lobby a {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 576px) {
+  .Lobby .card {
+    width: 100vw;
+    height: 100vh;
+    background: rgba($card-color, 0.4);
+    border-radius: 0;
+  }
+}

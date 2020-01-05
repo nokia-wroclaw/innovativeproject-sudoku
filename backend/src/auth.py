@@ -90,6 +90,8 @@ def create_token(*, data: dict, expires_delta: timedelta = None) -> jwt:
 
 
 def verify_refresh_token(token) -> str:
+    if token is None:
+        return None
     payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALG])
     username: str = payload.get("sub")
 
