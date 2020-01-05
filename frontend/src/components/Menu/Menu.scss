@@ -1,0 +1,49 @@
+@import "../../Variables";
+
+.Menu .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40px 20px 40px;
+  border-radius: 5px;
+  background: rgba($card-color, 0.6);
+}
+
+.Menu h1 {
+  margin-bottom: 40px;
+}
+
+.Menu a {
+  padding: 10px 0;
+  width: 70%;
+  text-decoration: none;
+}
+
+.Menu img {
+  margin-top: -95px;
+  margin-bottom: 30px;
+  width: 265px;
+  height: 208px;
+}
+
+.Menu button {
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .Menu .card {
+    width: 100vw;
+    height: 100vh;
+    background: rgba($card-color, 0.4);
+    border-radius: 0;
+  }
+
+  .Menu img {
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+
+  .Menu a {
+    width: 90%;
+  }
+}

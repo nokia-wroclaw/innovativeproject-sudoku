@@ -12,19 +12,20 @@
     text-align: center;
     height: 100%;
     width: 100%;
+    font-size: 25px;
 }
 
 .dragPanel td{
     margin: 0.3vw 0;
 }
 
-@media(max-width: 1000px){
-    .dragPanel tbody{
-        display: flex;
-        flex-direction: row;
+@media(max-width: 1024px){
+
+    .dragPanel-background  {
+        display: none;
     }
 
-    .dragPanel td{
-        margin: 0 0.3vw;
+    .dragPanel tbody{
+        display: none;
     }
 }

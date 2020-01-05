@@ -4,9 +4,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 40px;
+  padding: 0 20px 20px 20px;
   border-radius: 5px;
-  background-color: $white;
+  background: rgba($card-color, 0.6);
 }
 
 .Auth .textField {
@@ -19,12 +19,25 @@
 
 .Auth a {
   padding: 20px 0;
+  color: white;
+}
+
+.Auth button {
+  width: 100%;
+}
+
+.Auth img {
+  margin-top: -95px;
+  margin-bottom: 0;
+  width: 265px;
+  height: 208px;
 }
 
 @media (max-width: 576px) {
   .Auth .card {
     width: 100vw;
     height: 100vh;
+    background: rgba($card-color, 0.4);
     border-radius: 0;
   }
 
@@ -32,7 +45,19 @@
     width: 100%;
   }
 
+  .Auth img {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
   .Auth .textFieldWrapper {
     width: 100%;
+  }
+}
+
+@media (max-height: 812px) {
+  .Auth img {
+    width: 225px;
+    height: 166px;
   }
 }

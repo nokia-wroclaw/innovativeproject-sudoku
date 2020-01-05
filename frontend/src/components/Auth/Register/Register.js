@@ -1,7 +1,7 @@
 import "../Auth.scss";
 import React from "react";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import { Link, useHistory } from "react-router-dom";
+import { Button } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ky from "ky";
@@ -41,19 +41,23 @@ const validationSchema = yup.object({
   rePassword: yup
     .string()
     .required("confirm password is a required field")
-    .oneOf([yup.ref("password")], "Passwords don't match")
+    .oneOf([yup.ref("password")], "passwords don't match")
 });
 
-const onSubmit = (data, setSubmitting, setStatus) => {
-  setSubmitting(true);
-  handleRegister({ data }, setStatus);
-  setSubmitting(false);
-};
 const Register = () => {
+  const history = useHistory();
+
+  const onSubmit = (data, setSubmitting, setStatus) => {
+    setSubmitting(true);
+    handleRegister({ data }, setStatus);
+    history.push("/menu");
+    setSubmitting(false);
+  };
+
   return (
     <div className="Auth">
       <div className="card">
-        <h1>Sudoku Battle Royale</h1>
+        <img src="logo.png" alt="logo_image" />
         <Formik
           initialValues={form}
           validationSchema={validationSchema}
