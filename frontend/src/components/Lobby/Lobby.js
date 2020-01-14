@@ -1,7 +1,7 @@
 import "./Lobby.scss";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import GoBackButtonLobby from "../GoBackButtonLobby/GoBackButtonLobby";
+import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 
 const Lobby = () => {
   const history = useHistory();
