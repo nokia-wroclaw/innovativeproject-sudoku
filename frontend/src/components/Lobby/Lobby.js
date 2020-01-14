@@ -1,7 +1,7 @@
 import "./Lobby.scss";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import GoBackButton from "../GoBackButton/GoBackButton";
+import GoBackButtonLobby from "../GoBackButtonLobby/GoBackButtonLobby";
 
 const Lobby = () => {
   const history = useHistory();
@@ -19,7 +19,7 @@ const Lobby = () => {
   };
   return (
     <div className="Lobby">
-      <GoBackButton />
+      <GoBackButtonLobby />
       <div className="card">
         <h1 style={{ color: "white" }}>
           <p>Please wait.</p> Connected:{" "}

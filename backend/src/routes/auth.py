@@ -75,7 +75,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         httponly=True,
         expires=ACCESS_COKIE_LIFETIME,
     )
-
     return response
 
 

@@ -20,7 +20,7 @@ def random_nickname_development_purposes(stringLength=10):
 
 @lobby_router.websocket("/server/lobby")
 async def websocket_endpoint(
-    #    websocket: WebSocket, access_cookie: str = Cookie(..., key="access_token")
+    #websocket: WebSocket, access_cookie: str = Cookie(..., key="access_token")
     websocket: WebSocket,
     access_cookie: str = Cookie(None),
 ):

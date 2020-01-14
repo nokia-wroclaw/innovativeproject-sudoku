@@ -14,6 +14,8 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 
+let ws = new WebSocket("ws://127.0.0.1:8000/server/game");
+
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();

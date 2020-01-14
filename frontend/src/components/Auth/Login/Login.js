@@ -39,7 +39,7 @@ const Login = () => {
   const onSubmit = (data, setSubmitting, setStatus) => {
     setSubmitting(true);
     handleSubmit({ data }, setStatus);
-    history.push("/menu");
+    //history.push("/menu");
     setSubmitting(false);
   };
 

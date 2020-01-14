@@ -11,16 +11,15 @@ connect_to_db()
 
 app = FastAPI()
 
+
 origins = [
-    "http://localhost",
-    "http://localhost/",
-    "http://localhost:8080",
-    "http://localhost:3000",
+    "http://localhost:3000"
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins="http://localhost:3000",
     allow_credentials=True,
     allow_methods=["GET", "HEAD", "POST", "CONNECT"],
     allow_headers=["*"],

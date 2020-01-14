@@ -3,6 +3,7 @@ import logging
 from typing import List
 from starlette.websockets import WebSocket
 
+from .routes.game import initialize_new_game
 
 LOBBY_SIZE = 3
 
@@ -28,6 +29,7 @@ class Lobby:
         if len(self.connections) >= LOBBY_SIZE:
             logging.info("Game start")
             await self.generator.asend("start_game_1234")
+            initialize_new_game(self.usernames)
 
     def remove(self, websocket: WebSocket, username):
         self.connections.remove(websocket)
@@ -40,3 +42,5 @@ class Lobby:
             await websocket.send_text(data)
             living_connections.append(websocket)
         self.connections = living_connections
+
+
