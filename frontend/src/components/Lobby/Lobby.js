@@ -7,9 +7,17 @@ const Lobby = () => {
   const history = useHistory();
 
   const ws = new WebSocket("ws://127.0.0.1:8000/server/lobby");
+
   ws.onmessage = function(event) {
     const messages = document.getElementById("messages");
     const data = event.data.replace(/[[\]']+/g, "");
+    console.log(data);
+
+    // if (data.includes("set_cookie:")){
+    //    const username = event.data.replace("set_cookie: ", "");
+    //     console.log(username, "dadadadada");
+    // }
+
     if (data === "start_game_1234") {
       history.push("/game");
       ws.close();

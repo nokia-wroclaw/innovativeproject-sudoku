@@ -14,7 +14,7 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 
-let ws = new WebSocket("ws://127.0.0.1:8000/server/game");
+var ws_init = false;
 
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
@@ -25,6 +25,12 @@ const Board = () => {
   const { progress, minutes, seconds } = timeLeft;
 
   let timerColor = styles.timer;
+
+  if (!ws_init) {
+    let ws = new WebSocket("ws://127.0.0.1:8000/server/game");
+    ws_init = true;
+  }
+  console.log("XD");
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";

@@ -24,15 +24,18 @@ async def websocket_endpoint(
     websocket: WebSocket,
     access_cookie: str = Cookie(None),
 ):
-    username = verify_refresh_token(access_cookie)
     username = random_nickname_development_purposes(10)
-    if username is None:
-        logging.info("Acces token not verified.")
-        return
+    # username = verify_refresh_token(access_cookie)
+    # if username is None:
+    #     logging.info("Acces token not verified.")
+    #     return
     logging.info("User: %s entered lobby", username)
+    # msg = ("set_cookie: ", username)
+    # websocket.send_text(msg)
     await lobby.connect(websocket, username)
+    websocket.send_text(username)
     try:
-        await lobby.push(str(lobby.usernames))
+        await lobby.push(str(list(lobby.players.keys())))
         while True:
             await websocket.receive_text()
 

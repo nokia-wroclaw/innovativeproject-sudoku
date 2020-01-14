@@ -20,7 +20,7 @@ async def websocket_endpoint(
 ):
     username = verify_refresh_token(access_cookie)
     if username is None:
-        logging.info("Acces token not verified.")
+        logging.info("Access token not verified.")
         return
     game = None
     for g in games:

@@ -1,6 +1,6 @@
 import logging
 
-from typing import List
+from typing import Dict, List
 from starlette.websockets import WebSocket
 
 from .routes.game import initialize_new_game
@@ -10,8 +10,7 @@ LOBBY_SIZE = 3
 
 class Lobby:
     def __init__(self):
-        self.connections: List[WebSocket] = []
-        self.usernames: List[str] = []
+        self.players: Dict[str, WebSocket] = {}
         self.generator = self.lobby_message_generator()
 
     async def lobby_message_generator(self):
@@ -24,23 +23,18 @@ class Lobby:
 
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
-        self.connections.append(websocket)
-        self.usernames.append(username)
-        if len(self.connections) >= LOBBY_SIZE:
+        self.players[username] = websocket
+        if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
-            await self.generator.asend("start_game_1234")
-            initialize_new_game(self.usernames)
+            await self.generator.asend("start_game_1234")  
+            initialize_new_game(list(self.players.keys()))
 
-    def remove(self, websocket: WebSocket, username):
-        self.connections.remove(websocket)
-        self.usernames.remove(username)
+    def remove(self, username):
+        self.players[username] = None
 
     async def _send_data(self, data: str):
-        living_connections = []
-        while len(self.connections) > 0:
-            websocket = self.connections.pop()
+        active_players: Dict[str, WebSocket] = {}
+        for username, websocket in self.players.items():
             await websocket.send_text(data)
-            living_connections.append(websocket)
-        self.connections = living_connections
-
-
+            active_players[username] = websocket
+        self.players = active_players
