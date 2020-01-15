@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import LongPress from "react-long";
-import { isMobile } from "react-device-detect";
-import HTML5Backend from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import { Line } from "rc-progress";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
 import "../../Variables.scss";
-import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 
@@ -20,7 +14,7 @@ const Board = () => {
   const [suggestions, setSuggestions] = useState(null);
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
 
-  const { progress, minutes, seconds } = timeLeft;
+  const { minutes, seconds } = timeLeft;
 
   let timerColor = styles.timer;
 
@@ -29,7 +23,7 @@ const Board = () => {
   }
 
   if (gameEnd) {
-    console.log("GAME END");
+    // Redirect to game end view
   }
 
   const downloadNewBoard = () => {
@@ -135,38 +129,30 @@ const Board = () => {
       return (
         <tr key={idx}>
           {row.map(field => (
-            <LongPress
-              key={field.col}
-              time={0.1}
-              onLongPress={
-                field.blocked
-                  ? () => hideSuggestions()
-                  : () => displaySuggestions(field.row, field.col)
-              }
-            >
-              <td key={field.col} id={`${field.row}x${field.col}`}>
-                <Field
-                  key={field.value}
-                  row={field.row}
-                  col={field.col}
-                  value={field.value}
-                  onDrop={item => updateBoard(field.row, field.col, item)}
-                  isSelected={
-                    suggestions &&
-                    suggestions.row === idx &&
-                    suggestions.column === field.col
-                  }
-                  blocked={field.blocked}
-                  onClick={
-                    field.blocked || isMobile
-                      ? null
-                      : () => {
-                          updateBoard(field.row, field.col, "");
-                        }
-                  }
-                />
-              </td>
-            </LongPress>
+            <td key={field.col} id={`${field.row}x${field.col}`}>
+              <Field
+                key={field.value}
+                row={field.row}
+                col={field.col}
+                value={field.value}
+                isSelected={
+                  suggestions &&
+                  suggestions.row === idx &&
+                  suggestions.column === field.col
+                }
+                blocked={field.blocked}
+                onClick={
+                  field.blocked ||
+                  (suggestions &&
+                    !(
+                      suggestions.row === idx &&
+                      suggestions.column === field.col
+                    ))
+                    ? () => hideSuggestions()
+                    : () => displaySuggestions(field.row, field.col)
+                }
+              />
+            </td>
           ))}
         </tr>
       );
@@ -179,33 +165,23 @@ const Board = () => {
         <p style={{ color: timerColor }}>
           {minutes}:{seconds}
         </p>
-        <Line
-          className="progressBar"
-          percent={progress}
-          strokeWidth="2"
-          trailWidth="2"
-          strokeColor={timerColor}
-        />
       </div>
-      <DndProvider backend={HTML5Backend}>
-        <div className="gamePanel">
-          <GoBackButton />
-          <div className="sudoku sudoku-background">
-            {suggestions && (
-              <CircularMenu
-                itemsAmount={9}
-                suggestions={suggestions}
-                updateBoard={updateBoard}
-                hideMenu={hideSuggestions}
-              />
-            )}
-            <table>
-              <tbody>{boardRows}</tbody>
-            </table>
-          </div>
-          <DragPanel />
+      <div className="gamePanel">
+        <GoBackButton />
+        <div className="sudoku sudoku-background">
+          {suggestions && (
+            <CircularMenu
+              itemsAmount={9}
+              suggestions={suggestions}
+              updateBoard={updateBoard}
+              hideMenu={hideSuggestions}
+            />
+          )}
+          <table>
+            <tbody>{boardRows}</tbody>
+          </table>
         </div>
-      </DndProvider>
+      </div>
     </div>
   );
 };
