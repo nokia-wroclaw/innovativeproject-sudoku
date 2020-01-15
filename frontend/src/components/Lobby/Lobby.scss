@@ -14,12 +14,6 @@
   color: white;
 }
 
-.Lobby a {
-  padding: 10px 0;
-  width: 70%;
-  text-decoration: none;
-}
-
 .Lobby img {
   margin-top: -95px;
   margin-bottom: 30px;
@@ -28,7 +22,9 @@
 }
 
 .Lobby button {
-  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 80%;
 }
 
 @media (max-width: 576px) {
@@ -44,7 +40,7 @@
     margin-bottom: 30px;
   }
 
-  .Lobby a {
+  .Lobby button {
     width: 90%;
   }
 }

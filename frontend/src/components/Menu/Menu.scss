@@ -13,12 +13,6 @@
   margin-bottom: 40px;
 }
 
-.Menu a {
-  padding: 10px 0;
-  width: 70%;
-  text-decoration: none;
-}
-
 .Menu img {
   margin-top: -95px;
   margin-bottom: 30px;
@@ -27,7 +21,9 @@
 }
 
 .Menu button {
-  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 80%;
 }
 
 @media (max-width: 576px) {
@@ -43,7 +39,7 @@
     margin-bottom: 30px;
   }
 
-  .Menu a {
+  .Menu button {
     width: 90%;
   }
 }
