@@ -28,7 +28,7 @@ const Board = () => {
   let timerColor = styles.timer;
   const ws = new WebSocket("ws:localhost/api/game");
   ws.onmessage = function(event) {
-    console.log(data);
+    console.log(event.data);
   };
 
   if (minutes === 0 && seconds < 20) {
