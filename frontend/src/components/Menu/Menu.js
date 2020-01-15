@@ -8,7 +8,7 @@ const Menu = () => {
     <div className="Menu">
       <div className="card">
         <img src="logo.png" alt="logo_image" />
-        <Link to="/game">
+        <Link to="/lobby">
           <Button size="large" variant="outlined">
             Play
           </Button>
