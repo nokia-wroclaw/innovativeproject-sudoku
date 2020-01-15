@@ -5,7 +5,6 @@ const useTimer = startTime => {
   const [timeEnd, setTimeEnd] = useState(false);
 
   const parseTime = time => {
-    const progress = Math.floor((time / startTime) * 100);
     const minutes = Math.floor(time / 60);
     let seconds = time - minutes * 60;
 
@@ -15,8 +14,7 @@ const useTimer = startTime => {
 
     return {
       minutes,
-      seconds,
-      progress
+      seconds
     };
   };
 
