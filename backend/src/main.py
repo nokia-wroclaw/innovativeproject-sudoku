@@ -1,4 +1,3 @@
-from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
 from .auth import connect_to_db
@@ -6,27 +5,15 @@ from .sudokuboard import SudokuBoard
 from .routes.auth import auth_router
 from .routes.lobby import lobby_router
 from .routes.lobby import lobby
+from .routes.game import game_router
 
 connect_to_db()
 
 app = FastAPI()
 
-
-origins = [
-    "http://localhost:3000"
-]
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins="http://localhost:3000",
-    allow_credentials=True,
-    allow_methods=["GET", "HEAD", "POST", "CONNECT"],
-    allow_headers=["*"],
-)
-
 app.include_router(auth_router)
 app.include_router(lobby_router)
+app.include_router(game_router)
 
 
 @app.get("/")

@@ -25,7 +25,7 @@ from ..auth import (
 auth_router = APIRouter()
 
 
-@auth_router.post("/register")
+@auth_router.post("/api/register")
 async def register(form_data: RegisterForm = Depends()):
     if form_data.password != form_data.re_password:
         logging.info("Passwords were not the same.")
@@ -42,7 +42,7 @@ async def register(form_data: RegisterForm = Depends()):
         )
 
 
-@auth_router.post("/login")
+@auth_router.post("/api/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if user is None:

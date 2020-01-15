@@ -2,9 +2,10 @@ import logging
 import random
 import string
 
-from fastapi import APIRouter, Cookie
+from fastapi import APIRouter, Cookie, Header, Body, Depends, Path
 from starlette.websockets import WebSocket, WebSocketDisconnect
-
+from starlette.requests import Request
+from starlette.status import WS_1008_POLICY_VIOLATION
 from ..lobby import Lobby
 from ..auth import verify_refresh_token
 
@@ -13,31 +14,27 @@ lobby_router = APIRouter()
 lobby = Lobby()
 
 
-def random_nickname_development_purposes(stringLength=10):
-    letters = string.ascii_lowercase
-    return "".join(random.choice(letters) for i in range(stringLength))  # nosec
-
-
-@lobby_router.websocket("/server/lobby")
+@lobby_router.websocket("/api/lobby")
 async def websocket_endpoint(
-    #websocket: WebSocket, access_cookie: str = Cookie(..., key="access_token")
-    websocket: WebSocket,
-    access_cookie: str = Cookie(None),
+    websocket: WebSocket
 ):
-    username = random_nickname_development_purposes(10)
-    # username = verify_refresh_token(access_cookie)
-    # if username is None:
-    #     logging.info("Acces token not verified.")
-    #     return
+    try:
+        access_token = websocket.cookies["access_token"]
+    except:
+        return
+    username = verify_refresh_token(access_token)
+    print(username)
+    if username is None:
+        logging.info("Acces token not verified.")
+        return
     logging.info("User: %s entered lobby", username)
-    # msg = ("set_cookie: ", username)
-    # websocket.send_text(msg)
     await lobby.connect(websocket, username)
-    websocket.send_text(username)
+    await websocket.send_text(username)
     try:
         await lobby.push(str(list(lobby.players.keys())))
         while True:
             await websocket.receive_text()
 
     except WebSocketDisconnect:
-        lobby.remove(websocket, username)
+
+        lobby.remove(username)

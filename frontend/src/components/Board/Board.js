@@ -14,7 +14,8 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 
-var ws_init = false;
+// var ws_init = false;
+// var ws;
 
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
@@ -25,12 +26,10 @@ const Board = () => {
   const { progress, minutes, seconds } = timeLeft;
 
   let timerColor = styles.timer;
-
-  if (!ws_init) {
-    let ws = new WebSocket("ws://127.0.0.1:8000/server/game");
-    ws_init = true;
-  }
-  console.log("XD");
+  const ws = new WebSocket("ws:localhost/api/game");
+  ws.onmessage = function(event) {
+    console.log(data);
+  };
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";
@@ -41,7 +40,7 @@ const Board = () => {
   }
 
   const downloadNewBoard = () => {
-    fetch("https://sudokubr.me/api/sudoku")
+    fetch("/api/sudoku")
       .then(res => res.json())
       .then(board => {
         setBoardArray(board.sudokuBoard);

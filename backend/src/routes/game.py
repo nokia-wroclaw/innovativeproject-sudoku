@@ -12,13 +12,15 @@ game_router = APIRouter()
 games: List[Game] = []
 
 
-@game_router.websocket("/server/game")
+@game_router.websocket("/api/game")
 async def websocket_endpoint(
-   #  websocket: WebSocket, access_cookie: str = Cookie(..., key="access_token")
-    websocket: WebSocket,
-    access_cookie: str = Cookie(None),
+    websocket: WebSocket
 ):
-    username = verify_refresh_token(access_cookie)
+    try:
+        access_token = websocket.cookies["access_token"]
+    except: # add real exception
+        return
+    username = verify_refresh_token(access_token) # handle exceptions: expired 
     if username is None:
         logging.info("Access token not verified.")
         return

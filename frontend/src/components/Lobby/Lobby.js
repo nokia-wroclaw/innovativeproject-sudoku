@@ -6,7 +6,7 @@ import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 const Lobby = () => {
   const history = useHistory();
 
-  const ws = new WebSocket("ws://127.0.0.1:8000/server/lobby");
+  const ws = new WebSocket("ws:localhost/api/lobby");
 
   ws.onmessage = function(event) {
     const messages = document.getElementById("messages");
