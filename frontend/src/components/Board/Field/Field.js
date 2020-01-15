@@ -38,7 +38,8 @@ export default function Field({ value, blocked, isSelected, onClick }) {
 Field.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   blocked: PropTypes.bool.isRequired,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  isSelected: PropTypes.bool.isRequired
 };
 
 Field.defaultProps = {

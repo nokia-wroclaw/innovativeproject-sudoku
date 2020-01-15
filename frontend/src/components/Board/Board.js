@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import LongPress from "react-long";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
@@ -24,7 +23,7 @@ const Board = () => {
   }
 
   if (gameEnd) {
-    console.log("GAME END");
+    // Redirect to game end view
   }
 
   const downloadNewBoard = () => {
