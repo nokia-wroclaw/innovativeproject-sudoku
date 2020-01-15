@@ -2,7 +2,7 @@ import "./Lobby.scss";
 import React from "react";
 import PropTypes from "prop-types";
 
-const Lobby = props => {
+const Lobby = () => {
   return (
     <div className="Lobby">
       <div className="card">

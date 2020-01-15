@@ -1,28 +1,40 @@
 import "./Menu.scss";
-import { Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
 import React from "react";
+import { Button } from "@material-ui/core";
+import { useHistory } from "react-router";
 
 const Menu = () => {
+  const history = useHistory();
+
+  const redirect = path => {
+    history.push(path);
+  };
+
   return (
     <div className="Menu">
       <div className="card">
         <img src="logo.png" alt="logo_image" />
-        <Link to="/lobby">
-          <Button size="large" variant="outlined">
-            Play
-          </Button>
-        </Link>
-        <Link to="/game">
-          <Button size="large" variant="outlined">
-            Stats
-          </Button>
-        </Link>
-        <Link to="/settings">
-          <Button size="large" variant="outlined">
-            Settings
-          </Button>
-        </Link>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => redirect("/lobby")}
+        >
+          Play
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => redirect("/game")}
+        >
+          Stats
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => redirect("/settings")}
+        >
+          Settings
+        </Button>
       </div>
     </div>
   );
