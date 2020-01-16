@@ -17,6 +17,7 @@ async function handleSubmit(params, setStatus) {
       await ky.post("/api/login", {
         body: formData
       });
+      window.location.reload();
     } catch (e) {
       setStatus({ error: "loginError" });
     }
@@ -34,12 +35,9 @@ const form = {
 };
 
 const Login = () => {
-  const history = useHistory();
-
   const onSubmit = (data, setSubmitting, setStatus) => {
     setSubmitting(true);
     handleSubmit({ data }, setStatus);
-    //history.push("/menu");
     setSubmitting(false);
   };
 

@@ -1,4 +1,7 @@
-from typing import List
+import logging
+import json
+
+from typing import Dict, List
 from starlette.websockets import WebSocket
 
 
@@ -8,6 +11,7 @@ class Game:
         self.connections: List[WebSocket] = []
         self.usernames: List[str] = usernames
         self.generator = self.message_generator()
+        self.players: Dict[str, WebSocket] = {}
 
     async def message_generator(self):
         while True:
@@ -19,22 +23,19 @@ class Game:
 
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
-        self.connections.append(websocket)
-        self.usernames.append(username)
+        self.players[username] = websocket
+        logging.info("Player %s connected to game.", username)
 
-    def remove(self, websocket: WebSocket, username):
-        self.connections.remove(websocket)
-        self.usernames.remove(username)
-
+    def remove(self, username):
+            self.players.pop(username)
+            
     async def _send_data(self, data: str):
-        living_connections = []
-        while len(self.connections) > 0:
-            websocket = self.connections.pop()
-            await websocket.send_text(data)
-            living_connections.append(websocket)
-        self.connections = living_connections
+        active_players: Dict[str, WebSocket] = {}
+        while len(self.players) > 0:
+            username, ws = self.players.popitem()
+            await ws.send_text(data)
+            active_players[username] = ws
+        self.players = active_players
+    
+    #async def handle_data(self, data):
 
-
-def parse_change(input : str):
-    print(input)
-    return input+"parsed"

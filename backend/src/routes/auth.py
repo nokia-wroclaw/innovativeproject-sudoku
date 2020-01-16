@@ -78,7 +78,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return response
 
 
-@auth_router.get("/get-access-token")
+@auth_router.get("/api/get-access-token")
 async def get_acces_token(request: Request):
     refresh_token = request.cookies.get("refresh_token")
     response = Response()

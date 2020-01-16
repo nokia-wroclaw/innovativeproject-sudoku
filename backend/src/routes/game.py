@@ -1,9 +1,10 @@
-import logging
+import logging, time
 
 from fastapi import APIRouter, Cookie
 from starlette.websockets import WebSocket, WebSocketDisconnect
+from websockets.exceptions import ConnectionClosedError
 
-from ..game import Game, parse_change
+from ..game import Game
 from ..auth import verify_refresh_token
 from typing import List
 
@@ -18,9 +19,9 @@ async def websocket_endpoint(
 ):
     try:
         access_token = websocket.cookies["access_token"]
-    except: # add real exception
+    except: 
         return
-    username = verify_refresh_token(access_token) # handle exceptions: expired 
+    username = verify_refresh_token(access_token)  # handle exceptions: expired 
     if username is None:
         logging.info("Access token not verified.")
         return
@@ -28,18 +29,23 @@ async def websocket_endpoint(
     for g in games:
         if username in g.usernames:
             await g.connect(websocket, username)
+            print("sukces polaczenia")
             game = g
     if game is None:
+        print("GAME IS NONE")
         return
-    await game.generator.asend(None)
     try:
         while True:
-            game.generator.asend(parse_change(websocket.receive_text()))
-
+            time.sleep(2)
+            #await g.push(str(g.players.keys()))
+            data = await websocket.receive_text()
+            # g.handle_data(data)
     except WebSocketDisconnect:
-        game.remove(websocket, username)
+        game.remove(username)
+    except ConnectionClosedError:
+        await g.push(("Player %s has disconnected", username))
 
-
-def initialize_new_game(usernames):
+async def initialize_new_game(usernames):
     game = Game(usernames)
+    await game.generator.asend(None)
     games.append(game)

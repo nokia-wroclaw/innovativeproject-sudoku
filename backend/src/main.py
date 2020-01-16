@@ -21,7 +21,7 @@ async def root():
     return {"message": "Hello World!"}
 
 
-@app.get("/sudoku")
+@app.get("/api/sudoku")
 async def sudoku():
     board = SudokuBoard()
     board.make_puzzle()

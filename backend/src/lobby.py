@@ -8,7 +8,6 @@ from .routes.game import initialize_new_game
 
 LOBBY_SIZE = 2
 
-
 class Lobby:
     def __init__(self):
         self.players: Dict[str, WebSocket] = {}
@@ -28,7 +27,7 @@ class Lobby:
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
             await self.generator.asend("start_game_1234")  
-            initialize_new_game(list(self.players.keys()))
+            await initialize_new_game(list(self.players.keys()))
 
     def remove(self, username):
         self.players.pop(username)

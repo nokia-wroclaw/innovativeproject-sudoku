@@ -12,6 +12,10 @@ import Board from "./components/Board/Board";
 import Settings from "./components/Settings/Settings";
 import ParticlesComponent from "./components/ParticlesComponent/ParticlesComponent";
 import Lobby from "./components/Lobby/Lobby";
+import AuthenticatedRoute from "./routes/AuthenticatedRoute";
+import UnauthenticatedRoute from "./routes/UnauthenticatedRoute";
+import { useState, useEffect } from "react";
+import ky from "ky";
 
 const theme = createMuiTheme({
   overrides: {
@@ -59,6 +63,29 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+
+  async function Auth() {
+    try {
+      const response = await ky.get("/api/get-access-token");
+      userHasAuthenticated(true);
+      isAuthenticated(true);
+    } catch (e) {
+      isAuthenticated(false);
+    }
+  }
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  async function onLoad() {
+    try {
+      await Auth();
+      userHasAuthenticated(true);
+    } catch (e) {}
+  }
+
   return (
     <div className="App">
       <ParticlesComponent />
@@ -69,12 +96,36 @@ function App() {
               <Route exact path="/">
                 <Redirect to="register" />
               </Route>
-              <Route path="/register" component={Register} />
-              <Route path="/login" component={Login} />
-              <Route path="/menu" component={Menu} />
-              <Route path="/game" component={Board} />
-              <Route path="/lobby" component={Lobby} />
-              <Route path="/settings" component={Settings} />
+              <AuthenticatedRoute
+                path="/settings"
+                component={Settings}
+                appProps={{ isAuthenticated }}
+              />
+              <AuthenticatedRoute
+                path="/menu"
+                component={Menu}
+                appProps={{ isAuthenticated }}
+              />
+              <AuthenticatedRoute
+                path="/game"
+                component={Board}
+                appProps={{ isAuthenticated }}
+              />
+              <AuthenticatedRoute
+                path="/lobby"
+                component={Lobby}
+                appProps={{ isAuthenticated }}
+              />
+              <UnauthenticatedRoute
+                path="/register"
+                component={Register}
+                appProps={{ isAuthenticated }}
+              />
+              <UnauthenticatedRoute
+                path="/login"
+                component={Login}
+                appProps={{ isAuthenticated }}
+              />
               <Route path="*">
                 <Redirect to="register" />
               </Route>

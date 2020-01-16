@@ -14,9 +14,6 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 
-// var ws_init = false;
-// var ws;
-
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();
@@ -26,10 +23,6 @@ const Board = () => {
   const { progress, minutes, seconds } = timeLeft;
 
   let timerColor = styles.timer;
-  const ws = new WebSocket("ws:localhost/api/game");
-  ws.onmessage = function(event) {
-    console.log(event.data);
-  };
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";
@@ -73,6 +66,14 @@ const Board = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardArray]);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws:localhost/api/game");
+
+    ws.onmessage = function(event) {
+      console.log(event.data);
+    };
+  }, []);
 
   const checkBoardCorrect = () => {
     // Send this board to server

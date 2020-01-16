@@ -9,10 +9,8 @@ from starlette.status import WS_1008_POLICY_VIOLATION
 from ..lobby import Lobby
 from ..auth import verify_refresh_token
 
-
 lobby_router = APIRouter()
 lobby = Lobby()
-
 
 @lobby_router.websocket("/api/lobby")
 async def websocket_endpoint(
@@ -36,5 +34,5 @@ async def websocket_endpoint(
             await websocket.receive_text()
 
     except WebSocketDisconnect:
-
         lobby.remove(username)
+
