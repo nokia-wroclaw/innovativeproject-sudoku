@@ -11,7 +11,7 @@
     border-radius: 5px;
     background: $white;
     padding: 5px;
-    margin-right: 4vw;
+    margin-right: 1vw;
     height: 90%;
 }
 
@@ -63,14 +63,15 @@
 @media(max-width: 1024px){
     .sudoku-background{
         margin-right: 0;
-        margin-bottom: 4vh;
+        margin-bottom: 1vh;
     }
     .gameView{
         margin-top: -20vh;
+        flex-direction: column;
     }
 
     .gamePanel{
-        flex-direction: none;
+        flex-direction: column;
     }
     .Timer p{
         float: none;

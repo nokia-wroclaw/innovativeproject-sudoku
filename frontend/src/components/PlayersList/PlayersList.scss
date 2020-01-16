@@ -1,0 +1,36 @@
+@import "../../Variables";
+
+:export {active: $active-opponents; dead: $background-color}
+
+.playersList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.playersList .player{
+    height: 5vh;
+    width: 5vh;
+    opacity: 0.95;
+    margin: 1vh 0;
+    border-radius: 50%;
+    -webkit-box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
+    -moz-box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
+    box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
+  }
+
+
+  @media(max-width: 1024px){
+
+    .playersList {
+        flex-direction: row;
+    }
+
+    .playersList .player{
+        height: 7vw;
+        width: 7vw;
+        margin: 0 1vw;
+    }
+}
