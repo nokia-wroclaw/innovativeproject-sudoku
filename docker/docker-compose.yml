@@ -63,6 +63,9 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
+    depends_on:
+      - frontend
+      - backend
     environment:
       - ENV=development
       - PORT=80
