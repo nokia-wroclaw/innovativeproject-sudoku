@@ -8,6 +8,6 @@ WORKDIR /app
 COPY backend/Pipfile Pipfile
 COPY backend/Pipfile.lock Pipfile.lock
 
-RUN pipenv install --dev
+RUN pipenv install --dev --sequential
 
-EXPOSE 80
+
