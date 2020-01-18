@@ -16,7 +16,6 @@ import useTimer from "../../hooks/useTimer";
 import { useHistory } from "react-router-dom";
 
 let ws;
-var ctr = 1;
 
 const Board = () => {
   const history = useHistory();
@@ -96,8 +95,9 @@ const Board = () => {
 
   const checkBoardCorrect = () => {
     var obj = new Object();
-    obj.board = boardArray;
+    obj.board = parseBoard(rows);
     var jsonString = JSON.stringify(obj);
+    console.log(jsonString);
     ws.send(jsonString);
   };
 
@@ -129,6 +129,18 @@ const Board = () => {
     if (complete) {
       checkBoardCorrect(rows);
     }
+  };
+
+  const parseBoard = board => {
+    var userCompleteBoard = [];
+    board.forEach(row => {
+      var rowArr = [];
+      row.forEach(field => {
+        rowArr.push(field.value);
+      });
+      userCompleteBoard.push(rowArr);
+    });
+    return userCompleteBoard;
   };
 
   useEffect(() => {

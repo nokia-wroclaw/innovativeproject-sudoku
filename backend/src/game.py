@@ -7,7 +7,7 @@ from websockets.exceptions import ConnectionClosedError
 from .sudokuboard import check_sudoku
 
 GAME_DURATION = 120.0
-
+TIME_ADD_AFTER_SOLVE = 15
 
 class Player:
     def __init__(self, username):
@@ -61,13 +61,11 @@ class Game:
         self.players = active_players
     
     async def handle_data(self, data, username):
-        #print(data)
         parsed_data = json.loads(data)
-        time_delta = self.players_data[username].timer-time.time()
-        temp = json.dumps({"timeLeft": time_delta, "test": "test_value"})
         if 'board' in parsed_data:
-            print(check_sudoku(parsed_data['board']))
-
+            self.players_data[username].timer += TIME_ADD_AFTER_SOLVE
+            time_delta = self.players_data[username].timer-time.time()
+            temp = json.dumps({"boardSolved" : check_sudoku(parsed_data['board']), "timeLeft": time_delta})
         await self.players[username].send_json(temp)
 
 
