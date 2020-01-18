@@ -13,6 +13,7 @@ from .game import check_if_in_game
 lobby_router = APIRouter()
 lobby = Lobby()
 
+
 @lobby_router.websocket("/api/lobby")
 async def websocket_endpoint(
     websocket: WebSocket
@@ -20,15 +21,14 @@ async def websocket_endpoint(
     try:
         access_token = websocket.cookies["access_token"]
     except:
+        logging.info("No cookie found in /lobby")
         return
     username = verify_refresh_token(access_token)
-    print(username)
     if username is None:
         logging.info("Acces token not verified.")
         return
     logging.info("User: %s entered lobby", username)
     if check_if_in_game(username):
-        print("Duupa")
         await websocket.accept()
         await websocket.send_text("in_game_already")
         await websocket.close()

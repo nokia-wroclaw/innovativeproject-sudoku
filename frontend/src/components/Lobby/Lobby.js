@@ -11,17 +11,7 @@ const Lobby = () => {
   ws.onmessage = function(event) {
     const messages = document.getElementById("messages");
     const data = event.data.replace(/[[\]']+/g, "");
-    console.log(data);
-
-    // if (data.includes("set_cookie:")){
-    //    const username = event.data.replace("set_cookie: ", "");
-    //     console.log(username, "dadadadada");
-    // }
-
-    if (data === "start_game_1234") {
-      history.push("/game");
-      ws.close();
-    } else if (data === "in_game_already") {
+    if (data === "start_game_1234" || data === "in_game_already") {
       history.push("/game");
       ws.close();
     } else {
@@ -36,7 +26,7 @@ const Lobby = () => {
           <p>Please wait.</p> Connected:{" "}
         </h1>
         <div style={{ color: "white" }} className="messages" id="messages">
-          aaaa
+          You're disconnected. Please log in
         </div>
       </div>
     </div>

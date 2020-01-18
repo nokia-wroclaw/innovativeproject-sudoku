@@ -13,17 +13,18 @@ import "../../Variables.scss";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
+import { useHistory } from "react-router-dom";
 
 let ws;
+var ctr = 1;
 
 const Board = () => {
+  const history = useHistory();
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
-
   const { progress, minutes, seconds } = timeLeft;
-  console.log("XD");
   let timerColor = styles.timer;
 
   if (minutes === 0 && seconds < 20) {
@@ -41,7 +42,7 @@ const Board = () => {
         setBoardArray(board.sudokuBoard);
       })
       .then(() => {
-        setTimeLeft(40);
+        //setTimeLeft(40);
       });
   };
 
@@ -71,33 +72,33 @@ const Board = () => {
 
   useEffect(() => {
     ws = new WebSocket("ws:localhost/api/game");
+
     ws.onmessage = function(event) {
-      console.log(event.data);
+      try {
+        var data2json = JSON.parse(event.data);
+        data2json = JSON.parse(data2json);
+        console.log("Data from server: ", data2json);
+        if (event.data === "no_game") {
+          ws.close();
+          history.push("/lobby");
+        }
+        if (data2json.timeLeft) {
+          setTimeLeft(Math.round(data2json.timeLeft));
+        }
+        if (data2json.boardSolved) {
+          downloadNewBoard();
+        }
+      } catch (e) {
+        console.log(e, "error");
+      }
     };
   }, []);
 
   const checkBoardCorrect = () => {
-    // Send this board to server
-    // const boardForServer = parseBoard(rows);
-    // Response from server
-    var msg = JSON.stringify(Object.assign({}, parseBoard));
-    console.log("sending: ", msg);
-    ws.send("finished" + msg);
-    const boardCorrect = true;
-    if (boardCorrect) {
-      downloadNewBoard();
-    }
-  };
-
-  //Function disabled coz of eslint, prepared for board check in server
-  const parseBoard = board => {
-    const userCompleteBoard = [];
-    board.forEach(row => {
-      row.forEach(field => {
-        userCompleteBoard.push(field.value);
-      });
-    });
-    return userCompleteBoard;
+    var obj = new Object();
+    obj.board = boardArray;
+    var jsonString = JSON.stringify(obj);
+    ws.send(jsonString);
   };
 
   const getPosition = element => {

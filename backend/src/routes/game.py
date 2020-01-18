@@ -20,7 +20,8 @@ async def websocket_endpoint(
 ):
     try:
         access_token = websocket.cookies["access_token"]
-    except: 
+    except:
+        logging.error("No cookie found")
         return
     username = verify_refresh_token(access_token)  # handle exceptions: expired 
     if username is None:
@@ -32,14 +33,15 @@ async def websocket_endpoint(
             await g.connect(websocket, username)
             game = g
     if game is None:
-        print("GAME IS NONE")
+        await websocket.accept()
+        await websocket.send_text("no_game")
+        logging.info("Player: %s tried to connect /game, but no game was found with him.", username)
         return
     try:
+        await g.push(str(g.players.keys()))
         while True:
-            await g.push(str(g.players.keys()))
             data = await websocket.receive_text()
-            print(data, "123123132", username)
-            # g.handle_data(data)
+            await g.handle_data(data, username)
     except WebSocketDisconnect:
         game.remove(username)
     except ConnectionClosedError:

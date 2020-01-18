@@ -12,7 +12,7 @@ class Coord:
 
 
 class Difficulty(Enum):
-    TEST_SIMPLE = 80
+    TEST_SIMPLE = 81
     EASY = 32
     MEDIUM = 27
     HARD = 22
@@ -129,3 +129,29 @@ class SudokuBoard:
             [cell.value for cell in self.cells[x : x + self.SIZE ** 2]]
             for x in range(0, self.SIZE ** 2 ** 2, self.SIZE ** 2)
         ]
+
+
+def check_sudoku(sudoku):
+    n = len(sudoku)
+    for row in sudoku:
+        i = 1
+        while i <= n:
+            if i not in row:
+                return False
+            i += 1
+    j = 0    
+    transpose = []
+    temp_row = []
+    while j < n:
+        for row in sudoku:
+            temp_row.append(row[j])
+        transpose.append(temp_row)
+        temp_row = []
+        j += 1
+    for row in transpose:
+        i = 1
+        while i <= n:
+            if i not in row:
+                return False
+            i += 1
+    return True

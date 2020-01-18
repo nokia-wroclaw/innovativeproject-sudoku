@@ -26,7 +26,7 @@ class Lobby:
         self.players[username] = websocket
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
-            await self.generator.asend("start_game_1234")  
+            await self.generator.asend("start_game_1234")
             await initialize_new_game(list(self.players.keys()))
 
     def remove(self, username):
@@ -41,5 +41,4 @@ class Lobby:
             username, ws = self.players.popitem()
             await ws.send_text(data)
             active_players[username] = ws
-        print(self.players)
         self.players = active_players
