@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from os import environ
 
 import jwt
+from jwt.exceptions import ExpiredSignatureError
 from fastapi import Form
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
@@ -92,7 +93,10 @@ def create_token(*, data: dict, expires_delta: timedelta = None) -> jwt:
 def verify_refresh_token(token) -> str:
     if token is None:
         return None
-    payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALG])
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALG])
+    except ExpiredSignatureError:
+        return None
     username: str = payload.get("sub")
 
     if get_user(username) is None:

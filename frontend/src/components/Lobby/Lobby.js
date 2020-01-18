@@ -21,6 +21,9 @@ const Lobby = () => {
     if (data === "start_game_1234") {
       history.push("/game");
       ws.close();
+    } else if (data === "in_game_already") {
+      history.push("/game");
+      ws.close();
     } else {
       messages.innerHTML = data;
     }

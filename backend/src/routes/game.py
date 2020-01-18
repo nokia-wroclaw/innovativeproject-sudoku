@@ -1,4 +1,5 @@
-import logging, time
+import logging
+import json
 
 from fastapi import APIRouter, Cookie
 from starlette.websockets import WebSocket, WebSocketDisconnect
@@ -29,23 +30,30 @@ async def websocket_endpoint(
     for g in games:
         if username in g.usernames:
             await g.connect(websocket, username)
-            print("sukces polaczenia")
             game = g
     if game is None:
         print("GAME IS NONE")
         return
     try:
         while True:
-            time.sleep(2)
-            #await g.push(str(g.players.keys()))
+            await g.push(str(g.players.keys()))
             data = await websocket.receive_text()
+            print(data, "123123132", username)
             # g.handle_data(data)
     except WebSocketDisconnect:
         game.remove(username)
     except ConnectionClosedError:
         await g.push(("Player %s has disconnected", username))
 
+
 async def initialize_new_game(usernames):
     game = Game(usernames)
     await game.generator.asend(None)
     games.append(game)
+
+
+def check_if_in_game(username):
+    for g in games:
+        if username in g.usernames:
+            return True
+    return False

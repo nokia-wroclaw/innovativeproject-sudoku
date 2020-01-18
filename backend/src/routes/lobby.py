@@ -8,6 +8,7 @@ from starlette.requests import Request
 from starlette.status import WS_1008_POLICY_VIOLATION
 from ..lobby import Lobby
 from ..auth import verify_refresh_token
+from .game import check_if_in_game
 
 lobby_router = APIRouter()
 lobby = Lobby()
@@ -26,13 +27,20 @@ async def websocket_endpoint(
         logging.info("Acces token not verified.")
         return
     logging.info("User: %s entered lobby", username)
-    await lobby.connect(websocket, username)
-    await websocket.send_text(username)
-    try:
-        await lobby.push(str(list(lobby.players.keys())))
-        while True:
-            await websocket.receive_text()
+    if check_if_in_game(username):
+        print("Duupa")
+        await websocket.accept()
+        await websocket.send_text("in_game_already")
+        await websocket.close()
+        logging.info("Player: %s was in ongoing-game. Reconnecting", username)
+    else:
+        await lobby.connect(websocket, username)
+        await websocket.send_text(username)
+        try:
+            await lobby.push(str(list(lobby.players.keys())))
+            while True:
+                await websocket.receive_text()
 
-    except WebSocketDisconnect:
-        lobby.remove(username)
+        except WebSocketDisconnect:
+            lobby.remove(username)
 

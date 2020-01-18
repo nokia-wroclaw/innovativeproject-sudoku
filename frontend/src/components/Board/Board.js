@@ -14,6 +14,8 @@ import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 
+let ws;
+
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();
@@ -21,7 +23,7 @@ const Board = () => {
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
 
   const { progress, minutes, seconds } = timeLeft;
-
+  console.log("XD");
   let timerColor = styles.timer;
 
   if (minutes === 0 && seconds < 20) {
@@ -68,8 +70,7 @@ const Board = () => {
   }, [boardArray]);
 
   useEffect(() => {
-    const ws = new WebSocket("ws:localhost/api/game");
-
+    ws = new WebSocket("ws:localhost/api/game");
     ws.onmessage = function(event) {
       console.log(event.data);
     };
@@ -79,22 +80,25 @@ const Board = () => {
     // Send this board to server
     // const boardForServer = parseBoard(rows);
     // Response from server
+    var msg = JSON.stringify(Object.assign({}, parseBoard));
+    console.log("sending: ", msg);
+    ws.send("finished" + msg);
     const boardCorrect = true;
     if (boardCorrect) {
       downloadNewBoard();
     }
   };
 
-  // Function disabled coz of eslint, prepared for board check in server
-  // const parseBoard = board => {
-  //   const userCompleteBoard = [];
-  //   board.forEach(row => {
-  //     row.forEach(field => {
-  //       userCompleteBoard.push(field.value);
-  //     });
-  //   });
-  //   return userCompleteBoard;
-  // };
+  //Function disabled coz of eslint, prepared for board check in server
+  const parseBoard = board => {
+    const userCompleteBoard = [];
+    board.forEach(row => {
+      row.forEach(field => {
+        userCompleteBoard.push(field.value);
+      });
+    });
+    return userCompleteBoard;
+  };
 
   const getPosition = element => {
     const rect = element.getBoundingClientRect();

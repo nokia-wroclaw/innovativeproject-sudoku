@@ -3,6 +3,15 @@ import json
 
 from typing import Dict, List
 from starlette.websockets import WebSocket
+from websockets.exceptions import ConnectionClosedError
+
+class Player:
+    def __init__(self, username):
+        self.username = username
+        self.time = t
+
+    async def timer(self):
+        self.time-=1
 
 
 class Game:
@@ -22,13 +31,20 @@ class Game:
         await self.generator.asend(data)
 
     async def connect(self, websocket: WebSocket, username: str):
-        await websocket.accept()
+        try:
+            await websocket.accept()
+        except ConnectionClosedError:
+            logging.info("ConnectionClosed error - player has disconnected")
+        except AssertionError:
+            logging.info("ConnectionClosed error - player has disconnected")
         self.players[username] = websocket
         logging.info("Player %s connected to game.", username)
 
     def remove(self, username):
+        try:
             self.players.pop(username)
-            
+        except KeyError:
+            pass
     async def _send_data(self, data: str):
         active_players: Dict[str, WebSocket] = {}
         while len(self.players) > 0:
@@ -38,4 +54,5 @@ class Game:
         self.players = active_players
     
     #async def handle_data(self, data):
+
 

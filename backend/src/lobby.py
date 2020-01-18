@@ -1,12 +1,12 @@
 import logging
-from copy import deepcopy
 
-from typing import Dict, List
+from typing import Dict
 from starlette.websockets import WebSocket
 
-from .routes.game import initialize_new_game
+from .routes.game import initialize_new_game, check_if_in_game
 
 LOBBY_SIZE = 2
+
 
 class Lobby:
     def __init__(self):
@@ -30,7 +30,10 @@ class Lobby:
             await initialize_new_game(list(self.players.keys()))
 
     def remove(self, username):
-        self.players.pop(username)
+        try:
+            self.players.pop(username)
+        except KeyError:
+            pass
 
     async def _send_data(self, data: str):
         active_players: Dict[str, WebSocket] = {}

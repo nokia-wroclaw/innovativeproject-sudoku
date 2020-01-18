@@ -12,6 +12,7 @@ class Coord:
 
 
 class Difficulty(Enum):
+    TEST_SIMPLE = 80
     EASY = 32
     MEDIUM = 27
     HARD = 22

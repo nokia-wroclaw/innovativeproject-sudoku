@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from .auth import connect_to_db
-from .sudokuboard import SudokuBoard
+from .sudokuboard import SudokuBoard, Difficulty
 from .routes.auth import auth_router
 from .routes.lobby import lobby_router
 from .routes.lobby import lobby
@@ -23,7 +23,7 @@ async def root():
 
 @app.get("/api/sudoku")
 async def sudoku():
-    board = SudokuBoard()
+    board = SudokuBoard(difficulty=Difficulty.TEST_SIMPLE)
     board.make_puzzle()
     return {"sudokuBoard": board.get_board_matrix()}
 
