@@ -11,7 +11,7 @@
   width: 120px;
   height: 120px;
   opacity: 0;
-  
+
   -webkit-transform: scale(0);
   -moz-transform: scale(0);
   transform: scale(0);
@@ -198,8 +198,8 @@
 
 @media(max-width: 450px){
   .circle {
-    width: 130px;
-    height: 130px;
+    width: 135px;
+    height: 135px;
   }
 
   .circle .circle-button {

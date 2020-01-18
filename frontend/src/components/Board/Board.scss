@@ -13,6 +13,7 @@
     padding: 5px;
     margin-right: 1vw;
     height: 90%;
+    z-index: 10;
 }
 
 .sudoku table {
@@ -61,7 +62,7 @@
         margin-bottom: 1vh;
     }
     .gameView{
-        margin-top: -20vh;
+        margin-top: -30vh;
         flex-direction: column;
     }
 

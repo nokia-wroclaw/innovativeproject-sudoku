@@ -39,9 +39,10 @@ Field.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   blocked: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
-  isSelected: PropTypes.bool.isRequired
+  isSelected: PropTypes.bool
 };
 
 Field.defaultProps = {
-  onClick: null
+  onClick: null,
+  isSelected: false
 };
