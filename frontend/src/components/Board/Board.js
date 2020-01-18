@@ -7,6 +7,7 @@ import FieldModel from "../../models/FieldModel";
 import "../../Variables.scss";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
+import PlayersList from "../PlayersList/PlayersList";
 
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
@@ -181,6 +182,7 @@ const Board = () => {
             <tbody>{boardRows}</tbody>
           </table>
         </div>
+        <PlayersList playersLeft={5} myPosition={3} />
       </div>
     </div>
   );
