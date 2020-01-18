@@ -48,6 +48,11 @@
     
 }
 
+.Timer{
+    border-radius: 10px;
+    background-color: rgba($background-color, $alpha: 0.75);
+}
+
 .Timer p{
     margin: 0;
     color: $white;
