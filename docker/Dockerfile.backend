@@ -5,6 +5,8 @@ RUN apk add --no-cache --virtual .build-deps gcc libc-dev make libffi-dev \
 
 COPY backend/Pipfile* ./
 
+WORKDIR /app
+
 RUN pipenv lock --requirements > requirements.txt
 
 RUN cat requirements.txt 

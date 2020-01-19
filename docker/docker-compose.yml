@@ -12,14 +12,18 @@ services:
       - database
     ports:
       - "81:81"
+    depends_on:
+      - database
     environment:
       - HOST=${HOST}
       - PORT=81
       - SUDOKUBR_SECRET_KEY=${SUDOKUBR_SECRET_KEY}
       - SUDOKUBR_DB_USERNAME=${SUDOKUBR_DB_USERNAME} 
       - SUDOKUBR_DB_PASSWORD=${SUDOKUBR_DB_PASSWORD}
+  
   database:
     image: 'mongo'
+    restart: always
     container_name: 'mongo-container'
     environment:
       - MONGO_INITDB_DATABASE=admin
