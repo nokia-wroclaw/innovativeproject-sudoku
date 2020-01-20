@@ -17,7 +17,7 @@ from ..auth import (
     create_token,
     create_user,
     authenticate_user,
-    verify_refresh_token,
+    verify_token,
     RegisterForm,
 )
 
@@ -25,7 +25,7 @@ from ..auth import (
 auth_router = APIRouter()
 
 
-@auth_router.post("/api/register")
+@auth_router.post("/register")
 async def register(form_data: RegisterForm = Depends()):
     if form_data.password != form_data.re_password:
         logging.info("Passwords were not the same.")
@@ -86,7 +86,7 @@ async def get_acces_token(request: Request):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="No rights to refresh token.",
         )
-    username = verify_refresh_token(refresh_token)
+    username = verify_token(refresh_token)
     if username is None:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Username not found.",

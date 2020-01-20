@@ -17,7 +17,7 @@ game_router = APIRouter()
 games: List[Game] = []
 
 
-@game_router.websocket("/api/game")
+@game_router.websocket("/game")
 async def websocket_endpoint(websocket: WebSocket):
     try:
         username = verify_cookies(websocket.cookies)

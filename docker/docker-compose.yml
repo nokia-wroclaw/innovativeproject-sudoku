@@ -1,41 +1,73 @@
 version: '3'
+
 services:
+
   backend:
     container_name: backend-container
+    restart: always
+    command: uvicorn main:app --host 0.0.0.0 --port 81 --reload
     build:
       context: ..
       dockerfile: docker/Dockerfile.backend
-    command: pipenv run uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
     volumes:
       - '../backend:/app'
-    ports:
-      - "80:80"
     links:
       - database
-  database:
-    image: 'mongo'
-    container_name: 'mongo-container'
+    ports:
+      - "81:81"
+    depends_on:
+      - database
     environment:
-      - MONGO_INITDB_DATABASE=admin
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - HOST=${HOST}
+      - PORT=81
+      - SUDOKUBR_SECRET_KEY=${SUDOKUBR_SECRET_KEY}
+      - SUDOKUBR_DB_USERNAME=${SUDOKUBR_DB_USERNAME} 
+      - SUDOKUBR_DB_PASSWORD=${SUDOKUBR_DB_PASSWORD}
+  
+  database:
+    container_name: 'mongo-container'
+    image: 'mongo'
+    restart: always
     volumes:
       - ./mongo-volume:/data/db
     ports:
       - '27017-27019:27017-27019'
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      
   frontend:
     container_name: frontend-container
+    restart: always
+    command: npm start
     build:
       context: ..
       dockerfile: docker/Dockerfile.frontend
-    command: npm start
     volumes:
       - '../frontend:/app'
       - '/app/node_modules'
     ports:
-      - '3000:3000'
-    links:
-      - database
+      - "82:82"
     environment:
+      - HOST=${HOST}
+      - PORT=82
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
+    links:
+      - database
+
+  proxy:
+    container_name: proxy-container
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    environment:
+      - ENV=development
+      - PORT=80
+    depends_on:
+      - frontend
+      - backend

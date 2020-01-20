@@ -3,23 +3,19 @@ import logging
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
 from ..lobby import Lobby
-from ..auth import verify_refresh_token
+from ..auth import verify_cookies, CookieVerificationError
 from .game import check_if_in_game
 
 lobby_router = APIRouter()
 lobby = Lobby()
 
 
-@lobby_router.websocket("/api/lobby")
+@lobby_router.websocket("/lobby")
 async def websocket_endpoint(websocket: WebSocket):
     try:
-        access_token = websocket.cookies["access_token"]
-    except KeyError:
-        logging.info("No cookie found in /lobby")
-        return
-    username = verify_refresh_token(access_token)
-    if username is None:
-        logging.info("Acces token not verified.")
+        username = verify_cookies(websocket.cookies)
+    except CookieVerificationError:
+        logging.info("Cookie verification failed.")
         return
     logging.info("User: %s entered lobby", username)
     if check_if_in_game(username):
