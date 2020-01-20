@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./CircularMenu.scss";
 import PropTypes from "prop-types";
-import { isIOS } from "react-device-detect";
 
 const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
   const tilesArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -24,9 +23,7 @@ const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
   };
 
   useEffect(() => {
-    if (isIOS) {
-      setIsOpen(true);
-    }
+    setIsOpen(true);
   }, []);
 
   return (
