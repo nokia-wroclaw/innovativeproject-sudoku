@@ -12,6 +12,7 @@ class Coord:
 
 
 class Difficulty(Enum):
+    NOOB = 72
     EASY = 32
     MEDIUM = 27
     HARD = 22
@@ -46,7 +47,7 @@ class SudokuCell:
 
 
 class SudokuBoard:
-    def __init__(self, SIZE=3, difficulty: Difficulty = Difficulty.MEDIUM):
+    def __init__(self, SIZE=3, difficulty: Difficulty = Difficulty.NOOB):
         self.SIZE = SIZE
         self.VALID_VALUES = {x + 1 for x in range(SIZE ** 2)}
         self.cells = [
@@ -83,10 +84,19 @@ class SudokuBoard:
 
     def make_puzzle(self):
         clues = self.SIZE ** 4
-        while clues >= self.difficulty.value:
+
+        def get_index():
             index = randint(0, self.SIZE ** 4 - 1)  # nosec
-            while self.cells[index].value == 0:
+            coords = self.resolve_index(index)
+            while coords.x % 8 == 0 or coords.y % 8 == 0:
                 index = randint(0, self.SIZE ** 4 - 1)  # nosec
+                coords = self.resolve_index(index)
+            return index
+
+        while clues >= self.difficulty.value:
+            index = get_index()
+            while self.cells[index].value == 0:
+                index = get_index()
             self.cells[index].value = 0
             clues -= 1
 
