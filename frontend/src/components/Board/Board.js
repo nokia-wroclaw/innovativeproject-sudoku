@@ -31,14 +31,25 @@ const Board = () => {
 
   const downloadNewBoard = () => {
     setDisplayButtons(false);
-    fetch("https://sudokubr.me/api/sudoku")
-      .then(res => res.json())
-      .then(board => {
-        setBoardArray(board.sudokuBoard);
-      })
-      .then(() => {
-        setTimeLeft(40);
-      });
+    // fetch("https://sudokubr.me/api/sudoku")
+    //   .then(res => res.json())
+    //   .then(board => {
+    //     setBoardArray(board.sudokuBoard);
+    //   })
+    //   .then(() => {
+    setTimeLeft(40);
+    //   });
+    setBoardArray([
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 0]
+    ]);
   };
 
   const createRows = board => {
