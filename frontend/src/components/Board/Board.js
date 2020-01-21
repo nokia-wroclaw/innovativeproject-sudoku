@@ -4,7 +4,7 @@ import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
-import colors from "../../Variables.scss";
+import "../../Variables.scss";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 import PlayersList from "../PlayersList/PlayersList";
@@ -14,6 +14,7 @@ const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
+  const [displayButtons, setDisplayButtons] = useState(false);
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
 
   const { minutes, seconds } = timeLeft;
@@ -29,25 +30,15 @@ const Board = () => {
   }
 
   const downloadNewBoard = () => {
-    // fetch("https://sudokubr.me/api/sudoku")
-    //   .then(res => res.json())
-    //   .then(board => {
-    setBoardArray([
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]);
-    // setBoardArray(board.sudokuBoard);
-    // })
-    // .then(() => {
-    setTimeLeft(40);
-    // });
+    setDisplayButtons(false);
+    fetch("https://sudokubr.me/api/sudoku")
+      .then(res => res.json())
+      .then(board => {
+        setBoardArray(board.sudokuBoard);
+      })
+      .then(() => {
+        setTimeLeft(40);
+      });
   };
 
   const createRows = board => {
@@ -74,26 +65,32 @@ const Board = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardArray]);
 
-  const checkBoardCorrect = () => {
+  // Function disabled coz of eslint, prepared for board check in server
+  const parseBoard = (sRow, sColumn, value) => {
+    const userCompleteBoard = [];
+    rows.forEach(row => {
+      row.forEach(field => {
+        if (row === sRow && field.col === sColumn) {
+          userCompleteBoard.push(value);
+        } else {
+          userCompleteBoard.push(field.value);
+        }
+      });
+    });
+    return userCompleteBoard;
+  };
+
+  const checkBoardCorrect = (row, col, val) => {
     // Send this board to server
-    // const boardForServer = parseBoard(rows);
+    // const boardForServer = parseBoard(row, col, val);
+    parseBoard(row, col, val);
     // Response from server
     const boardCorrect = true;
     if (boardCorrect) {
-      downloadNewBoard();
+      // downloadNewBoard();
+      setDisplayButtons(true);
     }
   };
-
-  // Function disabled coz of eslint, prepared for board check in server
-  // const parseBoard = board => {
-  //   const userCompleteBoard = [];
-  //   board.forEach(row => {
-  //     row.forEach(field => {
-  //       userCompleteBoard.push(field.value);
-  //     });
-  //   });
-  //   return userCompleteBoard;
-  // };
 
   const getPosition = element => {
     const rect = element.getBoundingClientRect();
@@ -111,29 +108,24 @@ const Board = () => {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkBoardComplete = () => {
+  const checkBoardComplete = (sRow, sColumn, value) => {
     let complete = true;
     rows.forEach(row => {
       row.forEach(field => {
-        if (field.value === "") {
+        if (field.value === "" && row !== sRow && field.col !== sColumn) {
           complete = false;
         }
       });
     });
     if (complete) {
-      checkBoardCorrect(rows);
+      checkBoardCorrect(sRow, sColumn, value);
     }
   };
-
-  useEffect(() => {
-    if (rows) {
-      checkBoardComplete();
-    }
-  }, [rows, checkBoardComplete]);
 
   const updateBoard = (row, column, item) => {
     const value = _.get(item, "value", item);
     setRows(prev => _.set(prev, `['${row}'].['${column}'].value`, value));
+    checkBoardComplete(row, column, value);
   };
 
   let boardRows = null;
@@ -172,6 +164,17 @@ const Board = () => {
     });
   }
 
+  const renderMode = () => {
+    if (displayButtons) {
+      return <BattleButtons downloadNewBoard={downloadNewBoard} />;
+    }
+    return (
+      <table>
+        <tbody>{boardRows}</tbody>
+      </table>
+    );
+  };
+
   return (
     <div className="gameView">
       <div className="Timer">
@@ -181,10 +184,7 @@ const Board = () => {
       </div>
       <div className="gamePanel">
         <GoBackButton />
-        <div
-          className="sudoku sudoku-background"
-          style={{ background: "white" }}
-        >
+        <div className="sudoku sudoku-background">
           {suggestions && (
             <CircularMenu
               itemsAmount={9}
@@ -193,10 +193,7 @@ const Board = () => {
               hideMenu={hideSuggestions}
             />
           )}
-          {/* <table>
-            <tbody>{boardRows}</tbody>
-          </table> */}
-          <BattleButtons />
+          {renderMode()}
         </div>
         <PlayersList playersLeft={5} myPosition={3} />
       </div>
