@@ -16,10 +16,6 @@ const Lobby = () => {
     setPlayers(["Player1", "Player2", "Player3", "-", "-", "-", "-", "-"]);
   }, []);
 
-  const redirect = path => {
-    history.push(path);
-  };
-
   const displayPlayers = () => {
     return (
       <div className="players">
@@ -55,7 +51,7 @@ const Lobby = () => {
           disable="start"
           size="large"
           variant="outlined"
-          onClick={() => redirect("/menu")}
+          onClick={() => history.push("/menu")}
         >
           Cancel
         </Button>
