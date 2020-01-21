@@ -1,14 +1,12 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 
-// eslint-disable-next-line
-export default (
-  { component: C, appProps, ...rest } // eslint-disable-line
-) => (
+const UnauthenticatedRoute = ({ component: C, appProps, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      !appProps.isAuthenticated ? ( // eslint-disable-line
+      !appProps.isAuthenticated ? (
         <C {...props} {...appProps} />
       ) : (
         <Redirect to="/menu" />
@@ -16,3 +14,10 @@ export default (
     }
   />
 );
+
+UnauthenticatedRoute.propTypes = {
+  component: PropTypes.object.isRequired,
+  appProps: PropTypes.object.isRequired
+};
+
+export default UnauthenticatedRoute;

@@ -70,9 +70,9 @@ const Board = () => {
     ws = new WebSocket("ws:localhost/api/game");
 
     ws.onmessage = function(event) {
-      let data2json = JSON.parse(event.data);
+      let data2json;
       try {
-        data2json = JSON.parse(data2json);
+        data2json = JSON.parse(event.data);
         console.log("Data from server: ", data2json);
         if (event.data === "no_game") {
           ws.close();
@@ -93,7 +93,10 @@ const Board = () => {
       } catch (e) {
         console.log(e, "error");
       }
-    }; // eslint-disable-next-line
+    };
+    return () => {
+      ws.close();
+    };
   }, []); // if its any diffrent then code execute every second
 
   const parseBoard = board => {

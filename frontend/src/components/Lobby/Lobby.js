@@ -1,12 +1,19 @@
 import "./Lobby.scss";
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 
 const Lobby = () => {
   const history = useHistory();
 
-  const ws = new WebSocket("ws:localhost/api/lobby");
+  let ws;
+
+  useEffect(() => {
+    ws = new WebSocket("ws:localhost/api/lobby");
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   ws.onmessage = function(event) {
     const messages = document.getElementById("messages");

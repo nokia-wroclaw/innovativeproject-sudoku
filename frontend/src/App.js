@@ -62,22 +62,21 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   async function Auth() {
     try {
       await ky.get("/api/get-access-token");
-      userHasAuthenticated(true);
-      isAuthenticated(true);
+      setIsAuthenticated(true);
     } catch (e) {
-      isAuthenticated(false);
+      setIsAuthenticated(false);
     }
   }
 
   async function onLoad() {
     try {
       await Auth();
-      userHasAuthenticated(true);
+      setIsAuthenticated(true);
     } catch (e) {
       console.log(e);
     }
@@ -85,7 +84,7 @@ function App() {
 
   useEffect(() => {
     onLoad();
-  });
+  }, []);
 
   return (
     <div className="App">

@@ -1,16 +1,13 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export default function AuthenticatedRoute({
-  component: C, // eslint-disable-line
-  appProps, // eslint-disable-line
-  ...rest // eslint-disable-line
-}) {
+const AuthenticatedRoute = ({ component: C, appProps, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props =>
-        appProps.isAuthenticated ? ( // eslint-disable-line
+        appProps.isAuthenticated ? (
           <C {...props} {...appProps} />
         ) : (
           <Redirect
@@ -20,4 +17,11 @@ export default function AuthenticatedRoute({
       }
     />
   );
-}
+};
+
+AuthenticatedRoute.propTypes = {
+  component: PropTypes.object.isRequired,
+  appProps: PropTypes.object.isRequired
+};
+
+export default AuthenticatedRoute;
