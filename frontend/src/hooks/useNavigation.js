@@ -7,7 +7,7 @@ const useNavigation = modalPath => {
 
   const goBack = () => {
     if (history.location.pathname === modalPath) {
-      return open ? history.goBack() : setOpen(true);
+      return open ? history.push("/menu") : setOpen(true);
     }
     history.goBack();
     return setOpen(false);

@@ -1,6 +1,6 @@
 @import "../../Variables";
 
-:export {timer: $timer-color}
+:export {timer: $timer-color; bWhite: $white}
 
 .game {
     display: flex;
@@ -49,7 +49,8 @@
 }
 
 .Timer{
-    border-radius: 10px;
+    border-radius: 30px;
+    display: inline-block;
     background-color: rgba($background-color, $alpha: 0.75);
 }
 
@@ -67,8 +68,8 @@
         margin-bottom: 1vh;
     }
     .gameView{
-        margin-top: -30vh;
         flex-direction: column;
+        margin-top: -20vh;
     }
 
     .gamePanel{
