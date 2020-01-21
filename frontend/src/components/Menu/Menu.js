@@ -1,28 +1,36 @@
 import "./Menu.scss";
-import { Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
 import React from "react";
+import { Button } from "@material-ui/core";
+import { useHistory } from "react-router";
 
 const Menu = () => {
+  const history = useHistory();
+
   return (
     <div className="Menu">
       <div className="card">
         <img src="logo.png" alt="logo_image" />
-        <Link to="/game">
-          <Button size="large" variant="outlined">
-            Play
-          </Button>
-        </Link>
-        <Link to="/game">
-          <Button size="large" variant="outlined">
-            Stats
-          </Button>
-        </Link>
-        <Link to="/settings">
-          <Button size="large" variant="outlined">
-            Settings
-          </Button>
-        </Link>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => history.push("/lobby")}
+        >
+          Play
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => history.push("/game")}
+        >
+          Stats
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => history.push("/settings")}
+        >
+          Settings
+        </Button>
       </div>
     </div>
   );
