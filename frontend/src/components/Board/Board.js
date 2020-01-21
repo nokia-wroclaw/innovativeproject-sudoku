@@ -4,10 +4,11 @@ import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
-import "../../Variables.scss";
+import colors from "../../Variables.scss";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 import PlayersList from "../PlayersList/PlayersList";
+import BattleButtons from "../BattleButtons/BattleButtons";
 
 const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
@@ -28,14 +29,25 @@ const Board = () => {
   }
 
   const downloadNewBoard = () => {
-    fetch("https://sudokubr.me/api/sudoku")
-      .then(res => res.json())
-      .then(board => {
-        setBoardArray(board.sudokuBoard);
-      })
-      .then(() => {
-        setTimeLeft(40);
-      });
+    // fetch("https://sudokubr.me/api/sudoku")
+    //   .then(res => res.json())
+    //   .then(board => {
+    setBoardArray([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]);
+    // setBoardArray(board.sudokuBoard);
+    // })
+    // .then(() => {
+    setTimeLeft(40);
+    // });
   };
 
   const createRows = board => {
@@ -169,7 +181,10 @@ const Board = () => {
       </div>
       <div className="gamePanel">
         <GoBackButton />
-        <div className="sudoku sudoku-background">
+        <div
+          className="sudoku sudoku-background"
+          style={{ background: "white" }}
+        >
           {suggestions && (
             <CircularMenu
               itemsAmount={9}
@@ -178,9 +193,10 @@ const Board = () => {
               hideMenu={hideSuggestions}
             />
           )}
-          <table>
+          {/* <table>
             <tbody>{boardRows}</tbody>
-          </table>
+          </table> */}
+          <BattleButtons />
         </div>
         <PlayersList playersLeft={5} myPosition={3} />
       </div>
