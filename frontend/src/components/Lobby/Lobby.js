@@ -2,8 +2,8 @@ import "./Lobby.scss";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
-import Loader from "../Loader/Loader";
 import UIfx from "uifx";
+import Loader from "../Loader/Loader";
 
 const Lobby = () => {
   const history = useHistory();
