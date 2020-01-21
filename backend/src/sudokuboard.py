@@ -139,7 +139,7 @@ def check_sudoku(sudoku):
             if i not in row:
                 return False
             i += 1
-    j = 0    
+    j = 0
     transpose = []
     temp_row = []
     while j < n:

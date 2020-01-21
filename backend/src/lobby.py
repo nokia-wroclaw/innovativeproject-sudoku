@@ -3,7 +3,7 @@ import logging
 from typing import Dict
 from starlette.websockets import WebSocket
 
-from .routes.game import initialize_new_game, check_if_in_game
+from .routes.game import initialize_new_game
 
 LOBBY_SIZE = 2
 
@@ -14,6 +14,7 @@ class Lobby:
         self.generator = self.lobby_message_generator()
 
     async def lobby_message_generator(self):
+        # pylint: disable=duplicate-code
         while True:
             message = yield
             await self._send_data(message)
@@ -36,6 +37,7 @@ class Lobby:
             pass
 
     async def _send_data(self, data: str):
+        # pylint: disable=duplicate-code
         active_players: Dict[str, WebSocket] = {}
         while len(self.players) > 0:
             username, ws = self.players.popitem()

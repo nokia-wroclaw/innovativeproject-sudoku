@@ -1,11 +1,14 @@
 import React from "react";
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 
-export default ({ component: C, appProps, ...rest }) => (
+// eslint-disable-next-line
+export default (
+  { component: C, appProps, ...rest } // eslint-disable-line
+) => (
   <Route
     {...rest}
     render={props =>
-      !appProps.isAuthenticated ? (
+      !appProps.isAuthenticated ? ( // eslint-disable-line
         <C {...props} {...appProps} />
       ) : (
         <Redirect to="/menu" />

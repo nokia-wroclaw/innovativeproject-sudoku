@@ -5,6 +5,7 @@ import { isMobile } from "react-device-detect";
 import HTML5Backend from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { Line } from "rc-progress";
+import { useHistory } from "react-router-dom";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
@@ -13,7 +14,6 @@ import "../../Variables.scss";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
-import { useHistory } from "react-router-dom";
 
 let ws;
 
@@ -39,9 +39,6 @@ const Board = () => {
       .then(res => res.json())
       .then(board => {
         setBoardArray(board.sudokuBoard);
-      })
-      .then(() => {
-        //setTimeLeft(40);
       });
   };
 
@@ -73,8 +70,8 @@ const Board = () => {
     ws = new WebSocket("ws:localhost/api/game");
 
     ws.onmessage = function(event) {
+      let data2json = JSON.parse(event.data);
       try {
-        var data2json = JSON.parse(event.data);
         data2json = JSON.parse(data2json);
         console.log("Data from server: ", data2json);
         if (event.data === "no_game") {
@@ -87,16 +84,33 @@ const Board = () => {
         if (data2json.boardSolved) {
           downloadNewBoard();
         }
+        if (data2json.winner) {
+          alert("You won!");
+        }
+        if (data2json.timeout) {
+          alert("You lose");
+        }
       } catch (e) {
         console.log(e, "error");
       }
-    };
-  }, []);
+    }; // eslint-disable-next-line
+  }, []); // if its any diffrent then code execute every second
+
+  const parseBoard = board => {
+    const userCompleteBoard = [];
+    board.forEach(row => {
+      const rowArr = [];
+      row.forEach(field => {
+        rowArr.push(field.value);
+      });
+      userCompleteBoard.push(rowArr);
+    });
+    return userCompleteBoard;
+  };
 
   const checkBoardCorrect = () => {
-    var obj = new Object();
-    obj.board = parseBoard(rows);
-    var jsonString = JSON.stringify(obj);
+    const obj = { board: parseBoard(rows) };
+    const jsonString = JSON.stringify(obj);
     console.log(jsonString);
     ws.send(jsonString);
   };
@@ -129,18 +143,6 @@ const Board = () => {
     if (complete) {
       checkBoardCorrect(rows);
     }
-  };
-
-  const parseBoard = board => {
-    var userCompleteBoard = [];
-    board.forEach(row => {
-      var rowArr = [];
-      row.forEach(field => {
-        rowArr.push(field.value);
-      });
-      userCompleteBoard.push(rowArr);
-    });
-    return userCompleteBoard;
   };
 
   useEffect(() => {

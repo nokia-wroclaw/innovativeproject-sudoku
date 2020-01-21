@@ -5,3 +5,5 @@ __pycache__/
 *$py.class
 .mypy_cache
 dev_test_files
+.env
+mongo-volume/

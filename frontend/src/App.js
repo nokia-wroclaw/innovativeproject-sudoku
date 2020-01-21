@@ -1,10 +1,11 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import ky from "ky";
 import Register from "./components/Auth/Register/Register";
 import Login from "./components/Auth/Login/Login";
 import Menu from "./components/Menu/Menu";
@@ -14,8 +15,6 @@ import ParticlesComponent from "./components/ParticlesComponent/ParticlesCompone
 import Lobby from "./components/Lobby/Lobby";
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import UnauthenticatedRoute from "./routes/UnauthenticatedRoute";
-import { useState, useEffect } from "react";
-import ky from "ky";
 
 const theme = createMuiTheme({
   overrides: {
@@ -67,7 +66,7 @@ function App() {
 
   async function Auth() {
     try {
-      const response = await ky.get("/api/get-access-token");
+      await ky.get("/api/get-access-token");
       userHasAuthenticated(true);
       isAuthenticated(true);
     } catch (e) {
@@ -75,16 +74,18 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    onLoad();
-  }, []);
-
   async function onLoad() {
     try {
       await Auth();
       userHasAuthenticated(true);
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }
+
+  useEffect(() => {
+    onLoad();
+  });
 
   return (
     <div className="App">

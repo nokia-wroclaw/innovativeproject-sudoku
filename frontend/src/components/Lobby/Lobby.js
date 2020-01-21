@@ -26,7 +26,7 @@ const Lobby = () => {
           <p>Please wait.</p> Connected:{" "}
         </h1>
         <div style={{ color: "white" }} className="messages" id="messages">
-          You're disconnected. Please log in
+          Waiting for server response...
         </div>
       </div>
     </div>
