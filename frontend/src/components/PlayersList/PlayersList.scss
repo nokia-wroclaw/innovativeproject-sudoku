@@ -28,8 +28,29 @@
     }
 
     .playersList .player{
+        height: 4.5vw;
+        width: 4.5vw;
+        margin: 0 1vw;
+    }
+}
+
+@media(max-width: 800px){
+    .playersList .player{
+        height: 6.5vw;
+        width: 6.5vw;
+    }
+}
+
+@media(max-width: 600px){
+    .playersList .player{
+        height: 6vw;
+        width: 6vw;
+    }
+}
+
+@media(max-width: 420px){
+    .playersList .player{
         height: 7vw;
         width: 7vw;
-        margin: 0 1vw;
     }
 }
