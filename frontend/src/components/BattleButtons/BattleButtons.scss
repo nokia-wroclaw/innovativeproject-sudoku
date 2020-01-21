@@ -4,8 +4,8 @@
     display: flex;
     flex-direction: row;
     padding: 0;
-    width: calc(31.5vw + 6px);
-    height: calc(31.5vw + 6px);
+    width: calc(31.5vw + 16px);
+    height: calc(31.5vw + 16px);
     font-size: 25px;
 }
 
@@ -63,8 +63,8 @@
 
 @media(max-width: 1400px){
     .BattleButtons {
-        width: calc(40.5vw + 6px);
-        height: calc(40.5vw + 6px);
+        width: calc(40.5vw + 16px);
+        height: calc(40.5vw + 16px);
         font-size: 30px;
     }
 
@@ -91,8 +91,8 @@
 
 @media(max-width: 1024px){
     .BattleButtons {
-        width: calc(40.5vw + 6px);
-        height: calc(40.5vw + 6px);
+        width: calc(54vw + 16px);
+        height: calc(54vw + 16px);
         font-size: 30px;
     }
 
@@ -119,8 +119,8 @@
 
 @media(max-width: 800px){
     .BattleButtons {
-        width: calc(72vw + 6px);
-        height: calc(72vw + 6px);
+        width: calc(72vw + 16px);
+        height: calc(72vw + 16px);
     }
 
     .bHeal > img {
@@ -146,8 +146,8 @@
 
 @media(max-width: 600px){
     .BattleButtons {
-        width: calc(72vw + 6px);
-        height: calc(72vw + 6px);
+        width: calc(72vw + 16px);
+        height: calc(72vw + 16px);
         font-size: 20px;
     }
 
@@ -174,8 +174,8 @@
 
 @media(max-width: 370px){
     .BattleButtons {
-        width: calc(72vw + 6px);
-        height: calc(72vw + 6px);
+        width: calc(72vw + 16px);
+        height: calc(72vw + 16px);
         font-size: 20px;
     }
 

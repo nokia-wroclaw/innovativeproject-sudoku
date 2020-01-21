@@ -1,6 +1,9 @@
 @import "../../Variables";
 
-:export {active: $active-opponents; dead: $background-color}
+:export {
+    active: $active-opponents;
+    dead: $background-color
+}
 
 .playersList {
     display: flex;
@@ -9,47 +12,55 @@
     justify-content: center;
 }
 
-.playersList .player{
-    height: 5vh;
-    width: 5vh;
-    opacity: 0.95;
+.playersList .player {
+    height: 2.5vw;
+    width: 2.5vw;
     margin: 1vh 0;
+    opacity: 0.95;
     border-radius: 50%;
     -webkit-box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
     -moz-box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
     box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
-  }
+}
+
+@media(max-width: 1400px) {
+    .playersList .player {
+        height: 3.5vw;
+        width: 3.5vw;
+
+    }
+}
 
 
-  @media(max-width: 1024px){
+@media(max-width: 1024px) {
 
     .playersList {
         flex-direction: row;
     }
 
-    .playersList .player{
+    .playersList .player {
         height: 4.5vw;
         width: 4.5vw;
         margin: 0 1vw;
     }
 }
 
-@media(max-width: 800px){
-    .playersList .player{
+@media(max-width: 800px) {
+    .playersList .player {
         height: 6.5vw;
         width: 6.5vw;
     }
 }
 
-@media(max-width: 600px){
-    .playersList .player{
+@media(max-width: 600px) {
+    .playersList .player {
         height: 6vw;
         width: 6vw;
     }
 }
 
-@media(max-width: 420px){
-    .playersList .player{
+@media(max-width: 420px) {
+    .playersList .player {
         height: 7vw;
         width: 7vw;
     }
