@@ -6,10 +6,6 @@ import { useHistory } from "react-router";
 const Menu = () => {
   const history = useHistory();
 
-  const redirect = path => {
-    history.push(path);
-  };
-
   return (
     <div className="Menu">
       <div className="card">
@@ -17,21 +13,21 @@ const Menu = () => {
         <Button
           size="large"
           variant="outlined"
-          onClick={() => redirect("/lobby")}
+          onClick={() => history.push("/lobby")}
         >
           Play
         </Button>
         <Button
           size="large"
           variant="outlined"
-          onClick={() => redirect("/game")}
+          onClick={() => history.push("/game")}
         >
           Stats
         </Button>
         <Button
           size="large"
           variant="outlined"
-          onClick={() => redirect("/settings")}
+          onClick={() => history.push("/settings")}
         >
           Settings
         </Button>
