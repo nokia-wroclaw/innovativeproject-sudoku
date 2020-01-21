@@ -4,7 +4,7 @@ import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
-import colors from "../../Variables.scss";
+import "../../Variables.scss";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 import PlayersList from "../PlayersList/PlayersList";
@@ -184,10 +184,7 @@ const Board = () => {
       </div>
       <div className="gamePanel">
         <GoBackButton />
-        <div
-          className="sudoku sudoku-background"
-          style={{ background: "white" }}
-        >
+        <div className="sudoku sudoku-background">
           {suggestions && (
             <CircularMenu
               itemsAmount={9}
