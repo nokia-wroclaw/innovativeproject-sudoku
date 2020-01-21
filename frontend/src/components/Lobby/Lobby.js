@@ -3,10 +3,15 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import Loader from "../Loader/Loader";
+import UIfx from "uifx";
 
 const Lobby = () => {
   const history = useHistory();
   // const [start, setstart] = useState(false);
+
+  const buttonSound = new UIfx("/sounds/button_click.mp3", {
+    volume: 0.5 // number between 0.0 ~ 1.0
+  });
 
   const init = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
@@ -51,7 +56,10 @@ const Lobby = () => {
           disable="start"
           size="large"
           variant="outlined"
-          onClick={() => history.push("/menu")}
+          onClick={() => {
+            history.push("/menu");
+            buttonSound.play();
+          }}
         >
           Cancel
         </Button>
