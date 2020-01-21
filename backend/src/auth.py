@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime, timedelta
 from os import environ
+from typing import Dict
+
 
 import jwt
 from jwt.exceptions import ExpiredSignatureError
@@ -90,7 +92,7 @@ def create_token(*, data: dict, expires_delta: timedelta = None) -> jwt:
     return jwt.encode(to_encode, SECRET_KEY, algorithm=JWT_ALG)
 
 
-def verify_refresh_token(token) -> str:
+def verify_token(token) -> str:
     if token is None:
         return None
     try:
@@ -109,3 +111,18 @@ def authenticate_user(username: str, password: str) -> User:
     if user is None or not verify_password(password, user.hashed_password):
         return None
     return user
+
+
+def verify_cookies(cookies: Dict) -> str:
+    try:
+        access_token = cookies["access_token"]
+        username = verify_token(access_token)
+        if username is not None:
+            return username
+        raise CookieVerificationError
+    except KeyError:
+        raise CookieVerificationError
+
+
+class CookieVerificationError(Exception):
+    """Raised when user does not provide valid access token."""

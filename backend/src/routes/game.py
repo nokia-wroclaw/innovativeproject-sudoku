@@ -10,7 +10,7 @@ from starlette.websockets import WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
 
 from ..game import Game
-from ..auth import verify_refresh_token
+from ..auth import verify_cookies, CookieVerificationError
 
 
 game_router = APIRouter()
@@ -20,14 +20,11 @@ games: List[Game] = []
 @game_router.websocket("/api/game")
 async def websocket_endpoint(websocket: WebSocket):
     try:
-        access_token = websocket.cookies["access_token"]
-    except KeyError:
-        logging.error("No cookie found")
+        username = verify_cookies(websocket.cookies)
+    except CookieVerificationError:
+        logging.info("Cookie verification failed.")
         return
-    username = verify_refresh_token(access_token)
-    if username is None:
-        logging.info("Access token not verified.")
-        return
+
     game = None
     for g in games:
         if username in g.usernames:
@@ -49,11 +46,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 await game.handle_data(wrapper[0], username)
             except asyncio.TimeoutError:
                 await check_timers(websocket, username, game)
-    except WebSocketDisconnect:
-        game.remove(username)
-        if len(game.players) == 0 and game not in games:
-            games.remove(game)
-    except ConnectionClosedError:
+    except (WebSocketDisconnect, ConnectionClosedError):
         game.remove(username)
         if len(game.players) == 0 and game not in games:
             games.remove(game)
@@ -89,7 +82,5 @@ async def check_timers(websocket, username, game):
             try:
                 game.players.pop(p)
                 game.usernames.remove(p)
-            except KeyError:
-                pass
-            except ValueError:
+            except (KeyError, ValueError):
                 pass
