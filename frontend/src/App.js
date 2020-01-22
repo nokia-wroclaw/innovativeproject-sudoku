@@ -65,17 +65,17 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const getToken = () => {
-      ky.get("/api/get-access-token");
+    const getToken = async () => {
+      try {
+        await ky.get("/api/get-access-token");
+        setIsLoggedIn(true);
+      } catch (e) {
+        console.log(e);
+        setIsLoggedIn(false);
+      }
     };
 
-    try {
-      getToken();
-      setIsLoggedIn(true);
-    } catch (e) {
-      console.log(e);
-      setIsLoggedIn(false);
-    }
+    getToken();
   }, [setIsLoggedIn]);
 
   return (
