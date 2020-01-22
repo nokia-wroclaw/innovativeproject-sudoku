@@ -61,7 +61,7 @@ def connect_to_db():
             username=DB_USERNAME,
             password=DB_PASSWORD,
             authentication_source="admin",
-            host="mongo-container",
+            host="mongo",
             port=27017,
         )
     except ConnectionError as error:
