@@ -11,7 +11,6 @@ TIME_ADD_AFTER_SOLVE = 5
 
 
 class Player:
-    # pylint: disable=duplicate-code
     def __init__(self, username):
         self.username = username
         self.timer = time.time() + GAME_DURATION
@@ -28,7 +27,6 @@ class Game:
             self.players_data[p] = Player(p)
 
     async def message_generator(self):
-        # pylint: disable=duplicate-code
         while True:
             message = yield
             await self._send_data(message)

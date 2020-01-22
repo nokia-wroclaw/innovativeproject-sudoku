@@ -16,7 +16,8 @@ load-plugins=pylint_mongoengine
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=bad-continuation,
+disable=duplicate-code,
+        bad-continuation,
         too-few-public-methods,
         missing-class-docstring,
         missing-module-docstring,

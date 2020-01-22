@@ -16,7 +16,7 @@ async function handleSubmit(params, setStatus) {
       await ky.post("/api/login", {
         body: formData
       });
-      // window.location.reload();
+      window.location.reload();
     } catch (e) {
       setStatus({ error: "loginError" });
     }

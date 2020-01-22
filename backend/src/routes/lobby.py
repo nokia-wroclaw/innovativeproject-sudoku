@@ -1,4 +1,5 @@
 import logging
+import json
 
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
@@ -27,7 +28,6 @@ async def websocket_endpoint(websocket: WebSocket):
         await lobby.connect(websocket, username)
         await websocket.send_text(username)
         try:
-            await lobby.push(str(list(lobby.players.keys())))
             while True:
                 await websocket.receive_text()
         except WebSocketDisconnect:

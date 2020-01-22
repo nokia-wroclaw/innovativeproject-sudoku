@@ -1,4 +1,5 @@
 import logging
+import json
 
 from typing import Dict
 from starlette.websockets import WebSocket
@@ -14,13 +15,12 @@ class Lobby:
         self.generator = self.lobby_message_generator()
 
     async def lobby_message_generator(self):
-        # pylint: disable=duplicate-code
         while True:
             message = yield
             await self._send_data(message)
 
-    async def push(self, data: str):
-        await self.generator.asend(data)
+    async def push(self, data):
+        await self.generator.asend(json.dumps(data))
 
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
@@ -36,8 +36,7 @@ class Lobby:
         except KeyError:
             pass
 
-    async def _send_data(self, data: str):
-        # pylint: disable=duplicate-code
+    async def _send_data(self, data: Dict):
         active_players: Dict[str, WebSocket] = {}
         while len(self.players) > 0:
             username, ws = self.players.popitem()

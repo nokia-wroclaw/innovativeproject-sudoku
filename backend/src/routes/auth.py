@@ -42,7 +42,7 @@ async def register(form_data: RegisterForm = Depends()):
         )
 
 
-@auth_router.post("/api/login")
+@auth_router.post("/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if user is None:
@@ -78,7 +78,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return response
 
 
-@auth_router.get("/api/get-access-token")
+@auth_router.get("/get-access-token")
 async def get_acces_token(request: Request):
     refresh_token = request.cookies.get("refresh_token")
     response = Response()
