@@ -32,7 +32,7 @@ async def websocket_endpoint(websocket: WebSocket):
             game = g
     if game is None:
         await websocket.accept()
-        await websocket.send_text("no_game")
+        await websocket.send_json({"type": "event", "code": "no_game"})
         logging.info(
             "Player: %s tried to connect /game, but no game was found with him.",
             username,

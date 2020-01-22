@@ -19,16 +19,15 @@ async def websocket_endpoint(websocket: WebSocket):
         logging.info("Cookie verification failed.")
         return
     logging.info("User: %s entered lobby", username)
-    if check_if_in_game(username):
-        await websocket.accept()
-        await websocket.send_text("in_game_already")
-        await websocket.close()
-        logging.info("Player: %s was in ongoing-game. Reconnecting", username)
-    else:
-        await lobby.connect(websocket, username)
-        await websocket.send_text(username)
-        try:
+    try:
+        if check_if_in_game(username):
+            await websocket.accept()
+            await websocket.send_json({"type": "event", "code": "in_game_already"})
+            await websocket.close()
+            logging.info("Player: %s was in ongoing-game. Reconnecting", username)
+        else:
+            await lobby.connect(websocket, username)
             while True:
-                await websocket.receive_text()
-        except WebSocketDisconnect:
-            lobby.remove(username)
+                await websocket.receive_json()
+    except WebSocketDisconnect:
+        lobby.remove(username)

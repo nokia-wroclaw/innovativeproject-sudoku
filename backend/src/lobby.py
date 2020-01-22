@@ -1,12 +1,12 @@
 import logging
 import json
 
-from typing import Dict
+from typing import Dict, List
 from starlette.websockets import WebSocket
 
 from .routes.game import initialize_new_game
 
-LOBBY_SIZE = 2
+LOBBY_SIZE = 9
 
 
 class Lobby:
@@ -20,14 +20,15 @@ class Lobby:
             await self._send_data(message)
 
     async def push(self, data):
-        await self.generator.asend(json.dumps(data))
+        await self.generator.asend(data)
 
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
         self.players[username] = websocket
+        await self.push({"type": "data", "players": self.get_usernames()})
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
-            await self.generator.asend("start_game_1234")
+            await self.push({"type": "event", "code": "start_game"})
             await initialize_new_game(list(self.players.keys()))
 
     def remove(self, username):
@@ -36,10 +37,13 @@ class Lobby:
         except KeyError:
             pass
 
-    async def _send_data(self, data: Dict):
+    async def _send_data(self, data: str):
         active_players: Dict[str, WebSocket] = {}
         while len(self.players) > 0:
             username, ws = self.players.popitem()
-            await ws.send_text(data)
+            await ws.send_json(data)
             active_players[username] = ws
         self.players = active_players
+
+    def get_usernames(self) -> List[str]:
+        return list(self.players.keys())

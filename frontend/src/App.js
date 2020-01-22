@@ -62,30 +62,21 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
-
-  async function Auth() {
-    try {
-      await ky.get("/api/get-access-token");
-      userHasAuthenticated(true);
-      isAuthenticated(true);
-    } catch (e) {
-      isAuthenticated(false);
-    }
-  }
-
-  async function onLoad() {
-    try {
-      await Auth();
-      userHasAuthenticated(true);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    onLoad();
-  });
+    const getToken = () => {
+      ky.get("/api/get-access-token");
+    };
+
+    try {
+      getToken();
+      setIsLoggedIn(true);
+    } catch (e) {
+      console.log(e);
+      setIsLoggedIn(false);
+    }
+  }, [setIsLoggedIn]);
 
   return (
     <div className="App">
@@ -100,32 +91,32 @@ function App() {
               <AuthenticatedRoute
                 path="/settings"
                 component={Settings}
-                appProps={{ isAuthenticated }}
+                appProps={{ isLoggedIn }}
               />
               <AuthenticatedRoute
                 path="/menu"
                 component={Menu}
-                appProps={{ isAuthenticated }}
+                appProps={{ isLoggedIn }}
               />
               <AuthenticatedRoute
                 path="/game"
                 component={Board}
-                appProps={{ isAuthenticated }}
+                appProps={{ isLoggedIn }}
               />
               <AuthenticatedRoute
                 path="/lobby"
                 component={Lobby}
-                appProps={{ isAuthenticated }}
+                appProps={{ isLoggedIn }}
               />
               <UnauthenticatedRoute
                 path="/register"
                 component={Register}
-                appProps={{ isAuthenticated }}
+                appProps={{ isLoggedIn }}
               />
               <UnauthenticatedRoute
                 path="/login"
                 component={Login}
-                appProps={{ isAuthenticated }}
+                appProps={{ isLoggedIn }}
               />
               <Route path="*">
                 <Redirect to="register" />

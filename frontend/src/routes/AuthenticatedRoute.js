@@ -7,7 +7,7 @@ const AuthenticatedRoute = ({ component: C, appProps, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        appProps.isAuthenticated ? (
+        appProps.isLoggedIn ? (
           <C {...props} {...appProps} />
         ) : (
           <Redirect
