@@ -14,7 +14,7 @@ import "../../Variables.scss";
 import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
-
+import { CrazyAssWebSocket } from "../../Utils";
 let ws;
 
 const Board = () => {
@@ -67,7 +67,7 @@ const Board = () => {
   }, [boardArray]);
 
   useEffect(() => {
-    ws = new WebSocket("ws:localhost/api/game");
+    const ws = new CrazyAssWebSocket("/api/game");
 
     ws.onmessage = function(event) {
       let data2json;
@@ -97,7 +97,7 @@ const Board = () => {
     return () => {
       ws.close();
     };
-  }, []); // if its any diffrent then code execute every second
+  }, []);
 
   const parseBoard = board => {
     const userCompleteBoard = [];

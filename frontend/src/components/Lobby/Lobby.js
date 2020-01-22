@@ -1,39 +1,45 @@
 import "./Lobby.scss";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
+import { CrazyAssWebSocket } from "../../Utils.js";
 
 const Lobby = () => {
   const history = useHistory();
 
-  let ws;
+  const [messageHistory, setMessageHistory] = useState([[]]);
 
   useEffect(() => {
-    ws = new WebSocket("ws:localhost/api/lobby");
+    const ws = new CrazyAssWebSocket("/api/lobby");
+
+    ws.onmessage = event => {
+      console.log(event.data);
+      const response = event.data;
+      setMessageHistory([...messageHistory, response]);
+      if (response === "start_game_1234" || response === "in_game_already") {
+        history.push("/game");
+        ws.close();
+      }
+    };
+
+    ws.onclose = () => {
+      ws.close();
+    };
+
     return () => {
       ws.close();
     };
   }, []);
 
-  ws.onmessage = function(event) {
-    const messages = document.getElementById("messages");
-    const data = event.data.replace(/[[\]']+/g, "");
-    if (data === "start_game_1234" || data === "in_game_already") {
-      history.push("/game");
-      ws.close();
-    } else {
-      messages.innerHTML = data;
-    }
-  };
   return (
     <div className="Lobby">
       <GoBackButtonLobby />
       <div className="card">
         <h1 style={{ color: "white" }}>
-          <p>Please wait.</p> Connected:{" "}
+          <p>SudokuBR Lobby</p>
         </h1>
         <div style={{ color: "white" }} className="messages" id="messages">
-          Waiting for server response...
+          {messageHistory}
         </div>
       </div>
     </div>
