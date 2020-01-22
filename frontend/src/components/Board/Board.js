@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
+import UIfx from "uifx";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
@@ -20,6 +21,14 @@ const Board = () => {
   const { minutes, seconds } = timeLeft;
 
   let timerColor = styles.timer;
+
+  const wrongBoardSound = new UIfx("/sounds/incorrect_board.mp3", {
+    volume: 0.5 // number between 0.0 ~ 1.0
+  });
+
+  const correctBoardSound = new UIfx("/sounds/correct_board.mp3", {
+    volume: 0.5 // number between 0.0 ~ 1.0
+  });
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";
@@ -47,7 +56,7 @@ const Board = () => {
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 0, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 0]
     ]);
   };
@@ -99,7 +108,10 @@ const Board = () => {
     const boardCorrect = true;
     if (boardCorrect) {
       // downloadNewBoard();
+      correctBoardSound.play();
       setDisplayButtons(true);
+    } else {
+      wrongBoardSound.play();
     }
   };
 
