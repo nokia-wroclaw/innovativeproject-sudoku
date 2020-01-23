@@ -155,7 +155,7 @@ const Board = () => {
   const checkBoardCorrect = (row, col, val) => {
     const boardForServer = parseBoard(row, col, val);
 
-    console.log(boardForServer);
+    // console.log(boardForServer);
 
     ws.send(JSON.stringify(boardForServer));
 
@@ -199,9 +199,9 @@ const Board = () => {
   // }, [rows]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  const sendBoard = () => {
-    ws.send(JSON.stringify({ board: parseBoard(rows) }));
-  };
+  // const sendBoard = () => {
+  //   ws.send(JSON.stringify({ board: parseBoard(rows) }));
+  // };
 
   const checkBoardComplete = (sRow, sColumn, value) => {
     let complete = true;
@@ -213,7 +213,7 @@ const Board = () => {
       });
     });
     if (complete) {
-      console.log("COMLETED");
+      // console.log("COMLETED");
       checkBoardCorrect(sRow, sColumn, value);
     }
   };

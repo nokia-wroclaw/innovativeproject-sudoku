@@ -37,7 +37,7 @@ async def websocket_endpoint(websocket: WebSocket):
             username,
         )
         return
-   
+
     while True:
         try:
             wrapper = []

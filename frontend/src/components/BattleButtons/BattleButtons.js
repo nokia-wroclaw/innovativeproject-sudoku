@@ -46,7 +46,8 @@ const BattleButtons = ({ downloadNewBoard, setTimeLeft }) => {
 };
 
 BattleButtons.propTypes = {
-  downloadNewBoard: PropTypes.func.isRequired
+  downloadNewBoard: PropTypes.func.isRequired,
+  setTimeLeft: PropTypes.func.isRequired
 };
 
 export default BattleButtons;
