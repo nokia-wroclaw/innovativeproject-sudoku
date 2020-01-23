@@ -113,52 +113,57 @@ const Board = () => {
         // console.log(e);
       }
     };
+
+    ws.onclose = () => {
+      ws.close();
+    };
+
     return () => {
       ws.close();
     };
   }, [history, setTimeLeft]);
 
-  const parseBoard = board => {
-    const userCompleteBoard = [];
-    board.forEach(row => {
-      const rowArr = [];
-      row.forEach(field => {
-        rowArr.push(field.value);
-      });
-      userCompleteBoard.push(rowArr);
-    });
-    return userCompleteBoard;
-  };
-
-  // Function disabled coz of eslint, prepared for board check in server
-  // const parseBoard = (sRow, sColumn, value) => {
+  // const parseBoard = board => {
   //   const userCompleteBoard = [];
-  //   rows.forEach(row => {
+  //   board.forEach(row => {
+  //     const rowArr = [];
   //     row.forEach(field => {
-  //       if (row === sRow && field.col === sColumn) {
-  //         userCompleteBoard.push(value);
-  //       } else {
-  //         userCompleteBoard.push(field.value);
-  //       }
+  //       rowArr.push(field.value);
   //     });
+  //     userCompleteBoard.push(rowArr);
   //   });
   //   return userCompleteBoard;
   // };
 
-  // const checkBoardCorrect = (row, col, val) => {
-  //   // Send this board to server
-  //   // const boardForServer = parseBoard(row, col, val);
-  //   parseBoard(row, col, val);
-  //   // Response from server
-  //   const boardCorrect = true;
-  //   if (boardCorrect) {
-  //     // downloadNewBoard();
-  //     correctBoardSound.play();
-  //     setDisplayButtons(true);
-  //   } else {
-  //     wrongBoardSound.play();
-  //   }
-  // };
+  // Function disabled coz of eslint, prepared for board check in server
+  const parseBoard = (sRow, sColumn, value) => {
+    const userCompleteBoard = [];
+    rows.forEach(row => {
+      row.forEach(field => {
+        if (row === sRow && field.col === sColumn) {
+          userCompleteBoard.push(value);
+        } else {
+          userCompleteBoard.push(field.value);
+        }
+      });
+    });
+    return userCompleteBoard;
+  };
+
+  const checkBoardCorrect = (row, col, val) => {
+    // Send this board to server
+    // const boardForServer = parseBoard(row, col, val);
+    parseBoard(row, col, val);
+    // Response from server
+    const boardCorrect = true;
+    if (boardCorrect) {
+      // downloadNewBoard();
+      correctBoardSound.play();
+      setDisplayButtons(true);
+    } else {
+      wrongBoardSound.play();
+    }
+  };
 
   const getPosition = element => {
     const rect = element.getBoundingClientRect();
@@ -175,33 +180,33 @@ const Board = () => {
     setSuggestions({ x: coords.x, y: coords.y, row, column });
   };
 
-  useEffect(() => {
-    const checkBoardComplete = board =>
-      !board.filter(row => row.filter(field => field.value === ""));
-    const checkBoardCorrect = () => {
-      const boardStringified = JSON.stringify({ board: parseBoard(rows) });
-      ws.send(boardStringified);
-    };
-    if (rows) {
-      if (checkBoardComplete) {
-        checkBoardCorrect();
-      }
-    }
-  }, [rows]);
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const checkBoardComplete = (sRow, sColumn, value) => {
-  //   let complete = true;
-  //   rows.forEach(row => {
-  //     row.forEach(field => {
-  //       if (field.value === "" && row !== sRow && field.col !== sColumn) {
-  //         complete = false;
-  //       }
-  //     });
-  //   });
-  //   if (complete) {
-  //     checkBoardCorrect(sRow, sColumn, value);
+  // useEffect(() => {
+  //   const checkBoardComplete = board =>
+  //     !board.filter(row => row.filter(field => field.value === ""));
+  //   const checkBoardCorrect = () => {
+  //     const boardStringified = JSON.stringify({ board: parseBoard(rows) });
+  //     ws.send(boardStringified);
+  //   };
+  //   if (rows) {
+  //     if (checkBoardComplete) {
+  //       // checkBoardCorrect();
+  //     }
   //   }
-  // };
+  // }, [rows]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const checkBoardComplete = (sRow, sColumn, value) => {
+    let complete = true;
+    rows.forEach(row => {
+      row.forEach(field => {
+        if (field.value === "" && row !== sRow && field.col !== sColumn) {
+          complete = false;
+        }
+      });
+    });
+    if (complete) {
+      checkBoardCorrect(sRow, sColumn, value);
+    }
+  };
 
   const updateBoard = (row, column, item) => {
     const value = _.get(item, "value", item);

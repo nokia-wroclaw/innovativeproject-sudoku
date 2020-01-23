@@ -5,7 +5,7 @@ from starlette.websockets import WebSocket
 
 from .routes.game import initialize_new_game
 
-LOBBY_SIZE = 4
+LOBBY_SIZE = 2
 
 
 class Lobby:
