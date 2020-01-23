@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CircularMenu.scss";
 import PropTypes from "prop-types";
-import { isIOS } from "react-device-detect";
+import UIfx from "uifx";
 
 const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
   const tilesArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -16,6 +16,14 @@ const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
     }
   };
 
+  const writeSound = new UIfx("/sounds/write.mp3", {
+    volume: 0.4 // number between 0.0 ~ 1.0
+  });
+
+  const eraseSound = new UIfx("/sounds/erase.mp3", {
+    volume: 0.4 // number between 0.0 ~ 1.0
+  });
+
   const resetField = () => {
     displayMenu();
     if (isOpen) {
@@ -24,9 +32,7 @@ const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
   };
 
   useEffect(() => {
-    if (isIOS) {
-      setIsOpen(true);
-    }
+    setIsOpen(true);
   }, []);
 
   return (
@@ -47,6 +53,7 @@ const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
                 key={key}
                 onClick={() => {
                   updateBoard(suggestions.row, suggestions.column, tileValue);
+                  writeSound.play();
                   displayMenu();
                 }}
                 style={{
@@ -76,7 +83,10 @@ const CircularMenu = ({ itemsAmount, suggestions, updateBoard, hideMenu }) => {
           type="button"
           label="field"
           className="menu-button"
-          onClick={resetField}
+          onClick={() => {
+            resetField();
+            eraseSound.play();
+          }}
         />
       </div>
     )

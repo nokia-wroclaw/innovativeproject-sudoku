@@ -8,8 +8,8 @@
 }
 
 .circle {
-  width: 120px;
-  height: 120px;
+  width: 270px;
+  height: 270px;
   opacity: 0;
 
   -webkit-transform: scale(0);
@@ -37,6 +37,12 @@
   color: $white;
   opacity: 0.95;
   border: 1px solid $white;
+  height: 2.75vw;
+  width: 2.75vw;
+  margin-left: -80px;
+  margin-top: -80px;
+  border-radius: 40px;
+  font-size: 25px;
 }
 
 .circle .circle-button:active {
@@ -49,56 +55,159 @@
   text-align: center;
   display: block;
   opacity: 0;
+  top: calc(50% - 70px);
+  left: calc(50% - 70px);
+  height: 3.5vw;
+  width: 3.5vw;
+  font-size: 30px;
 }
 
-@media(max-width: 1025px){
+@media(max-width: 1920px) {
   .circle {
-    width: 320px;
-    height: 320px;
+    width: 215px;
+    height: 215px;
   }
 
   .circle .circle-button {
-    height: 6vh;
-    width: 6vh;
-    margin-left: -110px;
-    margin-top: -110px;
+    height: 2.75vw;
+    width: 2.75vw;
+    margin-left: -60px;
+    margin-top: -60px;
     border-radius: 40px;
     font-size: 25px;
   }
 
   .menu-button {
-    top: calc(50% - 123px);
-    left: calc(50% - 123px);
-    height: 6.5vh;
-    width: 6.5vh;
+    top: calc(50% - 70px);
+    left: calc(50% - 70px);
+    height: 3.5vw;
+    width: 3.5vw;
     font-size: 30px;
   }
 }
 
-@media(max-width: 800px){
+@media(max-width: 1400px) {
   .circle {
-    width: 220px;
-    height: 220px;
+    width: 180px;
+    height: 180px;
   }
 
   .circle .circle-button {
-    height: 5vh;
-    width: 5vh;
-    margin-left: -65px;
-    margin-top: -65px;
+    height: 3.2vw;
+    width: 3.2vw;
+    margin-left: -45px;
+    margin-top: -45px;
+    border-radius: 40px;
+    font-size: 25px;
+  }
+
+  .menu-button {
+    top: calc(50% - 55px);
+    left: calc(50% - 55px);
+    height: 4.5vw;
+    width: 4.5vw;
+    font-size: 30px;
+  }
+}
+
+@media(max-width: 1200px) {
+  .circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .circle .circle-button {
+    height: 4vw;
+    width: 4vw;
+    margin-left: -45px;
+    margin-top: -45px;
+    border-radius: 40px;
+    font-size: 25px;
+  }
+
+  .menu-button {
+    top: calc(50% - 55px);
+    left: calc(50% - 55px);
+    height: 4.5vw;
+    width: 4.5vw;
+    font-size: 30px;
+  }
+}
+
+
+@media(max-width: 1024px) {
+  .circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .circle .circle-button {
+    height: 4.5vw;
+    width: 4.5vw;
+    margin-left: -43px;
+    margin-top: -45px;
+    border-radius: 40px;
+    font-size: 20px;
+  }
+
+  .menu-button {
+    top: calc(50% - 55px);
+    left: calc(50% - 55px);
+    height: 6vw;
+    width: 6vw;
+    font-size: 30px;
+  }
+}
+
+@media(max-width: 800px) {
+  .circle {
+    width: 200px;
+    height: 200px;
+  }
+
+  .circle .circle-button {
+    height: 6vw;
+    width: 6vw;
+    margin-left: -53px;
+    margin-top: -53px;
     border-radius: 2.5vh;
     font-size: 18px;
   }
 
   .menu-button {
-    top: calc(50% - 73px);
-    left: calc(50% - 73px);
-    height: 6vh;
-    width: 6vh;
+    top: calc(50% - 65px);
+    left: calc(50% - 65px);
+    height: 8vw;
+    width: 8vw;
   }
 }
 
-@media(max-width: 600px){
+@media(max-width: 600px) {
+  .circle {
+    width: 150px;
+    height: 150px;
+  }
+
+  .circle .circle-button {
+    height: 4.5vh;
+    width: 4.5vh;
+    margin-left: -35px;
+    margin-top: -35px;
+    border-radius: 20px;
+    font-size: 15px;
+    padding: 0;
+  }
+
+
+  .menu-button {
+    top: calc(50% - 38px);
+    left: calc(50% - 38px);
+    height: 8vw;
+    width: 8vw;
+  }
+}
+
+@media(max-width: 450px) {
   .circle {
     width: 135px;
     height: 135px;
@@ -107,7 +216,7 @@
   .circle .circle-button {
     height: 4vh;
     width: 4vh;
-    margin-left: -30px;
+    margin-left: -28px;
     margin-top: -30px;
     border-radius: 20px;
     font-size: 15px;
@@ -116,14 +225,14 @@
 
 
   .menu-button {
-    top: calc(50% - 32px);
+    top: calc(50% - 30px);
     left: calc(50% - 30px);
-    height: 4vh;
-    width: 4vh;
+    height: 8vw;
+    width: 8vw;
   }
 }
 
-@media(max-width: 370px){
+@media(max-width: 370px) {
   .circle {
     width: 130px;
     height: 130px;
@@ -132,8 +241,8 @@
   .circle .circle-button {
     height: 5vh;
     width: 5vh;
-    margin-left: -25px;
-    margin-top: -25px;
+    margin-left: -30px;
+    margin-top: -28px;
     border-radius: 20px;
     font-size: 15px;
     padding: 0;
