@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import LongPress from "react-long";
-import { isMobile } from "react-device-detect";
-import HTML5Backend from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
-import { Line } from "rc-progress";
+// import UIfx from "uifx";
 import { useHistory } from "react-router-dom";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
 import FieldModel from "../../models/FieldModel";
 import "../../Variables.scss";
-import DragPanel from "../Draggable/DragPanel/DragPanel";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
 import { CrazyAssWebSocket } from "../../Utils";
+import PlayersList from "../PlayersList/PlayersList";
+import BattleButtons from "../BattleButtons/BattleButtons";
+
 let ws;
 
 const Board = () => {
@@ -22,9 +20,20 @@ const Board = () => {
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
+  const [displayButtons, setDisplayButtons] = useState(false);
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
-  const { progress, minutes, seconds } = timeLeft;
+
+  const { minutes, seconds } = timeLeft;
+
   let timerColor = styles.timer;
+
+  // const wrongBoardSound = new UIfx("/sounds/incorrect_board.mp3", {
+  //   volume: 0.5 // number between 0.0 ~ 1.0
+  // });
+
+  // const correctBoardSound = new UIfx("/sounds/correct_board.mp3", {
+  //   volume: 0.5 // number between 0.0 ~ 1.0
+  // });
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";
@@ -35,6 +44,7 @@ const Board = () => {
   }
 
   const downloadNewBoard = () => {
+    setDisplayButtons(false);
     fetch("/api/sudoku")
       .then(res => res.json())
       .then(board => {
@@ -67,37 +77,45 @@ const Board = () => {
   }, [boardArray]);
 
   useEffect(() => {
-    const ws = new CrazyAssWebSocket("/api/game");
+    ws = new CrazyAssWebSocket("/api/game");
 
-    ws.onmessage = function(event) {
-      let data2json;
+    ws.onmessage = event => {
       try {
-        data2json = JSON.parse(event.data);
-        console.log("Data from server: ", data2json);
-        if (event.data === "no_game") {
-          ws.close();
-          history.push("/lobby");
-        }
-        if (data2json.timeLeft) {
-          setTimeLeft(Math.round(data2json.timeLeft));
-        }
-        if (data2json.boardSolved) {
-          downloadNewBoard();
-        }
-        if (data2json.winner) {
-          alert("You won!");
-        }
-        if (data2json.timeout) {
-          alert("You lose");
+        const response = JSON.parse(event.data);
+
+        switch (response.type) {
+          case "event":
+            switch (response.code) {
+              case "no_game":
+                ws.close();
+                history.push("/lobby");
+                break;
+              case "game_lost":
+                alert("You lost!");
+                break;
+              case "game_won":
+                alert("You won!");
+                break;
+              case "next_level":
+                setTimeLeft(Math.round(response.timeLeft));
+                downloadNewBoard();
+                break;
+              default:
+                break;
+            }
+            break;
+          default:
+            break;
         }
       } catch (e) {
-        console.log(e, "error");
+        console.log(event);
+        console.log(e);
       }
     };
     return () => {
       ws.close();
     };
-  }, []);
+  }, [history, setTimeLeft]);
 
   const parseBoard = board => {
     const userCompleteBoard = [];
@@ -109,13 +127,6 @@ const Board = () => {
       userCompleteBoard.push(rowArr);
     });
     return userCompleteBoard;
-  };
-
-  const checkBoardCorrect = () => {
-    const obj = { board: parseBoard(rows) };
-    const jsonString = JSON.stringify(obj);
-    console.log(jsonString);
-    ws.send(jsonString);
   };
 
   const getPosition = element => {
@@ -133,26 +144,19 @@ const Board = () => {
     setSuggestions({ x: coords.x, y: coords.y, row, column });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkBoardComplete = () => {
-    let complete = true;
-    rows.forEach(row => {
-      row.forEach(field => {
-        if (field.value === "") {
-          complete = false;
-        }
-      });
-    });
-    if (complete) {
-      checkBoardCorrect(rows);
-    }
-  };
-
   useEffect(() => {
+    const checkBoardComplete = rows =>
+      !rows.filter(row => row.filter(field => field.value === ""));
+    const checkBoardCorrect = () => {
+      const boardStringified = JSON.stringify({ board: parseBoard(rows) });
+      ws.send(boardStringified);
+    };
     if (rows) {
-      checkBoardComplete();
+      if (checkBoardComplete) {
+        checkBoardCorrect();
+      }
     }
-  }, [rows, checkBoardComplete]);
+  }, [rows]);
 
   const updateBoard = (row, column, item) => {
     const value = _.get(item, "value", item);
@@ -165,43 +169,46 @@ const Board = () => {
       return (
         <tr key={idx}>
           {row.map(field => (
-            <LongPress
-              key={field.col}
-              time={0.1}
-              onLongPress={
-                field.blocked
-                  ? () => hideSuggestions()
-                  : () => displaySuggestions(field.row, field.col)
-              }
-            >
-              <td key={field.col} id={`${field.row}x${field.col}`}>
-                <Field
-                  key={field.value}
-                  row={field.row}
-                  col={field.col}
-                  value={field.value}
-                  onDrop={item => updateBoard(field.row, field.col, item)}
-                  isSelected={
-                    suggestions &&
-                    suggestions.row === idx &&
-                    suggestions.column === field.col
-                  }
-                  blocked={field.blocked}
-                  onClick={
-                    field.blocked || isMobile
-                      ? null
-                      : () => {
-                          updateBoard(field.row, field.col, "");
-                        }
-                  }
-                />
-              </td>
-            </LongPress>
+            <td key={field.col} id={`${field.row}x${field.col}`}>
+              <Field
+                key={field.value}
+                row={field.row}
+                col={field.col}
+                value={field.value}
+                isSelected={
+                  suggestions &&
+                  suggestions.row === idx &&
+                  suggestions.column === field.col
+                }
+                blocked={field.blocked}
+                onClick={
+                  field.blocked ||
+                  (suggestions &&
+                    !(
+                      suggestions.row === idx &&
+                      suggestions.column === field.col
+                    ))
+                    ? () => hideSuggestions()
+                    : () => displaySuggestions(field.row, field.col)
+                }
+              />
+            </td>
           ))}
         </tr>
       );
     });
   }
+
+  const renderMode = () => {
+    if (displayButtons) {
+      return <BattleButtons downloadNewBoard={downloadNewBoard} />;
+    }
+    return (
+      <table>
+        <tbody>{boardRows}</tbody>
+      </table>
+    );
+  };
 
   return (
     <div className="gameView">
@@ -209,33 +216,22 @@ const Board = () => {
         <p style={{ color: timerColor }}>
           {minutes}:{seconds}
         </p>
-        <Line
-          className="progressBar"
-          percent={progress}
-          strokeWidth="2"
-          trailWidth="2"
-          strokeColor={timerColor}
-        />
       </div>
-      <DndProvider backend={HTML5Backend}>
-        <div className="gamePanel">
-          <GoBackButton />
-          <div className="sudoku sudoku-background">
-            {suggestions && (
-              <CircularMenu
-                itemsAmount={9}
-                suggestions={suggestions}
-                updateBoard={updateBoard}
-                hideMenu={hideSuggestions}
-              />
-            )}
-            <table>
-              <tbody>{boardRows}</tbody>
-            </table>
-          </div>
-          <DragPanel />
+      <div className="gamePanel">
+        <GoBackButton />
+        <div className="sudoku sudoku-background">
+          {suggestions && (
+            <CircularMenu
+              itemsAmount={9}
+              suggestions={suggestions}
+              updateBoard={updateBoard}
+              hideMenu={hideSuggestions}
+            />
+          )}
+          {renderMode()}
         </div>
-      </DndProvider>
+        <PlayersList playersLeft={5} myPosition={3} />
+      </div>
     </div>
   );
 };

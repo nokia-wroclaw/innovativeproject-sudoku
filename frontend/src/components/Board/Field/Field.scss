@@ -7,8 +7,8 @@
     justify-content: center;
     background: $board-color;
     padding: 0;
-    min-width: 4vw;
-    min-height: 4vw;
+    min-width: 3.5vw;
+    min-height: 3.5vw;
     font-size: 25px;
 }
 
@@ -16,33 +16,42 @@
     margin: 0;
 }
 
+
+@media(max-width: 1400px){
+    .field{
+        min-width:4.5vw;
+        min-height: 4.5vw;
+        font-size: 30px;
+    }
+}
+
 @media(max-width: 1024px){
     .field{
-        min-width: 6.5vh;
-        min-height: 6.5vh;
-        font-size: 40px;
+        min-width: 6vw;
+        min-height: 6vw;
+        font-size: 30px;
     }
 }
 
 @media(max-width: 800px){
     .field{
-        min-width: 6vh;
-        min-height: 6vh;
+        min-width: 8vw;
+        min-height: 8vw;
     }
 }
 
 @media(max-width: 600px){
     .field{
-        min-width: 4vh;
-        min-height: 4vh;
+        min-width: 8vw;
+        min-height: 8vw;
         font-size: 20px;
     }
 }
 
 @media(max-width: 370px){
     .field{
-        min-width: 5vh;
-        min-height: 5vh;
+        min-width: 8vw;
+        min-height: 8vw;
         font-size: 20px;
     }
 }

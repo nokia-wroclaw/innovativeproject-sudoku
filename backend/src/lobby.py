@@ -6,7 +6,7 @@ from starlette.websockets import WebSocket
 
 from .routes.game import initialize_new_game
 
-LOBBY_SIZE = 9
+LOBBY_SIZE = 4
 
 
 class Lobby:
@@ -46,4 +46,6 @@ class Lobby:
         self.players = active_players
 
     def get_usernames(self) -> List[str]:
-        return list(self.players.keys())
+        usernames = list(self.players.keys())
+        logging.info(usernames)
+        return usernames    

@@ -66,18 +66,18 @@ def check_if_in_game(username):
 
 
 async def get_data(websocket, wrapper):
-    data = await websocket.receive_text()
+    data = await websocket.receive_json()
     wrapper.append(data)
 
 
 async def check_timers(websocket, username, game):
     if len(game.usernames) == 1:
-        await websocket.send_json({"winner": True})
+        await websocket.send_json({"type": "event", "code": "game_won"})
         game.players.pop(username)
         game.usernames.remove(username)
     for p in game.usernames:
         if game.players_data[p].timer - time() <= 0.2:
-            await game.players[p].send_json({"timeout": True})
+            await game.players[p].send_json({"type": "event", "code": "game_lost"})
             logging.info("time out on player %s", username)
             try:
                 game.players.pop(p)

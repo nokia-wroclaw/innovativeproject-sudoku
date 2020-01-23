@@ -1,21 +1,31 @@
 import "./Lobby.scss";
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import { CrazyAssWebSocket } from "../../Utils.js";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
+import UIfx from "uifx";
+import Loader from "../Loader/Loader";
+
+const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
 const Lobby = () => {
   const history = useHistory();
-  const init = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
-  const [players, setPlayers] = useState(init);
+  const buttonSound = new UIfx("/sounds/button_click.mp3", {
+    volume: 0.5
+  });
+
+  const [playersList, setPlayersList] = useState(emptyPlayersList);
 
   useEffect(() => {
     const ws = new CrazyAssWebSocket("/api/lobby");
 
     const makePlayersList = playersList =>
-      Object.assign(init, playersList.slice(0, init.length));
+      Object.assign(
+        [...emptyPlayersList],
+        playersList.slice(0, emptyPlayersList.length)
+      );
 
     ws.onmessage = event => {
       const response = JSON.parse(event.data);
@@ -33,25 +43,29 @@ const Lobby = () => {
           }
           break;
         case "data":
-          setPlayers(makePlayersList(response.players));
+          setPlayersList([...makePlayersList(response.players)]);
           break;
         default:
           break;
       }
     };
 
+    ws.onclose = () => {
+      ws.close();
+    };
+
     return () => {
       ws.close();
     };
-  }, [history, setPlayers, init]);
+  }, [history]);
 
-  const displayPlayers = () => {
+  const displayPlayersList = () => {
     return (
       <div className="players">
         <p>1. MyUsername</p>
         <div className="columns">
           <Table size="small">
-            {players.map((player, index) => {
+            {playersList.map((player, index) => {
               return (
                 <TableRow key={index + 2}>
                   <TableCell style={{ width: "1px", padding: "0" }}>
@@ -75,13 +89,15 @@ const Lobby = () => {
       <div className="card">
         <img src="logo.png" alt="logo_image" />
         <h2>Waiting for players...</h2>
-        {displayPlayers()}
+        {displayPlayersList()}
+        <Loader />
         <Button
           disable="start"
           size="large"
           variant="outlined"
           onClick={() => {
             history.push("/menu");
+            buttonSound.play();
           }}
         >
           Cancel

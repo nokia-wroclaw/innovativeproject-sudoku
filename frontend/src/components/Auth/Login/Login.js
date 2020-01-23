@@ -1,6 +1,7 @@
 import "../Auth.scss";
 import React from "react";
 import { Button } from "@material-ui/core";
+// import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -34,9 +35,12 @@ const form = {
 };
 
 const Login = () => {
+  // const history = useHistory();
+
   const onSubmit = (data, setSubmitting, setStatus) => {
-    setSubmitting(true);
+    // setSubmitting(true);
     handleSubmit({ data }, setStatus);
+    // history.push("/menu");
     setSubmitting(false);
   };
 

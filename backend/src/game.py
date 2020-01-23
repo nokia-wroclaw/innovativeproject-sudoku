@@ -65,12 +65,14 @@ class Game:
             self.players_data[username].timer += TIME_ADD_AFTER_SOLVE
             time_delta = self.players_data[username].timer - time.time()
             try:
-                await self.players[username].send_json(
-                    {   
-                        "type": "data",
-                        "board_solved": check_sudoku(parsed_data["board"]),
-                        "time_left": time_delta,
-                    }
-                )
+                if check_sudoku(parsed_data["board"]):
+
+                    await self.players[username].send_json(
+                        {
+                            "type": "event",
+                            "code": "next_level",
+                            "time_left": time_delta,
+                        }
+                    )
             except ConnectionClosedError:
                 pass
