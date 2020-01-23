@@ -1,10 +1,10 @@
 import "./Lobby.scss";
+import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
+import UIfx from "uifx";
 import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
-import { CrazyAssWebSocket } from "../../Utils.js";
-import { Button, Table, TableRow, TableCell } from "@material-ui/core";
-import UIfx from "uifx";
+import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
@@ -21,10 +21,10 @@ const Lobby = () => {
   useEffect(() => {
     const ws = new CrazyAssWebSocket("/api/lobby");
 
-    const makePlayersList = playersList =>
+    const makePlayersList = newPlayersList =>
       Object.assign(
         [...emptyPlayersList],
-        playersList.slice(0, emptyPlayersList.length)
+        newPlayersList.slice(0, emptyPlayersList.length)
       );
 
     ws.onmessage = event => {

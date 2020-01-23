@@ -1,4 +1,4 @@
-export class CrazyAssWebSocket extends WebSocket {
+export default class CrazyAssWebSocket extends WebSocket {
   constructor(url) {
     super(
       (window.location.protocol === "https:" ? "wss://" : "ws://") +

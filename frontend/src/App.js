@@ -70,7 +70,6 @@ function App() {
         await ky.get("/api/get-access-token");
         setIsLoggedIn(true);
       } catch (e) {
-        console.log(e);
         setIsLoggedIn(false);
       }
     };

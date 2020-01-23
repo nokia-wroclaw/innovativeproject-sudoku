@@ -9,7 +9,7 @@ import FieldModel from "../../models/FieldModel";
 import "../../Variables.scss";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import useTimer from "../../hooks/useTimer";
-import { CrazyAssWebSocket } from "../../Utils";
+import CrazyAssWebSocket from "../../Utils";
 import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 
@@ -40,7 +40,7 @@ const Board = () => {
   }
 
   if (gameEnd) {
-    console.log("GAME END");
+    // console.log("GAME END");
   }
 
   const downloadNewBoard = () => {
@@ -108,8 +108,8 @@ const Board = () => {
             break;
         }
       } catch (e) {
-        console.log(event);
-        console.log(e);
+        // console.log(event);
+        // console.log(e);
       }
     };
     return () => {
@@ -145,8 +145,8 @@ const Board = () => {
   };
 
   useEffect(() => {
-    const checkBoardComplete = rows =>
-      !rows.filter(row => row.filter(field => field.value === ""));
+    const checkBoardComplete = board =>
+      !board.filter(row => row.filter(field => field.value === ""));
     const checkBoardCorrect = () => {
       const boardStringified = JSON.stringify({ board: parseBoard(rows) });
       ws.send(boardStringified);
