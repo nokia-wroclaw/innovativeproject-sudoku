@@ -1,5 +1,4 @@
 import logging
-import json
 from time import time
 from asyncio import wait_for
 import asyncio.exceptions

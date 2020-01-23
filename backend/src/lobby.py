@@ -1,5 +1,4 @@
 import logging
-import json
 
 from typing import Dict, List
 from starlette.websockets import WebSocket

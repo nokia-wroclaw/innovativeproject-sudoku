@@ -1,5 +1,4 @@
 import logging
-import json
 
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
