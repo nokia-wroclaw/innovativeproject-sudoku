@@ -26,6 +26,7 @@ const Menu = () => {
           Play
         </Button>
         <Button
+          disabled
           size="large"
           variant="outlined"
           onClick={() => {
@@ -36,6 +37,7 @@ const Menu = () => {
           Stats
         </Button>
         <Button
+          disabled
           size="large"
           variant="outlined"
           onClick={() => {

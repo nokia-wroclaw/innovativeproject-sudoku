@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import UIfx from "uifx";
 
-const BattleButtons = ({ downloadNewBoard }) => {
+const BattleButtons = ({ downloadNewBoard, setTimeLeft }) => {
   const stopwatchSound = new UIfx("/sounds/stopwatch.mp3", {
     volume: 0.5, // number between 0.0 ~ 1.0
     throttleMs: 100
@@ -21,6 +21,7 @@ const BattleButtons = ({ downloadNewBoard }) => {
         role="button"
         tabIndex="0"
         onClick={() => {
+          setTimeLeft(15);
           downloadNewBoard();
           stopwatchSound.play();
         }}

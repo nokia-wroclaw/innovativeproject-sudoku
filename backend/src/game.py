@@ -1,12 +1,11 @@
 import logging
-import json
 import time
 from typing import Dict, List
 from starlette.websockets import WebSocket
 from websockets.exceptions import ConnectionClosedError
 from .sudokuboard import check_sudoku
 
-GAME_DURATION = 120.0
+GAME_DURATION = 140.0
 TIME_ADD_AFTER_SOLVE = 5
 
 
@@ -60,19 +59,13 @@ class Game:
         self.players = active_players
 
     async def handle_data(self, data, username):
-        parsed_data = json.loads(data)
-        if "board" in parsed_data:
-            self.players_data[username].timer += TIME_ADD_AFTER_SOLVE
-            time_delta = self.players_data[username].timer - time.time()
-            try:
-                if check_sudoku(parsed_data["board"]):
-
-                    await self.players[username].send_json(
-                        {
-                            "type": "event",
-                            "code": "next_level",
-                            "time_left": time_delta,
-                        }
-                    )
-            except ConnectionClosedError:
-                pass
+        self.players_data[username].timer += TIME_ADD_AFTER_SOLVE
+        time_delta = self.players_data[username].timer - time.time()
+        logging.info(time_delta)
+        try:
+            if check_sudoku(data):
+                await self.players[username].send_json(
+                    {"type": "event", "code": "next_level", "time_left": time_delta,}
+                )
+        except ConnectionClosedError:
+            pass

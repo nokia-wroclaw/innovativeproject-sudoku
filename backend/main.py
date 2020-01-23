@@ -23,7 +23,7 @@ async def root():
 
 @app.get("/sudoku")
 async def sudoku():
-    board = SudokuBoard(difficulty=Difficulty.TEST_SIMPLE)
+    board = SudokuBoard(difficulty=Difficulty.NOOB)
     board.make_puzzle()
     return {"sudokuBoard": board.get_board_matrix()}
 

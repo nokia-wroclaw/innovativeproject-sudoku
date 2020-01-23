@@ -11,7 +11,7 @@ import Login from "./components/Auth/Login/Login";
 import Menu from "./components/Menu/Menu";
 import Board from "./components/Board/Board";
 import Settings from "./components/Settings/Settings";
-// import ParticlesComponent from "./components/ParticlesComponent/ParticlesComponent";
+import ParticlesComponent from "./components/ParticlesComponent/ParticlesComponent";
 import Lobby from "./components/Lobby/Lobby";
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import UnauthenticatedRoute from "./routes/UnauthenticatedRoute";
@@ -79,7 +79,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* <ParticlesComponent /> */}
+      <ParticlesComponent />
       <div className="foreground">
         <MuiThemeProvider theme={theme}>
           <BrowserRouter>

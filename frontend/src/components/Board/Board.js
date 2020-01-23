@@ -21,7 +21,7 @@ const Board = () => {
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
   const [displayButtons, setDisplayButtons] = useState(false);
-  const [timeLeft, setTimeLeft, gameEnd] = useTimer(90);
+  const [timeLeft, setTimeLeft, gameEnd] = useTimer(110);
 
   const { minutes, seconds } = timeLeft;
 
@@ -45,7 +45,7 @@ const Board = () => {
 
   const downloadNewBoard = () => {
     setDisplayButtons(false);
-    fetch("/api/sudoku")
+    fetch(`/api/sudoku`)
       .then(res => res.json())
       .then(board => {
         setBoardArray(board.sudokuBoard);
@@ -97,8 +97,9 @@ const Board = () => {
                 alert("You won!");
                 break;
               case "next_level":
-                setTimeLeft(Math.round(response.timeLeft));
-                downloadNewBoard();
+                // setTimeLeft(Math.round(response.time_left));
+                setDisplayButtons(true);
+                // downloadNewBoard();
                 break;
               default:
                 break;
@@ -138,23 +139,27 @@ const Board = () => {
   const parseBoard = (sRow, sColumn, value) => {
     const userCompleteBoard = [];
     rows.forEach(row => {
+      const rowArr = [];
       row.forEach(field => {
-        if (row === sRow && field.col === sColumn) {
-          userCompleteBoard.push(value);
+        if (field.row === sRow && field.col === sColumn) {
+          rowArr.push(value);
         } else {
-          userCompleteBoard.push(field.value);
+          rowArr.push(field.value);
         }
       });
+      userCompleteBoard.push(rowArr);
     });
     return userCompleteBoard;
   };
 
   const checkBoardCorrect = (row, col, val) => {
-    // Send this board to server
-    // const boardForServer = parseBoard(row, col, val);
-    parseBoard(row, col, val);
-    // Response from server
-    const boardCorrect = true;
+    const boardForServer = parseBoard(row, col, val);
+
+    console.log(boardForServer);
+
+    ws.send(JSON.stringify(boardForServer));
+
+    const boardCorrect = false;
     if (boardCorrect) {
       // downloadNewBoard();
       correctBoardSound.play();
@@ -193,16 +198,22 @@ const Board = () => {
   //   }
   // }, [rows]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const sendBoard = () => {
+    ws.send(JSON.stringify({ board: parseBoard(rows) }));
+  };
+
   const checkBoardComplete = (sRow, sColumn, value) => {
     let complete = true;
     rows.forEach(row => {
       row.forEach(field => {
-        if (field.value === "" && row !== sRow && field.col !== sColumn) {
+        if (field.value === "" && field.row !== sRow && field.col !== sColumn) {
           complete = false;
         }
       });
     });
     if (complete) {
+      console.log("COMLETED");
       checkBoardCorrect(sRow, sColumn, value);
     }
   };
@@ -210,7 +221,7 @@ const Board = () => {
   const updateBoard = (row, column, item) => {
     const value = _.get(item, "value", item);
     setRows(prev => _.set(prev, `['${row}'].['${column}'].value`, value));
-    checkBoardComplete();
+    checkBoardComplete(row, column, item);
   };
 
   let boardRows = null;
@@ -251,7 +262,12 @@ const Board = () => {
 
   const renderMode = () => {
     if (displayButtons) {
-      return <BattleButtons downloadNewBoard={downloadNewBoard} />;
+      return (
+        <BattleButtons
+          downloadNewBoard={downloadNewBoard}
+          setTimeLeft={setTimeLeft}
+        />
+      );
     }
     return (
       <table>
