@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import _ from "lodash";
 // import UIfx from "uifx";
 import { useHistory } from "react-router-dom";
-import UIfx from "uifx";
+// import UIfx from "uifx";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
@@ -28,13 +28,13 @@ const Board = () => {
 
   let timerColor = styles.timer;
 
-  const wrongBoardSound = new UIfx("/sounds/incorrect_board.mp3", {
-    volume: 0.5 // number between 0.0 ~ 1.0
-  });
+  // const wrongBoardSound = new UIfx("/sounds/incorrect_board.mp3", {
+  //   volume: 0.5 // number between 0.0 ~ 1.0
+  // });
 
-  const correctBoardSound = new UIfx("/sounds/correct_board.mp3", {
-    volume: 0.5 // number between 0.0 ~ 1.0
-  });
+  // const correctBoardSound = new UIfx("/sounds/correct_board.mp3", {
+  //   volume: 0.5 // number between 0.0 ~ 1.0
+  // });
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";
@@ -131,34 +131,34 @@ const Board = () => {
   };
 
   // Function disabled coz of eslint, prepared for board check in server
-  const parseBoard = (sRow, sColumn, value) => {
-    const userCompleteBoard = [];
-    rows.forEach(row => {
-      row.forEach(field => {
-        if (row === sRow && field.col === sColumn) {
-          userCompleteBoard.push(value);
-        } else {
-          userCompleteBoard.push(field.value);
-        }
-      });
-    });
-    return userCompleteBoard;
-  };
+  // const parseBoard = (sRow, sColumn, value) => {
+  //   const userCompleteBoard = [];
+  //   rows.forEach(row => {
+  //     row.forEach(field => {
+  //       if (row === sRow && field.col === sColumn) {
+  //         userCompleteBoard.push(value);
+  //       } else {
+  //         userCompleteBoard.push(field.value);
+  //       }
+  //     });
+  //   });
+  //   return userCompleteBoard;
+  // };
 
-  const checkBoardCorrect = (row, col, val) => {
-    // Send this board to server
-    // const boardForServer = parseBoard(row, col, val);
-    parseBoard(row, col, val);
-    // Response from server
-    const boardCorrect = true;
-    if (boardCorrect) {
-      // downloadNewBoard();
-      correctBoardSound.play();
-      setDisplayButtons(true);
-    } else {
-      wrongBoardSound.play();
-    }
-  };
+  // const checkBoardCorrect = (row, col, val) => {
+  //   // Send this board to server
+  //   // const boardForServer = parseBoard(row, col, val);
+  //   parseBoard(row, col, val);
+  //   // Response from server
+  //   const boardCorrect = true;
+  //   if (boardCorrect) {
+  //     // downloadNewBoard();
+  //     correctBoardSound.play();
+  //     setDisplayButtons(true);
+  //   } else {
+  //     wrongBoardSound.play();
+  //   }
+  // };
 
   const getPosition = element => {
     const rect = element.getBoundingClientRect();
@@ -188,25 +188,24 @@ const Board = () => {
       }
     }
   }, [rows]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkBoardComplete = (sRow, sColumn, value) => {
-    let complete = true;
-    rows.forEach(row => {
-      row.forEach(field => {
-        if (field.value === "" && row !== sRow && field.col !== sColumn) {
-          complete = false;
-        }
-      });
-    });
-    if (complete) {
-      checkBoardCorrect(sRow, sColumn, value);
-    }
-  };
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const checkBoardComplete = (sRow, sColumn, value) => {
+  //   let complete = true;
+  //   rows.forEach(row => {
+  //     row.forEach(field => {
+  //       if (field.value === "" && row !== sRow && field.col !== sColumn) {
+  //         complete = false;
+  //       }
+  //     });
+  //   });
+  //   if (complete) {
+  //     checkBoardCorrect(sRow, sColumn, value);
+  //   }
+  // };
 
   const updateBoard = (row, column, item) => {
     const value = _.get(item, "value", item);
     setRows(prev => _.set(prev, `['${row}'].['${column}'].value`, value));
-    checkBoardComplete(row, column, value);
   };
 
   let boardRows = null;
