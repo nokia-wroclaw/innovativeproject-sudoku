@@ -37,18 +37,18 @@ async def websocket_endpoint(websocket: WebSocket):
             username,
         )
         return
-    try:
-        while True:
-            try:
-                wrapper = []
-                await wait_for(get_data(websocket, wrapper), timeout=1.0)
-                await game.handle_data(wrapper[0], username)
-            except asyncio.TimeoutError:
-                await check_timers(websocket, username, game)
-    except (WebSocketDisconnect, ConnectionClosedError):
-        game.remove(username)
-        if len(game.players) == 0 and game not in games:
-            games.remove(game)
+   
+    while True:
+        try:
+            wrapper = []
+            await wait_for(get_data(websocket, wrapper), timeout=1.0)
+            await game.handle_data(wrapper[0], username)
+        except asyncio.TimeoutError:
+            await check_timers(websocket, username, game)
+        except (WebSocketDisconnect, ConnectionClosedError):
+            game.remove(username)
+            if len(game.players) == 0 and game in games:
+                games.remove(game)
 
 
 async def initialize_new_game(usernames):

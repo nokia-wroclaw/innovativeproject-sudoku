@@ -120,7 +120,7 @@ const Board = () => {
     return () => {
       ws.close();
     };
-  }, [history, setTimeLeft]);
+  }, [history]);
 
   // const parseBoard = board => {
   //   const userCompleteBoard = [];

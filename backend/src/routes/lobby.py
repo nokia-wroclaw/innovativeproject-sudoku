@@ -27,6 +27,6 @@ async def websocket_endpoint(websocket: WebSocket):
         else:
             await lobby.connect(websocket, username)
             while True:
-                await websocket.receive_json()
+                await websocket.receive_text()
     except WebSocketDisconnect:
         lobby.remove(username)
