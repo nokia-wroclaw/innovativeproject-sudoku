@@ -48,4 +48,4 @@ class Lobby:
     def get_usernames(self) -> List[str]:
         usernames = list(self.players.keys())
         logging.info(usernames)
-        return usernames    
+        return usernames
