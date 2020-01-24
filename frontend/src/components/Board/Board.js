@@ -14,7 +14,6 @@ import BattleButtons from "../BattleButtons/BattleButtons";
 import useUpdateEffect from "../../hooks/useUpdateEffect";
 import useMountEffect from "../../hooks/useMountEffect";
 import { correctBoardSound, wrongBoardSound } from "../shared/Sounds";
-import Action from "../shared/Action";
 
 let ws;
 
@@ -260,4 +259,4 @@ const Board = () => {
   );
 };
 
-export { Board, Action };
+export default Board;
