@@ -1,20 +1,10 @@
 import "./BattleButtons.scss";
 import PropTypes from "prop-types";
 import React from "react";
-import UIfx from "uifx";
-import { ACTION } from "../Board/Board";
+import Action from "../shared/Action";
+import { stopwatchSound, swordsSound } from "../shared/Sounds";
 
 const BattleButtons = ({ setAction, setDisplay }) => {
-  const stopwatchSound = new UIfx("/sounds/stopwatch.mp3", {
-    volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 100
-  });
-
-  const swordsSound = new UIfx("/sounds/swords.mp3", {
-    volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 100
-  });
-
   return (
     <div className="BattleButtons">
       <div
@@ -22,7 +12,7 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         role="button"
         tabIndex="0"
         onClick={() => {
-          setAction(ACTION.HEAL);
+          setAction(Action.HEAL);
           stopwatchSound.play();
           setDisplay(false);
         }}
@@ -34,7 +24,7 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         role="button"
         tabIndex="0"
         onClick={() => {
-          setAction(ACTION.FIGHT);
+          setAction(Action.FIGHT);
           swordsSound.play();
           setDisplay(false);
         }}

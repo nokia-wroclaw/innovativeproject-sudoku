@@ -2,7 +2,7 @@ import "./Menu.scss";
 import React from "react";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router";
-import { buttonSound } from "../../extra/Sounds";
+import { buttonSound } from "../shared/Sounds";
 
 const Menu = () => {
   const history = useHistory();

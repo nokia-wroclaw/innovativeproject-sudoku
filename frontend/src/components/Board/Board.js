@@ -13,11 +13,10 @@ import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 import useUpdateEffect from "../../hooks/useUpdateEffect";
 import useMountEffect from "../../hooks/useMountEffect";
-import { correctBoardSound, wrongBoardSound } from "../../extra/Sounds";
+import { correctBoardSound, wrongBoardSound } from "../shared/Sounds";
+import Action from "../shared/Action";
 
 let ws;
-
-const ACTION = Object.freeze({ HEAL: 0, FIGHT: 1 });
 
 const Board = () => {
   const history = useHistory();
@@ -259,4 +258,4 @@ const Board = () => {
   );
 };
 
-export { Board, ACTION };
+export { Board, Action };

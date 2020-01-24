@@ -5,7 +5,7 @@ import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
-import { buttonSound } from "../../extra/Sounds";
+import { buttonSound } from "../shared/Sounds";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
@@ -59,7 +59,7 @@ const Lobby = () => {
     return (
       <div className="players">
         <p>1. MyUsername</p>{" "}
-        {/* TODO: display username from state manager/props/cookie*/}
+        {/* TODO: display username from state manager/props/cookie */}
         <div className="columns">
           <Table size="small">
             {playersList.map((player, index) => {
