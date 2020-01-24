@@ -1,7 +1,7 @@
 import "../Auth.scss";
 import React from "react";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -14,9 +14,10 @@ async function handleSubmit(params, setStatus) {
   formData.append("password", params.data.password);
   (async () => {
     try {
-      await ky.post("http://127.0.0.1:8000/login", {
+      await ky.post("/api/login", {
         body: formData
       });
+      window.location.reload();
     } catch (e) {
       setStatus({ error: "loginError" });
     }
@@ -34,12 +35,12 @@ const form = {
 };
 
 const Login = () => {
-  const history = useHistory();
+  // const history = useHistory();
 
   const onSubmit = (data, setSubmitting, setStatus) => {
-    setSubmitting(true);
+    // setSubmitting(true);
     handleSubmit({ data }, setStatus);
-    history.push("/menu");
+    // history.push("/menu");
     setSubmitting(false);
   };
 

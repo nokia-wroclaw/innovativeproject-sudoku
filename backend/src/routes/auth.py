@@ -17,7 +17,7 @@ from ..auth import (
     create_token,
     create_user,
     authenticate_user,
-    verify_refresh_token,
+    verify_token,
     RegisterForm,
 )
 
@@ -75,7 +75,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         httponly=True,
         expires=ACCESS_COKIE_LIFETIME,
     )
-
     return response
 
 
@@ -87,7 +86,7 @@ async def get_acces_token(request: Request):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="No rights to refresh token.",
         )
-    username = verify_refresh_token(refresh_token)
+    username = verify_token(refresh_token)
     if username is None:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Username not found.",

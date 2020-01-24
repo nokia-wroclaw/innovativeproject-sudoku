@@ -1,8 +1,11 @@
 import logging
 from datetime import datetime, timedelta
 from os import environ
+from typing import Dict
+
 
 import jwt
+from jwt.exceptions import ExpiredSignatureError
 from fastapi import Form
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
@@ -15,11 +18,11 @@ from .models import User
 
 SECRET_KEY = environ["SUDOKUBR_SECRET_KEY"]
 DB_USERNAME = environ["SUDOKUBR_DB_USERNAME"]
-DB_PASSWORD = environ["SUDOKUBR_DB_USERNAME"]
+DB_PASSWORD = environ["SUDOKUBR_DB_PASSWORD"]
 
 JWT_ALG = "HS256"
 REFRESH_TOKEN_EXPIRE_MINUTES = 360
-ACCESS_TOKEN_EXPIRES_MINUTES = 15
+ACCESS_TOKEN_EXPIRES_MINUTES = 60
 REFRESH_COOKIE_LIFETIME = 36000
 ACCESS_COKIE_LIFETIME = 1000
 
@@ -58,7 +61,7 @@ def connect_to_db():
             username=DB_USERNAME,
             password=DB_PASSWORD,
             authentication_source="admin",
-            host="mongo-container",
+            host="mongo",
             port=27017,
         )
     except ConnectionError as error:
@@ -91,8 +94,13 @@ def create_token(*, data: dict, expires_delta: timedelta = None) -> jwt:
     return jwt.encode(to_encode, SECRET_KEY, algorithm=JWT_ALG)
 
 
-def verify_refresh_token(token) -> str:
-    payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALG])
+def verify_token(token) -> str:
+    if token is None:
+        return None
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALG])
+    except ExpiredSignatureError:
+        return None
     username: str = payload.get("sub")
 
     if get_user(username) is None:
@@ -105,3 +113,18 @@ def authenticate_user(username: str, password: str) -> User:
     if user is None or not verify_password(password, user.hashed_password):
         return None
     return user
+
+
+def verify_cookies(cookies: Dict) -> str:
+    try:
+        access_token = cookies["access_token"]
+        username = verify_token(access_token)
+        if username is not None:
+            return username
+        raise CookieVerificationError
+    except KeyError:
+        raise CookieVerificationError
+
+
+class CookieVerificationError(Exception):
+    """Raised when user does not provide valid access token."""

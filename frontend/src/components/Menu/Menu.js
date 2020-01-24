@@ -2,13 +2,9 @@ import "./Menu.scss";
 import React from "react";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router";
-import UIfx from "uifx";
+import { buttonSound } from "../shared/Sounds";
 
 const Menu = () => {
-  const buttonSound = new UIfx("/sounds/button_click.mp3", {
-    volume: 0.5 // number between 0.0 ~ 1.0
-  });
-
   const history = useHistory();
 
   return (
@@ -26,6 +22,7 @@ const Menu = () => {
           Play
         </Button>
         <Button
+          disabled
           size="large"
           variant="outlined"
           onClick={() => {
@@ -36,6 +33,7 @@ const Menu = () => {
           Stats
         </Button>
         <Button
+          disabled
           size="large"
           variant="outlined"
           onClick={() => {

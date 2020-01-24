@@ -1,33 +1,68 @@
 import "./Lobby.scss";
+import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
-import { Button, Table, TableRow, TableCell } from "@material-ui/core";
-import UIfx from "uifx";
+import GoBackButtonLobby from "../GoBackButton/GoBackButton";
+import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
+import { buttonSound } from "../shared/Sounds";
+
+const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
 const Lobby = () => {
   const history = useHistory();
-  // const [start, setstart] = useState(false);
 
-  const buttonSound = new UIfx("/sounds/button_click.mp3", {
-    volume: 0.5 // number between 0.0 ~ 1.0
-  });
-
-  const init = ["-", "-", "-", "-", "-", "-", "-", "-"];
-
-  const [players, setPlayers] = useState(init);
+  const [playersList, setPlayersList] = useState(emptyPlayersList);
 
   useEffect(() => {
-    setPlayers(["Player1", "Player2", "Player3", "-", "-", "-", "-", "-"]);
-  }, []);
+    const ws = new CrazyAssWebSocket("/api/lobby");
 
-  const displayPlayers = () => {
+    const makePlayersList = newPlayersList =>
+      // TODO: playersList should contain opponents nicknames only
+      Object.assign(
+        [...emptyPlayersList],
+        newPlayersList.slice(0, emptyPlayersList.length)
+      );
+
+    ws.onmessage = event => {
+      const response = JSON.parse(event.data);
+
+      switch (response.type) {
+        case "event":
+          switch (response.code) {
+            case "start_game":
+            case "in_game_already":
+              history.push("/game");
+              break;
+            default:
+              break;
+          }
+          break;
+        case "data":
+          setPlayersList([...makePlayersList(response.players)]);
+          break;
+        default:
+          break;
+      }
+    };
+
+    ws.onclose = () => {
+      ws.close();
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [history]);
+
+  const displayPlayersList = () => {
     return (
       <div className="players">
-        <p>1. MyUsername</p>
+        <p>1. MyUsername</p>{" "}
+        {/* TODO: display username from state manager/props/cookie */}
         <div className="columns">
           <Table size="small">
-            {players.map((player, index) => {
+            {playersList.map((player, index) => {
               return (
                 <TableRow key={index + 2}>
                   <TableCell style={{ width: "1px", padding: "0" }}>
@@ -47,10 +82,11 @@ const Lobby = () => {
 
   return (
     <div className="Lobby">
+      <GoBackButtonLobby />
       <div className="card">
         <img src="logo.png" alt="logo_image" />
         <h2>Waiting for players...</h2>
-        {displayPlayers()}
+        {displayPlayersList()}
         <Loader />
         <Button
           disable="start"

@@ -15,7 +15,7 @@ async function handleRegister(params, setStatus) {
   formData.append("re_password", params.data.rePassword);
   (async () => {
     try {
-      await ky.post("http://127.0.0.1:8000/register", {
+      await ky.post("/api/register", {
         body: formData
       });
     } catch (e) {

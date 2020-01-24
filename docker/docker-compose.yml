@@ -3,7 +3,7 @@ version: '3'
 services:
 
   backend:
-    container_name: backend-container
+    container_name: backend
     restart: always
     command: uvicorn main:app --host 0.0.0.0 --port 81 --reload
     build:
@@ -21,11 +21,11 @@ services:
       - HOST=${HOST}
       - PORT=81
       - SUDOKUBR_SECRET_KEY=${SUDOKUBR_SECRET_KEY}
-      - SUDOKUBR_DB_USERNAME=${SUDOKUBR_DB_USERNAME} 
+      - SUDOKUBR_DB_USERNAME=${SUDOKUBR_DB_USERNAME}
       - SUDOKUBR_DB_PASSWORD=${SUDOKUBR_DB_PASSWORD}
-  
+
   database:
-    container_name: 'mongo-container'
+    container_name: 'mongo'
     image: 'mongo'
     restart: always
     volumes:
@@ -36,9 +36,9 @@ services:
       - MONGO_INITDB_DATABASE=admin
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
-      
+
   frontend:
-    container_name: frontend-container
+    container_name: frontend
     restart: always
     command: npm start
     build:
@@ -58,7 +58,7 @@ services:
       - database
 
   proxy:
-    container_name: proxy-container
+    container_name: proxy
     image: nginx:latest
     restart: always
     volumes:

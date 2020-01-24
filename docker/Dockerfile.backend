@@ -9,6 +9,6 @@ WORKDIR /app
 
 RUN pipenv lock --requirements > requirements.txt
 
-RUN cat requirements.txt 
+RUN cat requirements.txt
 
 RUN pip install -r requirements.txt
