@@ -5,19 +5,19 @@ from starlette.websockets import WebSocket
 from websockets.exceptions import ConnectionClosedError
 from .sudokuboard import check_sudoku
 
-GAME_DURATION = 140.0
-TIME_ADD_AFTER_SOLVE = 5
+GAME_DURATION = 30
+HEAL_VALUE = 20
+FIGHT_VALUE = 10
 
 
 class Player:
     def __init__(self, username):
         self.username = username
-        self.timer = time.time() + GAME_DURATION
+        self.endgame_time = time.time() + GAME_DURATION
 
 
 class Game:
     def __init__(self, usernames: List[str]):
-        self.connections: List[WebSocket] = []
         self.usernames = usernames
         self.generator = self.message_generator()
         self.players: Dict[str, WebSocket] = {}
@@ -45,12 +45,14 @@ class Game:
         try:
             self.players.pop(username)
             self.usernames.remove(username)
-            self.players_data[username].timer = -1.0
+            self.players_data.pop(username)
         except KeyError:
             pass
 
+    def get_time_left(self, username: str) -> float:
+        return max(round(self.players_data[username].endgame_time - time.time()), 0.0)
+
     async def _send_data(self, data: dict):
-        # pylint: disable=duplicate-code
         active_players: Dict[str, WebSocket] = {}
         while len(self.players) > 0:
             username, ws = self.players.popitem()
@@ -58,22 +60,40 @@ class Game:
             active_players[username] = ws
         self.players = active_players
 
-    async def handle_board(self, data, username):
-        self.players_data[username].timer += TIME_ADD_AFTER_SOLVE
-        time_delta = self.players_data[username].timer - time.time()
-        logging.info(time_delta)
+    async def check_board(self, board, username):
         try:
-            if check_sudoku(data):
+            if check_sudoku(board):
                 await self.players[username].send_json(
-                    {"type": "event", "code": "next_level", "time_left": time_delta,}
+                    {"code": "next_level", "time_left": self.get_time_left(username)}
                 )
             else:
                 await self.players[username].send_json(
                     {
-                        "type": "event",
                         "code": "incorrect_board",
-                        "time_left": time_delta,
+                        "time_left": self.get_time_left(username),
                     }
                 )
+        except ConnectionClosedError:
+            pass
+
+    async def heal(self, username):
+        logging.info("%s is healing.", username)
+        self.players_data[username].endgame_time += HEAL_VALUE
+        try:
+            await self.players[username].send_json(
+                {"code": "heal", "time_left": self.get_time_left(username)}
+            )
+        except ConnectionClosedError:
+            pass
+
+    async def fight(self, username):
+        logging.info("%s is attacking.", username)
+        try:
+            for name, player in self.players_data.items():
+                if name != username:
+                    player.endgame_time -= FIGHT_VALUE
+                    await self.players[name].send_json(
+                        {"code": "attacked", "time_left": self.get_time_left(name)}
+                    )
         except ConnectionClosedError:
             pass
