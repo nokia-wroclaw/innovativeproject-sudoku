@@ -36,7 +36,6 @@ const Lobby = () => {
             case "start_game":
             case "in_game_already":
               history.push("/game");
-              ws.close();
               break;
             default:
               break;

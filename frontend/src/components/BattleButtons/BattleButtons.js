@@ -2,8 +2,9 @@ import "./BattleButtons.scss";
 import PropTypes from "prop-types";
 import React from "react";
 import UIfx from "uifx";
+import { ACTION } from "../Board/Board";
 
-const BattleButtons = ({ downloadNewBoard, setTimeLeft }) => {
+const BattleButtons = ({ setAction, setDisplay }) => {
   const stopwatchSound = new UIfx("/sounds/stopwatch.mp3", {
     volume: 0.5, // number between 0.0 ~ 1.0
     throttleMs: 100
@@ -21,11 +22,10 @@ const BattleButtons = ({ downloadNewBoard, setTimeLeft }) => {
         role="button"
         tabIndex="0"
         onClick={() => {
-          setTimeLeft(15);
-          downloadNewBoard();
+          setAction(ACTION.HEAL);
           stopwatchSound.play();
+          setDisplay(false);
         }}
-        onKeyDown={downloadNewBoard}
       >
         <img alt="heal" />
       </div>
@@ -34,10 +34,10 @@ const BattleButtons = ({ downloadNewBoard, setTimeLeft }) => {
         role="button"
         tabIndex="0"
         onClick={() => {
-          downloadNewBoard();
+          setAction(ACTION.FIGHT);
           swordsSound.play();
+          setDisplay(false);
         }}
-        onKeyDown={downloadNewBoard}
       >
         <img alt="fight" />
       </div>
@@ -46,8 +46,8 @@ const BattleButtons = ({ downloadNewBoard, setTimeLeft }) => {
 };
 
 BattleButtons.propTypes = {
-  downloadNewBoard: PropTypes.func.isRequired,
-  setTimeLeft: PropTypes.func.isRequired
+  setAction: PropTypes.func.isRequired,
+  setDisplay: PropTypes.func.isRequired
 };
 
 export default BattleButtons;

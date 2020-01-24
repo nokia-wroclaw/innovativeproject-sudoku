@@ -14,6 +14,9 @@ import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 
 let ws;
+let newTime;
+
+const ACTION = Object.freeze({ HEAL: 0, FIGHT: 1 });
 
 const Board = () => {
   const history = useHistory();
@@ -22,6 +25,7 @@ const Board = () => {
   const [suggestions, setSuggestions] = useState(null);
   const [displayButtons, setDisplayButtons] = useState(false);
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(110);
+  const [action, setAction] = useState();
 
   const { minutes, seconds } = timeLeft;
 
@@ -98,8 +102,8 @@ const Board = () => {
                 break;
               case "next_level":
                 // setTimeLeft(Math.round(response.time_left));
+                downloadNewBoard();
                 setDisplayButtons(true);
-                // downloadNewBoard();
                 break;
               default:
                 break;
@@ -152,23 +156,6 @@ const Board = () => {
     return userCompleteBoard;
   };
 
-  const checkBoardCorrect = (row, col, val) => {
-    const boardForServer = parseBoard(row, col, val);
-
-    // console.log(boardForServer);
-
-    ws.send(JSON.stringify(boardForServer));
-
-    const boardCorrect = false;
-    if (boardCorrect) {
-      // downloadNewBoard();
-      correctBoardSound.play();
-      setDisplayButtons(true);
-    } else {
-      wrongBoardSound.play();
-    }
-  };
-
   const getPosition = element => {
     const rect = element.getBoundingClientRect();
     return { x: rect.left, y: rect.top };
@@ -184,25 +171,6 @@ const Board = () => {
     setSuggestions({ x: coords.x, y: coords.y, row, column });
   };
 
-  // useEffect(() => {
-  //   const checkBoardComplete = board =>
-  //     !board.filter(row => row.filter(field => field.value === ""));
-  //   const checkBoardCorrect = () => {
-  //     const boardStringified = JSON.stringify({ board: parseBoard(rows) });
-  //     ws.send(boardStringified);
-  //   };
-  //   if (rows) {
-  //     if (checkBoardComplete) {
-  //       // checkBoardCorrect();
-  //     }
-  //   }
-  // }, [rows]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  // const sendBoard = () => {
-  //   ws.send(JSON.stringify({ board: parseBoard(rows) }));
-  // };
-
   const checkBoardComplete = (sRow, sColumn, value) => {
     let complete = true;
     rows.forEach(row => {
@@ -213,8 +181,7 @@ const Board = () => {
       });
     });
     if (complete) {
-      // console.log("COMLETED");
-      checkBoardCorrect(sRow, sColumn, value);
+      ws.send(JSON.stringify(parseBoard(sRow, sColumn, value)));
     }
   };
 
@@ -263,10 +230,7 @@ const Board = () => {
   const renderMode = () => {
     if (displayButtons) {
       return (
-        <BattleButtons
-          downloadNewBoard={downloadNewBoard}
-          setTimeLeft={setTimeLeft}
-        />
+        <BattleButtons setDisplay={setDisplayButtons} setAction={setAction} />
       );
     }
     return (
@@ -302,4 +266,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export { Board, ACTION };
