@@ -114,7 +114,9 @@ const Board = () => {
           // TODO: update time on every response
           setTimeLeft(response.timeLeft);
         }
-      } catch (e) {}
+      } catch (e) {
+        // TODO: handle errors
+      }
     };
 
     ws.onclose = () => {

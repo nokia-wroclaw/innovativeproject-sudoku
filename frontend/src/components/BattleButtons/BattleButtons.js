@@ -11,9 +11,9 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         className="bButton bHeal"
         role="button"
         tabIndex="0"
+        onKeyDown={() => stopwatchSound.play()}
         onClick={() => {
           setAction(Action.HEAL);
-          stopwatchSound.play();
           setDisplay(false);
         }}
       >
@@ -23,9 +23,9 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         className="bButton bFight"
         role="button"
         tabIndex="0"
+        onKeyDown={() => swordsSound.play()}
         onClick={() => {
           setAction(Action.FIGHT);
-          swordsSound.play();
           setDisplay(false);
         }}
       >
