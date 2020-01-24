@@ -35,5 +35,5 @@ rules: {
   "react/no-array-index-key": [0, always],
   "no-alert": "off",
   "react/forbid-prop-types": [0,always],
-  "jsx-a11y/click-events-have-key-events": 1
+  "jsx-a11y/click-events-have-key-events": 0
 }

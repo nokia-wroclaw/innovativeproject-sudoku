@@ -13,7 +13,12 @@ import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 import useUpdateEffect from "../../hooks/useUpdateEffect";
 import useMountEffect from "../../hooks/useMountEffect";
-import { correctBoardSound, wrongBoardSound } from "../shared/Sounds";
+import {
+  correctBoardSound,
+  wrongBoardSound,
+  swordsSound
+} from "../shared/Sounds";
+import Action from "../shared/Action";
 
 let ws;
 
@@ -23,7 +28,7 @@ const Board = () => {
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
   const [displayButtons, setDisplayButtons] = useState(false);
-  const [timeLeft, setTimeLeft, gameEnd] = useTimer(110);
+  const [timeLeft, setTimeLeft, gameEnd] = useTimer(30);
   const [action, setAction] = useState();
 
   const { minutes, seconds } = timeLeft;
@@ -77,44 +82,37 @@ const Board = () => {
     ws = new CrazyAssWebSocket("/api/game");
 
     ws.onmessage = event => {
-      try {
-        const response = JSON.parse(event.data);
+      const response = JSON.parse(event.data);
 
-        switch (response.type) {
-          case "event":
-            switch (response.code) {
-              case "no_game":
-                ws.close();
-                history.push("/lobby");
-                break;
-              case "game_lost":
-                alert("You lost!");
-                break;
-              case "game_won":
-                alert("You won!");
-                break;
-              case "next_level":
-                correctBoardSound.play();
-                downloadNewBoard();
-                setDisplayButtons(true);
-                break;
-              case "incorrect_board":
-                wrongBoardSound.play();
-                // TODO: handle incorrect board feedback
-                break;
-              default:
-                break;
-            }
-            break;
-          default:
-            break;
-        }
-        if (response.timeLeft) {
-          // TODO: update time on every response
-          setTimeLeft(response.timeLeft);
-        }
-      } catch (e) {
-        // TODO: handle errors
+      switch (response.code) {
+        case "no_game":
+          ws.close();
+          history.push("/lobby");
+          break;
+        case "game_lost":
+          alert("You lost!");
+          break;
+        case "game_won":
+          alert("You won!");
+          break;
+        case "next_level":
+          correctBoardSound.play();
+          downloadNewBoard();
+          setDisplayButtons(true);
+          break;
+        case "incorrect_board":
+          wrongBoardSound.play();
+          // TODO: handle incorrect board feedback
+          break;
+        case "attacked":
+          swordsSound.play();
+          break;
+        default:
+          break;
+      }
+
+      if (response.time_left) {
+        setTimeLeft(response.time_left);
       }
     };
 
@@ -129,8 +127,18 @@ const Board = () => {
   }, [history]);
 
   useUpdateEffect(() => {
-    // TODO: handling action - heal or fight
-    // IDEA: send 'heal/fight message' to server
+    switch (action) {
+      case Action.HEAL:
+        ws.send(JSON.stringify({ code: "heal" }));
+        setAction(null);
+        break;
+      case Action.FIGHT:
+        ws.send(JSON.stringify({ code: "fight" }));
+        setAction(null);
+        break;
+      default:
+        break;
+    }
   }, [action]);
 
   const parseBoard = (sRow, sColumn, value) => {
@@ -174,7 +182,12 @@ const Board = () => {
       });
     });
     if (complete) {
-      ws.send(JSON.stringify(parseBoard(sRow, sColumn, value)));
+      ws.send(
+        JSON.stringify({
+          code: "check_board",
+          board: parseBoard(sRow, sColumn, value)
+        })
+      );
     }
   };
 

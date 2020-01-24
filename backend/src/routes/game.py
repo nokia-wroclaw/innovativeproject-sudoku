@@ -1,8 +1,9 @@
 import logging
-from time import time
 from asyncio import wait_for
+import asyncio
 import asyncio.exceptions
 from typing import List
+import time
 
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
@@ -31,7 +32,7 @@ async def websocket_endpoint(websocket: WebSocket):
             game = g
     if game is None:
         await websocket.accept()
-        await websocket.send_json({"type": "event", "code": "no_game"})
+        await websocket.send_json({"code": "no_game"})
         logging.info(
             "Player: %s tried to connect /game, but no game was found with him.",
             username,
@@ -40,11 +41,15 @@ async def websocket_endpoint(websocket: WebSocket):
 
     while True:
         try:
+            check_timers(websocket, username, game)
             data = []  # a wrapper to achieve _pass_by_reference_
             await wait_for(get_data(websocket, data), timeout=1.0)
-            await game.handle_board(
-                data[0], username
-            )  # ! It won't be always a board so it should be checked
+            if data[0]["code"] == "check_board":
+                await game.check_board(data[0]["board"], username)
+            elif data[0]["code"] == "heal":
+                await game.heal(username)
+            elif data[0]["code"] == "fight":
+                await game.fight(username)
         except asyncio.TimeoutError:
             await check_timers(websocket, username, game)
         except (WebSocketDisconnect, ConnectionClosedError):
@@ -73,15 +78,11 @@ async def get_data(websocket, wrapper):
 
 async def check_timers(websocket, username, game):
     if len(game.usernames) == 1:
-        await websocket.send_json({"type": "event", "code": "game_won"})
-        game.players.pop(username)
-        game.usernames.remove(username)
-    for p in game.usernames:
-        if game.players_data[p].timer - time() <= 0.2:
-            await game.players[p].send_json({"type": "event", "code": "game_lost"})
+        await websocket.send_json({"code": "game_won"})
+        game.remove(username)
+
+    for name, player in game.players_data.copy().items():
+        if player.endgame_time <= time.time():
+            await game.players[name].send_json({"code": "game_lost"})
             logging.info("time out on player %s", username)
-            try:
-                game.players.pop(p)
-                game.usernames.remove(p)
-            except (KeyError, ValueError):
-                pass
+            game.remove(name)
