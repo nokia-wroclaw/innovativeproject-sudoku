@@ -58,7 +58,7 @@ class Game:
             active_players[username] = ws
         self.players = active_players
 
-    async def handle_data(self, data, username):
+    async def handle_board(self, data, username):
         self.players_data[username].timer += TIME_ADD_AFTER_SOLVE
         time_delta = self.players_data[username].timer - time.time()
         logging.info(time_delta)
@@ -66,6 +66,14 @@ class Game:
             if check_sudoku(data):
                 await self.players[username].send_json(
                     {"type": "event", "code": "next_level", "time_left": time_delta,}
+                )
+            else:
+                await self.players[username].send_json(
+                    {
+                        "type": "event",
+                        "code": "incorrect_board",
+                        "time_left": time_delta,
+                    }
                 )
         except ConnectionClosedError:
             pass

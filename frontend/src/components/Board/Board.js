@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import _ from "lodash";
-import UIfx from "uifx";
 import { useHistory } from "react-router-dom";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
@@ -12,9 +11,11 @@ import useTimer from "../../hooks/useTimer";
 import CrazyAssWebSocket from "../../Utils";
 import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
+import useUpdateEffect from "../../hooks/useUpdateEffect";
+import useMountEffect from "../../hooks/useMountEffect";
+import { correctBoardSound, wrongBoardSound } from "../../extra/Sounds";
 
 let ws;
-let newTime;
 
 const ACTION = Object.freeze({ HEAL: 0, FIGHT: 1 });
 
@@ -30,14 +31,6 @@ const Board = () => {
   const { minutes, seconds } = timeLeft;
 
   let timerColor = styles.timer;
-
-  const wrongBoardSound = new UIfx("/sounds/incorrect_board.mp3", {
-    volume: 0.5 // number between 0.0 ~ 1.0
-  });
-
-  const correctBoardSound = new UIfx("/sounds/correct_board.mp3", {
-    volume: 0.5 // number between 0.0 ~ 1.0
-  });
 
   if (minutes === 0 && seconds < 20) {
     timerColor = "#cc0033";
@@ -56,31 +49,33 @@ const Board = () => {
       });
   };
 
-  const createRows = board => {
-    const newRows = [];
-    let currentRow;
-    for (let row = 0; row < 9; row++) {
-      currentRow = [];
-      newRows.push(currentRow);
-      for (let col = 0; col < 9; col++) {
-        currentRow.push(
-          new FieldModel(newRows.length - 1, currentRow.length, board[row][col])
-        );
-      }
-    }
-    return newRows;
-  };
+  useMountEffect(() => {
+    downloadNewBoard();
+  });
 
-  useEffect(() => {
-    if (boardArray) {
-      setRows(createRows(boardArray));
-    } else {
-      downloadNewBoard();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useUpdateEffect(() => {
+    const createRows = board => {
+      const newRows = [];
+      let currentRow;
+      for (let row = 0; row < 9; row++) {
+        currentRow = [];
+        newRows.push(currentRow);
+        for (let col = 0; col < 9; col++) {
+          currentRow.push(
+            new FieldModel(
+              newRows.length - 1,
+              currentRow.length,
+              board[row][col]
+            )
+          );
+        }
+      }
+      return newRows;
+    };
+    setRows(createRows(boardArray));
   }, [boardArray]);
 
-  useEffect(() => {
+  useMountEffect(() => {
     ws = new CrazyAssWebSocket("/api/game");
 
     ws.onmessage = event => {
@@ -101,9 +96,13 @@ const Board = () => {
                 alert("You won!");
                 break;
               case "next_level":
-                // setTimeLeft(Math.round(response.time_left));
+                correctBoardSound.play();
                 downloadNewBoard();
                 setDisplayButtons(true);
+                break;
+              case "incorrect_board":
+                wrongBoardSound.play();
+                // TODO: handle incorrect board feedback
                 break;
               default:
                 break;
@@ -112,10 +111,11 @@ const Board = () => {
           default:
             break;
         }
-      } catch (e) {
-        // console.log(event);
-        // console.log(e);
-      }
+        if (response.timeLeft) {
+          // TODO: update time on every response
+          setTimeLeft(response.timeLeft);
+        }
+      } catch (e) {}
     };
 
     ws.onclose = () => {
@@ -125,21 +125,14 @@ const Board = () => {
     return () => {
       ws.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history]);
 
-  // const parseBoard = board => {
-  //   const userCompleteBoard = [];
-  //   board.forEach(row => {
-  //     const rowArr = [];
-  //     row.forEach(field => {
-  //       rowArr.push(field.value);
-  //     });
-  //     userCompleteBoard.push(rowArr);
-  //   });
-  //   return userCompleteBoard;
-  // };
+  useUpdateEffect(() => {
+    // TODO: handling action - heal or fight
+    // IDEA: send 'heal/fight message' to server
+  }, [action]);
 
-  // Function disabled coz of eslint, prepared for board check in server
   const parseBoard = (sRow, sColumn, value) => {
     const userCompleteBoard = [];
     rows.forEach(row => {

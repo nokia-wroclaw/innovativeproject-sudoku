@@ -40,9 +40,11 @@ async def websocket_endpoint(websocket: WebSocket):
 
     while True:
         try:
-            wrapper = []
-            await wait_for(get_data(websocket, wrapper), timeout=1.0)
-            await game.handle_data(wrapper[0], username)
+            data = []  # a wrapper to achieve _pass_by_reference_
+            await wait_for(get_data(websocket, data), timeout=1.0)
+            await game.handle_board(
+                data[0], username
+            )  # ! It won't be always a board so it should be checked
         except asyncio.TimeoutError:
             await check_timers(websocket, username, game)
         except (WebSocketDisconnect, ConnectionClosedError):

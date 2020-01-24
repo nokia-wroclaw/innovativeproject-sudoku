@@ -1,20 +1,16 @@
 import "./Lobby.scss";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import UIfx from "uifx";
 import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
+import { buttonSound } from "../../extra/Sounds";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
 const Lobby = () => {
   const history = useHistory();
-
-  const buttonSound = new UIfx("/sounds/button_click.mp3", {
-    volume: 0.5
-  });
 
   const [playersList, setPlayersList] = useState(emptyPlayersList);
 
@@ -22,6 +18,7 @@ const Lobby = () => {
     const ws = new CrazyAssWebSocket("/api/lobby");
 
     const makePlayersList = newPlayersList =>
+      // TODO: playersList should contain opponents nicknames only
       Object.assign(
         [...emptyPlayersList],
         newPlayersList.slice(0, emptyPlayersList.length)
@@ -61,7 +58,8 @@ const Lobby = () => {
   const displayPlayersList = () => {
     return (
       <div className="players">
-        <p>1. MyUsername</p>
+        <p>1. MyUsername</p>{" "}
+        {/* TODO: display username from state manager/props/cookie*/}
         <div className="columns">
           <Table size="small">
             {playersList.map((player, index) => {
