@@ -1,5 +1,6 @@
 import "./Menu.scss";
 import React from "react";
+import Cookies from "js-cookie";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { buttonSound } from "../shared/Sounds";
@@ -42,6 +43,23 @@ const Menu = () => {
           }}
         >
           Settings
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          onClick={() => {
+            Cookies.remove("access_token", { path: "/" });
+            Cookies.remove("refresh_token", { path: "/" });
+            // Cookies.set('test', { path: '/' })
+            // console.log("set")
+            // Cookies.remove('test', { path: '/' })
+            // console.log("removed")
+            console.log(Cookies.get("access_token", { path: "/" }));
+            history.push("/login");
+            buttonSound.play();
+          }}
+        >
+          Logout
         </Button>
       </div>
     </div>
