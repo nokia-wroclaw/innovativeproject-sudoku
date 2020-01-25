@@ -15,7 +15,6 @@ import ParticlesComponent from "./components/ParticlesComponent/ParticlesCompone
 import Lobby from "./components/Lobby/Lobby";
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import UnauthenticatedRoute from "./routes/UnauthenticatedRoute";
-
 const theme = createMuiTheme({
   overrides: {
     MuiInputLabel: {
