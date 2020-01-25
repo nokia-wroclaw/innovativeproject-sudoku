@@ -64,10 +64,10 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - "80:80"
+      - "2137:80"
     environment:
       - ENV=development
-      - PORT=80
+      - PORT=2137
     depends_on:
       - frontend
       - backend
