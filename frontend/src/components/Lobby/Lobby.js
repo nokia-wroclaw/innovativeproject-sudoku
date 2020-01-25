@@ -7,7 +7,8 @@ import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 import { buttonSound } from "../shared/Sounds";
 
-const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
+// const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
+const emptyPlayersList = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 const Lobby = () => {
   const history = useHistory();
@@ -49,26 +50,33 @@ const Lobby = () => {
     };
   }, [history]);
 
+  const renderColumn = odd => {
+    return (
+      <Table size="small">
+        {playersList.map((player, index) => {
+          return index % 2 === odd ? (
+            <TableRow key={index + 2}>
+              <TableCell style={{ width: "1px", padding: "0" }}>
+                {index + 2}.
+              </TableCell>
+              <TableCell align="center" style={{ paddingRight: "30px" }}>
+                {player}
+              </TableCell>
+            </TableRow>
+          ) : null;
+        })}
+      </Table>
+    );
+  };
+
   const displayPlayersList = () => {
     return (
       <div className="players">
         <p>1. MyUsername</p>{" "}
         {/* TODO: display username from state manager/props/cookie */}
         <div className="columns">
-          <Table size="small">
-            {playersList.map((player, index) => {
-              return (
-                <TableRow key={index + 2}>
-                  <TableCell style={{ width: "1px", padding: "0" }}>
-                    {index + 2}.
-                  </TableCell>
-                  <TableCell align="center" style={{ paddingRight: "30px" }}>
-                    {player}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </Table>
+          {renderColumn(0)}
+          {renderColumn(1)}
         </div>
       </div>
     );
