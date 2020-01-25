@@ -41,7 +41,6 @@ async def websocket_endpoint(websocket: WebSocket):
 
     while True:
         try:
-            check_timers(websocket, username, game)
             data = []  # a wrapper to achieve _pass_by_reference_
             await wait_for(get_data(websocket, data), timeout=1.0)
             if data[0]["code"] == "check_board":
