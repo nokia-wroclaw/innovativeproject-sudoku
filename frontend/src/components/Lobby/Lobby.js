@@ -1,14 +1,14 @@
 import "./Lobby.scss";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 import { buttonSound } from "../shared/Sounds";
 
-// const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
-const emptyPlayersList = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
 const Lobby = () => {
   const history = useHistory();
@@ -19,7 +19,6 @@ const Lobby = () => {
     const ws = new CrazyAssWebSocket("/api/lobby");
 
     const makePlayersList = newPlayersList =>
-      // TODO: playersList should contain opponents nicknames only
       Object.assign(
         [...emptyPlayersList],
         newPlayersList.slice(0, emptyPlayersList.length)
@@ -34,6 +33,10 @@ const Lobby = () => {
           history.push("/game");
           break;
         case "players":
+          response.players.splice(
+            response.players.indexOf(Cookies.get("username")),
+            1
+          );
           setPlayersList([...makePlayersList(response.players)]);
           break;
         default:
@@ -72,8 +75,7 @@ const Lobby = () => {
   const displayPlayersList = () => {
     return (
       <div className="players">
-        <p>1. MyUsername</p>{" "}
-        {/* TODO: display username from state manager/props/cookie */}
+        <p>1. {Cookies.get("username")}</p>
         <div className="columns">
           {renderColumn(0)}
           {renderColumn(1)}
