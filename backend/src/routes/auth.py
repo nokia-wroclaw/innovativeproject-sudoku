@@ -107,7 +107,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Response:
 async def get_acces_token(request: Request) -> Response:
     try:
         username = verify_cookies(request.cookies, "refresh_token")
-    except (CookieVerificationError, KeyError):
+    except CookieVerificationError:
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST)
     response = Response()
     response.set_cookie(
