@@ -13,11 +13,11 @@ lobby = Lobby()
 @lobby_router.websocket("/lobby")
 async def websocket_endpoint(websocket: WebSocket):
     try:
-        username = verify_cookies(websocket.cookies)
+        username = verify_cookies(websocket.cookies, name="access_token")
+        logging.info("User: %s entered lobby", username)
     except CookieVerificationError:
         logging.info("Cookie verification failed.")
         return
-    logging.info("User: %s entered lobby", username)
     try:
         if check_if_in_game(username):
             await websocket.accept()
@@ -27,6 +27,6 @@ async def websocket_endpoint(websocket: WebSocket):
         else:
             await lobby.connect(websocket, username)
             while True:
-                await websocket.receive_text()
+                await websocket.receive_json()
     except WebSocketDisconnect:
         lobby.remove(username)

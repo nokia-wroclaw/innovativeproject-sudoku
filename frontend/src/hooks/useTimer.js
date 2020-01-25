@@ -19,7 +19,7 @@ const useTimer = startTime => {
   };
 
   useEffect(() => {
-    if (timeLeft <= 0) {
+    if (timeLeft === 0) {
       setTimeEnd(true);
     }
   }, [timeLeft]);

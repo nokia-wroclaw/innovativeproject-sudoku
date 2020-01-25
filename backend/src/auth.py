@@ -21,10 +21,9 @@ DB_USERNAME = environ["SUDOKUBR_DB_USERNAME"]
 DB_PASSWORD = environ["SUDOKUBR_DB_PASSWORD"]
 
 JWT_ALG = "HS256"
-REFRESH_TOKEN_EXPIRE_MINUTES = 360
-ACCESS_TOKEN_EXPIRES_MINUTES = 60
-REFRESH_COOKIE_LIFETIME = 36000
-ACCESS_COKIE_LIFETIME = 1000
+
+REFRESH_TOKEN_LIFETIME = 72000
+ACCESS_TOKEN_LIFETIME = 36000
 
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -35,21 +34,17 @@ class RegisterForm:
     def __init__(
         self,
         username: str = Form(...),
-        email: str = Form(...),
         password: str = Form(...),
         re_password: str = Form(...),
     ):
         self.username = username
-        self.email = email
         self.password = password
         self.re_password = re_password
 
 
-def create_user(username: str, email: str, password: str) -> User:
+def create_user(username: str, password: str) -> User:
     hashed_password = get_password_hash(password)
-    user = User(
-        username=username, email=email, hashed_password=hashed_password, disabled=False,
-    )
+    user = User(username=username, hashed_password=hashed_password)
     user.save()
     logging.info("User: %s added to DB", user["username"])
 
@@ -83,48 +78,44 @@ def get_user(username: str) -> User:
         return None
 
 
-def create_token(*, data: dict, expires_delta: timedelta = None) -> jwt:
+def create_token(*, data: dict, lifetime: int) -> jwt:
     to_encode = data.copy()
-    if expires_delta is None:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-
+    to_encode.update({"exp": datetime.utcnow() + timedelta(minutes=lifetime)})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=JWT_ALG)
 
 
 def verify_token(token) -> str:
-    if token is None:
-        return None
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALG])
+        username = payload.get("sub")
+        if get_user(username) is not None:
+            return username
+        raise TokenVerificationError
     except ExpiredSignatureError:
-        return None
-    username: str = payload.get("sub")
-
-    if get_user(username) is None:
-        return None
-    return username
+        raise TokenVerificationError
 
 
-def authenticate_user(username: str, password: str) -> User:
+def authenticate_user(username: str, password: str) -> None:
     user = get_user(username)
     if user is None or not verify_password(password, user.hashed_password):
-        return None
-    return user
+        raise UserVerificationError
 
 
-def verify_cookies(cookies: Dict) -> str:
+def verify_cookies(cookies: Dict, name) -> str:
     try:
-        access_token = cookies["access_token"]
-        username = verify_token(access_token)
-        if username is not None:
-            return username
+        token = cookies[name]
+        return verify_token(token)
+    except TokenVerificationError:
         raise CookieVerificationError
-    except KeyError:
-        raise CookieVerificationError
+
+
+class TokenVerificationError(Exception):
+    """Raised when user does not provide valid access token."""
 
 
 class CookieVerificationError(Exception):
     """Raised when user does not provide valid access token."""
+
+
+class UserVerificationError(Exception):
+    """Raised wher user does not provide valid password or username."""

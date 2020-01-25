@@ -90,6 +90,7 @@ const Board = () => {
           history.push("/lobby");
           break;
         case "game_lost":
+          setTimeLeft(0);
           alert("You lost!");
           break;
         case "game_won":
