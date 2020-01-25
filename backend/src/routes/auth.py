@@ -97,6 +97,11 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Response:
         httponly=True,
         expires=ACCESS_TOKEN_LIFETIME,
     )
+    response.set_cookie(
+        key="username",
+        value=form_data.username,
+        expires=REFRESH_TOKEN_LIFETIME
+    )
     return response
 
 
