@@ -15,6 +15,7 @@ import ParticlesComponent from "./components/ParticlesComponent/ParticlesCompone
 import Lobby from "./components/Lobby/Lobby";
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import UnauthenticatedRoute from "./routes/UnauthenticatedRoute";
+import BattleButtons from "./components/BattleButtons/BattleButtons";
 
 const theme = createMuiTheme({
   overrides: {
