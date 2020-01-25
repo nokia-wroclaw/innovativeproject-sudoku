@@ -45,7 +45,14 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
 
+.gamePanel .borderRed{
+    animation: redBorder 0.75s linear;
+}
+  
+@keyframes redBorder {
+    50%	{ background-color: #ef0a1a;}
 }
 
 .Timer{
@@ -56,11 +63,9 @@
 
 .Timer p{
     margin: 0;
-    color: $white;
     font-size: 60px;
     font-family: 'Exo 2', sans-serif;
 }
-
 
 @media(max-width: 1024px){
     .sudoku-background{

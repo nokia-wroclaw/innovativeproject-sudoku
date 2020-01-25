@@ -30,6 +30,7 @@ const Board = () => {
   const [displayButtons, setDisplayButtons] = useState(false);
   const [timeLeft, setTimeLeft, gameEnd] = useTimer(30);
   const [action, setAction] = useState();
+  const [borderRed, setBorderRed] = useState();
 
   const { minutes, seconds } = timeLeft;
 
@@ -103,7 +104,7 @@ const Board = () => {
           break;
         case "incorrect_board":
           wrongBoardSound.play();
-          // TODO: handle incorrect board feedback
+          setBorderRed(true);
           break;
         case "attacked":
           swordsSound.play();
@@ -174,6 +175,7 @@ const Board = () => {
   };
 
   const checkBoardComplete = (sRow, sColumn, value) => {
+    setBorderRed(false);
     let complete = true;
     rows.forEach(row => {
       row.forEach(field => {
@@ -256,7 +258,12 @@ const Board = () => {
       </div>
       <div className="gamePanel">
         <GoBackButton />
-        <div className="sudoku sudoku-background">
+        {console.log(borderRed)}
+        <div
+          className={
+            "sudoku sudoku-background " + (borderRed ? "borderRed" : null)
+          }
+        >
           {suggestions && (
             <CircularMenu
               itemsAmount={9}
