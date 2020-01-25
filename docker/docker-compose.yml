@@ -28,8 +28,6 @@ services:
     container_name: 'mongo'
     image: 'mongo'
     restart: always
-    volumes:
-      - ./mongo-volume:/data/db
     ports:
       - '27017-27019:27017-27019'
     environment:
@@ -44,9 +42,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.frontend
-    volumes:
-      - '../frontend:/app'
-      - '/app/node_modules'
     ports:
       - "82:82"
     environment:

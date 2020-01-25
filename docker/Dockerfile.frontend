@@ -1,6 +1,5 @@
-FROM node:12.2.0-alpine
+FROM node:13.7.0-alpine
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY frontend/package.json /app/package.json
-COPY frontend/package-lock.json /app/package-lock.json
-RUN npm install
+COPY frontend /app
+RUN npm install node-sass
