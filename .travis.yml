@@ -50,6 +50,7 @@ matrix:
   - stage: deploy
     script: skip
     deploy:
+      skip_cleanup: true
       provider: heroku
       api_key:
         secure: mDD+1VF6/OCwG4abVg66Pwl3kV2zvjtnxROCBCHMG24XqKJGsbKTzM4Hxp+ADzspmJuqkcCm39o5Bh4hr3Am1S5OuMBqhJaUojpCCbxrZ6OW07AnBn2A4JMmmkmp+8ckq+JHIgCUx4ZaFevD8e4jSbrWn4fXGiMQ3XQGXy9jnAqWw+F3p7eViOy4YRnqjbLdDBiDlbOpr3b49eg9kJFfVDiA73vjCZ5dbZMkWQlJeSMKVKznYlSWICdRYRHajZAPxrTYgMRIcm6OLdLsQ0m6Stbq60yEx8IlpgmJbBIag1ifU5zK3z6h/FLScXZ73e+vUvSq6Gy4xTgG9IpQxPYNX3edU4zBSru52T4vRHQG844FNlEu5nkobwf66B7YV4jgqGOREF/gd/ZKLdagb1g4HscZ9ws0UHUVk/fndr8T+6R97ay8LuXLsFxYMb+7mOELWapSzD4WwaaeVuF8dSatdZEQDfz/SJZ69A4fu3cC2bg8khApIf+6zMX/nB4DA9UhIReSDZ3eDDoAGOskyZm7QLwVWfg4gtdh+H+yEygxsUxvvn0YUCbgnCKv4OZ5Xa1UIhAnzvviNY/pkrwNq6iEsSVQu6YzHyA0toAPEdeRZK5luX8ljPRRpShydDwnA38F8x6rS5OI4O3yKXs+AeHUzYj18V/l2SxMy5eDLjIfv/4=
