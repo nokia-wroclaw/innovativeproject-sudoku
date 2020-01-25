@@ -54,18 +54,16 @@ const Lobby = () => {
     return (
       <Table size="small">
         {playersList.map((player, index) => {
-          if (index % 2 === odd) {
-            return (
-              <TableRow key={index + 2}>
-                <TableCell style={{ width: "1px", padding: "0" }}>
-                  {index + 2}.
-                </TableCell>
-                <TableCell align="center" style={{ paddingRight: "30px" }}>
-                  {player}
-                </TableCell>
-              </TableRow>
-            );
-          }
+          return index % 2 === odd ? (
+            <TableRow key={index + 2}>
+              <TableCell style={{ width: "1px", padding: "0" }}>
+                {index + 2}.
+              </TableCell>
+              <TableCell align="center" style={{ paddingRight: "30px" }}>
+                {player}
+              </TableCell>
+            </TableRow>
+          ) : null;
         })}
       </Table>
     );
