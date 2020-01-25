@@ -1,5 +1,6 @@
 import "../Auth.scss";
 import React from "react";
+import Cookies from "js-cookie";
 import { Button } from "@material-ui/core";
 // import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
@@ -17,6 +18,7 @@ async function handleSubmit(params, setStatus) {
       await ky.post("/api/login", {
         body: formData
       });
+      Cookies.set("username", params.data.username);
       window.location.reload();
     } catch (e) {
       setStatus({ error: "loginError" });
@@ -40,6 +42,7 @@ const Login = () => {
   const onSubmit = (data, setSubmitting, setStatus) => {
     // setSubmitting(true);
     handleSubmit({ data }, setStatus);
+
     // history.push("/menu");
     setSubmitting(false);
   };
