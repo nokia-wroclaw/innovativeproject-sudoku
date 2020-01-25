@@ -1,4 +1,3 @@
-from datetime import timedelta
 import logging
 
 from fastapi import Depends, HTTPException, APIRouter
@@ -10,15 +9,15 @@ from starlette.requests import Request
 from mongoengine import SaveConditionError, NotUniqueError
 
 from ..auth import (
-    REFRESH_TOKEN_EXPIRE_MINUTES,
-    ACCESS_TOKEN_EXPIRES_MINUTES,
-    REFRESH_COOKIE_LIFETIME,
-    ACCESS_COKIE_LIFETIME,
+    REFRESH_TOKEN_LIFETIME,
+    ACCESS_TOKEN_LIFETIME,
     create_token,
     create_user,
     authenticate_user,
-    verify_token,
+    verify_cookies,
     RegisterForm,
+    UserVerificationError,
+    CookieVerificationError,
 )
 
 
@@ -26,15 +25,39 @@ auth_router = APIRouter()
 
 
 @auth_router.post("/register")
-async def register(form_data: RegisterForm = Depends()):
+async def register(form_data: RegisterForm = Depends()) -> Response:
     if form_data.password != form_data.re_password:
         logging.info("Passwords were not the same.")
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Repeat password correctly.",
         )
     try:
-        create_user(form_data.username, form_data.email, form_data.password)
-        return Response(status_code=200)
+        create_user(form_data.username, form_data.password)
+
+        response = Response(status_code=200)
+
+        response.set_cookie(
+            key="refresh_token",
+            value=jsonable_encoder(
+                create_token(
+                    data={"sub": form_data.username}, lifetime=REFRESH_TOKEN_LIFETIME
+                )
+            ),
+            httponly=True,
+            expires=REFRESH_TOKEN_LIFETIME,
+        )
+        response.set_cookie(
+            key="access_token",
+            value=jsonable_encoder(
+                create_token(
+                    data={"sub": form_data.username}, lifetime=ACCESS_TOKEN_LIFETIME
+                )
+            ),
+            httponly=True,
+            expires=ACCESS_TOKEN_LIFETIME,
+        )
+
+        return response
     except (NotUniqueError, SaveConditionError) as error:
         logging.error(error)
         raise HTTPException(
@@ -43,62 +66,53 @@ async def register(form_data: RegisterForm = Depends()):
 
 
 @auth_router.post("/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
-    if user is None:
+async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Response:
+    try:
+        authenticate_user(form_data.username, form_data.password)
+        logging.info("User: %s  verified", form_data.username)
+    except UserVerificationError:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail="Incorrect username or password",
         )
 
-    refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES)
-
-    refresh_token = create_token(
-        data={"sub": form_data.username}, expires_delta=refresh_token_expires
-    )
-    access_token = create_token(
-        data={"sub": form_data.username}, expires_delta=access_token_expires
-    )
-
-    logging.info("User: %s  verified", form_data.username)
     response = Response(status_code=200)
 
     response.set_cookie(
         key="refresh_token",
-        value=jsonable_encoder(refresh_token),
+        value=jsonable_encoder(
+            create_token(
+                data={"sub": form_data.username}, lifetime=REFRESH_TOKEN_LIFETIME
+            )
+        ),
         httponly=True,
-        expires=REFRESH_COOKIE_LIFETIME,
+        expires=REFRESH_TOKEN_LIFETIME,
     )
     response.set_cookie(
         key="access_token",
-        value=jsonable_encoder(access_token),
+        value=jsonable_encoder(
+            create_token(
+                data={"sub": form_data.username}, lifetime=ACCESS_TOKEN_LIFETIME
+            )
+        ),
         httponly=True,
-        expires=ACCESS_COKIE_LIFETIME,
+        expires=ACCESS_TOKEN_LIFETIME,
     )
     return response
 
 
 @auth_router.get("/get-access-token")
-async def get_acces_token(request: Request):
-    refresh_token = request.cookies.get("refresh_token")
+async def get_acces_token(request: Request) -> Response:
+    try:
+        username = verify_cookies(request.cookies, "refresh_token")
+    except CookieVerificationError:
+        raise HTTPException(status_code=HTTP_400_BAD_REQUEST)
     response = Response()
-    if refresh_token is None:
-        raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail="No rights to refresh token.",
-        )
-    username = verify_token(refresh_token)
-    if username is None:
-        raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail="Username not found.",
-        )
-    access_token = create_token(
-        data={"sub": username},
-        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES),
-    )
     response.set_cookie(
         key="access_token",
-        value=jsonable_encoder(access_token),
+        value=jsonable_encoder(
+            create_token(data={"sub": username}, lifetime=ACCESS_TOKEN_LIFETIME)
+        ),
         httponly=True,
-        expires=ACCESS_COKIE_LIFETIME,
+        expires=ACCESS_TOKEN_LIFETIME,
     )
     return response

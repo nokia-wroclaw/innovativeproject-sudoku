@@ -10,7 +10,6 @@ import TextField from "../../TextField/TextField";
 async function handleRegister(params, setStatus) {
   const formData = new FormData();
   formData.append("username", params.data.username);
-  formData.append("email", params.data.email);
   formData.append("password", params.data.password);
   formData.append("re_password", params.data.rePassword);
   (async () => {
@@ -26,17 +25,12 @@ async function handleRegister(params, setStatus) {
 
 const form = {
   username: "",
-  email: "",
   password: "",
   rePassword: ""
 };
 
 const validationSchema = yup.object({
   username: yup.string().required(),
-  email: yup
-    .string()
-    .email()
-    .required(),
   password: yup.string().required(),
   rePassword: yup
     .string()
@@ -69,7 +63,6 @@ const Register = () => {
             <Form className="container">
               <div className="textFieldWrapper">
                 <TextField label="Username" name="username" type="username" />
-                <TextField label="Email" name="email" type="email" />
                 <TextField label="Password" name="password" type="password" />
                 <TextField
                   label="Confirm password"

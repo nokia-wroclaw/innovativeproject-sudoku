@@ -20,7 +20,7 @@ games: List[Game] = []
 @game_router.websocket("/game")
 async def websocket_endpoint(websocket: WebSocket):
     try:
-        username = verify_cookies(websocket.cookies)
+        username = verify_cookies(websocket.cookies, name="access_token")
     except CookieVerificationError:
         logging.info("Cookie verification failed.")
         return
