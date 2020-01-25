@@ -47,13 +47,11 @@ matrix:
     before_install: cd frontend
     script:
     - npm test
-  - stage: deploy
-    script: skip
-    deploy:
-      skip_cleanup: true
-      provider: heroku
-      api_key:
-        secure: mDD+1VF6/OCwG4abVg66Pwl3kV2zvjtnxROCBCHMG24XqKJGsbKTzM4Hxp+ADzspmJuqkcCm39o5Bh4hr3Am1S5OuMBqhJaUojpCCbxrZ6OW07AnBn2A4JMmmkmp+8ckq+JHIgCUx4ZaFevD8e4jSbrWn4fXGiMQ3XQGXy9jnAqWw+F3p7eViOy4YRnqjbLdDBiDlbOpr3b49eg9kJFfVDiA73vjCZ5dbZMkWQlJeSMKVKznYlSWICdRYRHajZAPxrTYgMRIcm6OLdLsQ0m6Stbq60yEx8IlpgmJbBIag1ifU5zK3z6h/FLScXZ73e+vUvSq6Gy4xTgG9IpQxPYNX3edU4zBSru52T4vRHQG844FNlEu5nkobwf66B7YV4jgqGOREF/gd/ZKLdagb1g4HscZ9ws0UHUVk/fndr8T+6R97ay8LuXLsFxYMb+7mOELWapSzD4WwaaeVuF8dSatdZEQDfz/SJZ69A4fu3cC2bg8khApIf+6zMX/nB4DA9UhIReSDZ3eDDoAGOskyZm7QLwVWfg4gtdh+H+yEygxsUxvvn0YUCbgnCKv4OZ5Xa1UIhAnzvviNY/pkrwNq6iEsSVQu6YzHyA0toAPEdeRZK5luX8ljPRRpShydDwnA38F8x6rS5OI4O3yKXs+AeHUzYj18V/l2SxMy5eDLjIfv/4=
-      app: sudoku-battle-royale
-      on: 
-        branch: devops/auto_deployment
+deploy:
+  provider: heroku
+  api_key:
+    secure: yMxaIJmNOJgbqGnW1iUHrVNy/qPgIEFEvNkr17p/59Pz/QjJ2t4V8vB4hFIEnGI8t06tZxD/Guj8lp4mLiGk2LlMgBwJlKdEfG9lJMJqWq1hOsQFL2oEok31ToIKFilvWgwIIlsmPlECOj/kS99qOvD7xKr9hTfcwn0Z/GV2BclaeFpOXk6pxIbNkvKS2FBf/RZx0K8b8Q9/bHKo0s39BNOoU92xo6UesTqQ2SC+qAsM4HVFj4Ci2lKPNKSTtw8FTPqNNP/cVs+/Xm3QI5pjAeeLF6RVb+Y25DmkOWMek6ZgI2BfAqfeY2i/a06+gske/1o3EACtxUrTFKQq+Pf71dVmr4EgKd2PrFOZnMPAqnGlATlNTXQfJO01/OhRQ+PCHGbBMRl8QdRlvmnGLn+kGWL+TRAjhvURYO/W4t7lXlpCy71yTxBqNVatxprNWsEGpJR3Ais5PCe2brU2sltSKzhMESa7tVZtCfKVXuiANA04TE1jT+3orsMY3r+Ljn3kclKpxHZNYsWDZaOJp28PvXAFqSHss2snM5bWV1YoLHBKcgmyax503xTFkPkrPzs0LfvIfkjWbf2csBDCgRCke4fF7BYjU08q0VeQEFxvOHpQvQpvkSaMo9K8VWrJt8Q1wrsrNf0rTOnCCsGi/C705toaOhyjTok5PFalJl9Zob4=
+  app: sudoku-battle-royale
+  on:
+    repo: nokia-wroclaw/innovativeproject-sudoku
+    branch: devops/auto_deployment
