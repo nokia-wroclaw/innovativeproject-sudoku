@@ -43,7 +43,7 @@ services:
     command: serve -s build
     build:
       context: ..
-      dockerfile: docker/Dockerfile.frontend
+      dockerfile: docker/Dockerfile.frontend-production
     volumes:
       - '../frontend:/app'
       - '/app/node_modules'

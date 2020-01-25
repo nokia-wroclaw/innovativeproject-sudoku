@@ -4,3 +4,4 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY frontend/package.json /app/package.json
 COPY frontend/package-lock.json /app/package-lock.json
 RUN npm install
+RUN npm build
