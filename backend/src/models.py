@@ -1,8 +1,10 @@
-from mongoengine import StringField, BooleanField, EmailField, Document
+from mongoengine import Document, SortedListField, ReferenceField, StringField
 
 
 class User(Document):
-    username = StringField(required=True, max_length=200, unique=True)
-    email = EmailField(required=True, max_length=200, unique=True)
-    hashed_password = StringField(required=True, max_length=200)
-    disabled = BooleanField(default=False)
+    username = StringField(required=True, max_length=20, unique=True)
+    hashed_password = StringField(required=True)
+
+
+class Game(Document):
+    players = SortedListField(ReferenceField(User))
