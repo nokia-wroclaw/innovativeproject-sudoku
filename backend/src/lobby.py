@@ -24,10 +24,10 @@ class Lobby:
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
         self.players[username] = websocket
-        await self.push({"type": "data", "players": self.get_usernames()})
+        await self.push({"code": "players", "players": self.get_usernames()})
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
-            await self.push({"type": "event", "code": "start_game"})
+            await self.push({"code": "start_game"})
             await initialize_new_game(list(self.players.keys()))
 
     def remove(self, username):

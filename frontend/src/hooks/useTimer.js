@@ -19,7 +19,7 @@ const useTimer = startTime => {
   };
 
   useEffect(() => {
-    if (timeLeft === 0) {
+    if (timeLeft <= 0) {
       setTimeEnd(true);
     }
   }, [timeLeft]);
@@ -35,11 +35,7 @@ const useTimer = startTime => {
     return () => clearInterval(interval);
   }, []);
 
-  return [
-    parseTime(timeLeft),
-    newValue => setTimeLeft(timeLeft + newValue),
-    timeEnd
-  ];
+  return [parseTime(timeLeft), newValue => setTimeLeft(newValue), timeEnd];
 };
 
 export default useTimer;

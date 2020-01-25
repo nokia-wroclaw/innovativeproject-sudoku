@@ -27,18 +27,12 @@ const Lobby = () => {
     ws.onmessage = event => {
       const response = JSON.parse(event.data);
 
-      switch (response.type) {
-        case "event":
-          switch (response.code) {
-            case "start_game":
-            case "in_game_already":
-              history.push("/game");
-              break;
-            default:
-              break;
-          }
+      switch (response.code) {
+        case "start_game":
+        case "in_game_already":
+          history.push("/game");
           break;
-        case "data":
+        case "players":
           setPlayersList([...makePlayersList(response.players)]);
           break;
         default:
