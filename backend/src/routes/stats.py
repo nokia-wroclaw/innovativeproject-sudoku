@@ -27,15 +27,13 @@ async def get_stats(request: Request) -> JSONResponse:
         del player_stats["_id"]
         response_json["top5"] = get_current_top()
         response_json["player_stats"] = player_stats
-        response = JSONResponse(response_json)
-        return response
+        return JSONResponse(response_json)
     except (CookieVerificationError, DoesNotExist):
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST)
 
 
 def get_current_top():
     players = UserStats.objects.order_by("-games_won").limit(5)
-    players.to_json()
     top5_dict = {}
     position = 1
     for player in players:
