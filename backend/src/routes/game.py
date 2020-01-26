@@ -11,6 +11,7 @@ from websockets.exceptions import ConnectionClosedError
 
 from ..game import Game
 from ..auth import verify_cookies, CookieVerificationError
+from .stats import update_stats
 
 
 game_router = APIRouter()
@@ -52,6 +53,7 @@ async def websocket_endpoint(websocket: WebSocket):
         except asyncio.TimeoutError:
             await check_timers(websocket, username, game)
         except (WebSocketDisconnect, ConnectionClosedError):
+            update_stats(game.players_data[username], username, False)
             game.remove(username)
             if len(game.players) == 0 and game in games:
                 games.remove(game)
@@ -78,10 +80,12 @@ async def get_data(websocket, wrapper):
 async def check_timers(websocket, username, game):
     if len(game.usernames) == 1:
         await websocket.send_json({"code": "game_won"})
+        update_stats(game.players_data[username], username, True)
         game.remove(username)
 
     for name, player in game.players_data.copy().items():
         if player.endgame_time <= time.time():
+            update_stats(player, name, False)
             await game.players[name].send_json({"code": "game_lost"})
             logging.info("time out on player %s", username)
             game.remove(name)
