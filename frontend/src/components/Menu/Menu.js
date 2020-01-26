@@ -1,11 +1,22 @@
 import "./Menu.scss";
 import React from "react";
+import ky from "ky";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { buttonSound } from "../shared/Sounds";
 
 const Menu = () => {
   const history = useHistory();
+
+  const logout = async () => {
+    try {
+      await ky.get("/api/logout");
+      history.push("/login");
+      window.location.reload();
+    } catch (e) {
+      console.log("logout error");
+    }
+  };
 
   return (
     <div className="Menu">
@@ -45,7 +56,7 @@ const Menu = () => {
           size="large"
           variant="outlined"
           onClick={() => {
-            history.push("/login");
+            logout();
             buttonSound.play();
           }}
         >
