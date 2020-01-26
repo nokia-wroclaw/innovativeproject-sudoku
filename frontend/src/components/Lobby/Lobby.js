@@ -36,7 +36,7 @@ const Lobby = () => {
           setPlayersList([
             ...makePlayersList(
               response.players.filter(
-                username => username != Cookies.get("username")
+                username => username !== Cookies.get("username")
               )
             )
           ]);
