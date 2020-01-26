@@ -1,27 +1,12 @@
 import "../Auth.scss";
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ky from "ky";
 import TextField from "../../TextField/TextField";
-
-async function handleRegister(params, setStatus) {
-  const formData = new FormData();
-  formData.append("username", params.data.username);
-  formData.append("password", params.data.password);
-  formData.append("re_password", params.data.rePassword);
-  (async () => {
-    try {
-      await ky.post("/api/register", {
-        body: formData
-      });
-    } catch (e) {
-      setStatus({ error: "registerError" });
-    }
-  })();
-}
+import LoggedContext from "../../../contexts/LoggedContext";
 
 const form = {
   username: "",
@@ -40,11 +25,34 @@ const validationSchema = yup.object({
 
 const Register = () => {
   const history = useHistory();
+  const isLogged = useContext(LoggedContext);
+
+  useEffect(() => {
+    if (isLogged) {
+      history.replace("/menu");
+    }
+  }, [isLogged]);
+
+  async function handleRegister(params, setStatus) {
+    const formData = new FormData();
+    formData.append("username", params.data.username);
+    formData.append("password", params.data.password);
+    formData.append("re_password", params.data.rePassword);
+    (async () => {
+      try {
+        await ky.post("/api/register", {
+          body: formData
+        });
+        history.push("/menu");
+      } catch (e) {
+        setStatus({ error: "registerError" });
+      }
+    })();
+  }
 
   const onSubmit = (data, setSubmitting, setStatus) => {
     setSubmitting(true);
     handleRegister({ data }, setStatus);
-    history.push("/menu");
     setSubmitting(false);
   };
 

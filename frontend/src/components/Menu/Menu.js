@@ -1,18 +1,25 @@
 import "./Menu.scss";
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import ky from "ky";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { buttonSound } from "../shared/Sounds";
+import LoggedContext from "../../contexts/LoggedContext";
 
 const Menu = () => {
   const history = useHistory();
+  const isLogged = useContext(LoggedContext);
+
+  useEffect(() => {
+    if (!isLogged) {
+      history.replace("/login");
+    }
+  }, [isLogged]);
 
   const logout = async () => {
     try {
       await ky.get("/api/logout");
       history.push("/login");
-      window.location.reload();
     } catch (e) {
       console.log("logout error");
     }

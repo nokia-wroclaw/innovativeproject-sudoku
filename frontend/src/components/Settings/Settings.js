@@ -1,8 +1,19 @@
 import "./Settings.scss";
-import React from "react";
+import React, { useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import GoBackButton from "../GoBackButton/GoBackButton";
+import LoggedContext from "../../contexts/LoggedContext";
 
 const Settings = () => {
+  const history = useHistory();
+  const isLogged = useContext(LoggedContext);
+
+  useEffect(() => {
+    if (!isLogged) {
+      history.replace("/login");
+    }
+  }, [isLogged]);
+
   return (
     <div className="Settings">
       <GoBackButton />
