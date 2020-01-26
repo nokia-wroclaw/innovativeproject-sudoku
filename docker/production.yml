@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+
+  backend:
+    container_name: backend
+    restart: always
+    command: uvicorn main:app --host 0.0.0.0 --port 81 
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend-production
+    links:
+      - database
+    ports:
+      - "81:81"
+    depends_on:
+      - database
+    environment:
+      - HOST=${HOST}
+      - PORT=81
+      - SUDOKUBR_SECRET_KEY=${SUDOKUBR_SECRET_KEY}
+      - SUDOKUBR_DB_USERNAME=${SUDOKUBR_DB_USERNAME}
+      - SUDOKUBR_DB_PASSWORD=${SUDOKUBR_DB_PASSWORD}
+
+  database:
+    container_name: 'mongo'
+    image: 'mongo'
+    restart: always
+    volumes:
+      - /home/sudoku/mongo-volume:/data/db
+    ports:
+      - '27017-27019:27017-27019'
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+
+  frontend:
+    container_name: frontend
+    restart: always
+    command: serve -s build
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend-production
+    ports:
+      - "82:82"
+    environment:
+      - HOST=${HOST}
+      - PORT=82
+      - NODE_ENV=production
+    links:
+      - database
+
+  proxy:
+    container_name: proxy
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.proxy-production
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - ENV=production
+      - PORT=80
+    depends_on:
+      - frontend
+      - backend

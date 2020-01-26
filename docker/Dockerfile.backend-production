@@ -1,0 +1,10 @@
+FROM python:3.8-alpine3.10
+
+RUN apk add --no-cache --virtual .build-deps gcc libc-dev make libffi-dev \
+    && pip install pipenv
+
+WORKDIR /app
+COPY backend /app
+RUN pipenv lock --requirements > requirements.txt
+RUN cat requirements.txt
+RUN pip install -r requirements.txt
