@@ -16,6 +16,9 @@ class Player:
     def __init__(self, username):
         self.username = username
         self.endgame_time = time.time() + GAME_DURATION
+        self.attacks = 0
+        self.heals = 0
+        self.start_time = time.time()
 
 
 class Game:
@@ -76,6 +79,7 @@ class Game:
 
     async def heal(self, username: str) -> None:
         logging.info("%s is healing.", username)
+        self.players_data[username].heals += 1
         self.players_data[username].endgame_time += HEAL_VALUE
         await self.players[username].send_json(
             {"code": "heal", "time_left": self.get_time_left(username)}
@@ -83,6 +87,7 @@ class Game:
 
     async def fight(self, username: str) -> None:
         logging.info("%s is attacking.", username)
+        self.players_data[username].attacks += 1
         for name, player in self.players_data.items():
             if name != username:
                 player.endgame_time -= FIGHT_VALUE

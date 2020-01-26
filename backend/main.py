@@ -6,6 +6,7 @@ from src.routes.auth import auth_router
 from src.routes.lobby import lobby_router
 from src.routes.lobby import lobby
 from src.routes.game import game_router
+from src.routes.stats import stats_router
 
 connect_to_db()
 
@@ -14,6 +15,7 @@ app = FastAPI()
 app.include_router(auth_router)
 app.include_router(lobby_router)
 app.include_router(game_router)
+app.include_router(stats_router)
 
 
 @app.get("/")
