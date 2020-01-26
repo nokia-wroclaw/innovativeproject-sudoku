@@ -1,7 +1,5 @@
 from mongoengine import (
     Document,
-    SortedListField,
-    ReferenceField,
     StringField,
     IntField,
     FloatField,
@@ -20,7 +18,3 @@ class UserStats(Document):
     attacks = IntField(default=0)
     heals = IntField(default=0)
     time_spend = FloatField(default=0)
-
-
-class Game(Document):
-    players = SortedListField(ReferenceField(User))
