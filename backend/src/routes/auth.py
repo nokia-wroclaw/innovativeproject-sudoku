@@ -119,3 +119,12 @@ async def get_acces_token(request: Request) -> Response:
         expires=ACCESS_TOKEN_LIFETIME,
     )
     return response
+
+
+@auth_router.get("/logout")
+async def logout() -> Response:
+    response = Response()
+    response.delete_cookie(key="access_token")
+    response.delete_cookie(key="refresh_token")
+    response.delete_cookie(key="username")
+    return response

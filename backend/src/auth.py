@@ -105,7 +105,7 @@ def verify_cookies(cookies: Dict, name) -> str:
     try:
         token = cookies[name]
         return verify_token(token)
-    except TokenVerificationError:
+    except (TokenVerificationError, KeyError):
         raise CookieVerificationError
 
 
