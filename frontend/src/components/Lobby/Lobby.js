@@ -33,11 +33,13 @@ const Lobby = () => {
           history.push("/game");
           break;
         case "players":
-          response.players.splice(
-            response.players.indexOf(Cookies.get("username")),
-            1
-          );
-          setPlayersList([...makePlayersList(response.players)]);
+          setPlayersList([
+            ...makePlayersList(
+              response.players.filter(
+                username => username != Cookies.get("username")
+              )
+            )
+          ]);
           break;
         default:
           break;
