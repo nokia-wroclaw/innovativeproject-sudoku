@@ -1,4 +1,11 @@
-from mongoengine import Document, SortedListField, ReferenceField, StringField, IntField
+from mongoengine import (
+    Document,
+    SortedListField,
+    ReferenceField,
+    StringField,
+    IntField,
+    FloatField,
+)
 
 
 class User(Document):
@@ -11,7 +18,8 @@ class UserStats(Document):
     games_total = IntField(default=0)
     games_won = IntField(default=0)
     attacks = IntField(default=0)
-    defends = IntField(default=0)
+    heals = IntField(default=0)
+    time_spend = FloatField(default=0)
 
 
 class Game(Document):
