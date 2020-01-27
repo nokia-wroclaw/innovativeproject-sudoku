@@ -39,7 +39,7 @@ const Login = () => {
         await ky.post("/api/login", {
           body: formData
         });
-        Cookies.set("username", params.data.username);
+        Cookies.set("username", params.data.username, { expires: 7 });
         history.push("/menu");
       } catch (e) {
         setStatus({ error: "loginError" });
