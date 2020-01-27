@@ -1,17 +1,20 @@
 import logging
-
 from typing import Dict, List
-from starlette.websockets import WebSocket
+
+from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
+from starlette.websockets import WebSocket, WebSocketDisconnect
 
 from .routes.game import initialize_new_game
 
-LOBBY_SIZE = 2
+LOBBY_SIZE = 4
 
 
 class Lobby:
     def __init__(self):
         self.players: Dict[str, WebSocket] = {}
         self.generator = self.lobby_message_generator()
+        self.timer_started = False
+        self.timer_end = 1.0
 
     async def lobby_message_generator(self):
         while True:
@@ -28,6 +31,7 @@ class Lobby:
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
             await self.push({"code": "start_game"})
+            self.timer_started = False
             await initialize_new_game(list(self.players.keys()))
 
     def remove(self, username):
@@ -39,12 +43,14 @@ class Lobby:
     async def _send_data(self, data: str):
         active_players: Dict[str, WebSocket] = {}
         while len(self.players) > 0:
-            username, ws = self.players.popitem()
-            await ws.send_json(data)
-            active_players[username] = ws
+            try:
+                username, ws = self.players.popitem()
+                await ws.send_json(data)
+                active_players[username] = ws
+            except (ConnectionClosedError, ConnectionClosedOK, WebSocketDisconnect):
+                self.remove(username)
         self.players = active_players
 
     def get_usernames(self) -> List[str]:
-        usernames = list(self.players.keys())
-        logging.info(usernames)
+        usernames = sorted(list(self.players.keys()))
         return usernames
