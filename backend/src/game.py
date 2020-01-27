@@ -53,7 +53,7 @@ class Game:
         try:
             await websocket.accept()
             self.players[username] = websocket
-            websocket.send_json(
+            await websocket.send_json(
                 {"code": "start", "time_left": self.get_time_left(username)}
             )
             logging.info("Player %s connected to game.", username)
