@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
 import Field from "./Field/Field";
@@ -19,11 +19,13 @@ import {
   swordsSound
 } from "../shared/Sounds";
 import Action from "../shared/Action";
+import LoggedContext from "../../contexts/LoggedContext";
 
 let ws;
 
 const Board = () => {
   const history = useHistory();
+  const isLogged = useContext(LoggedContext);
   const [boardArray, setBoardArray] = useState(null);
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
@@ -55,6 +57,12 @@ const Board = () => {
   if (gameEnd) {
     // Redirect to game end view
   }
+
+  useEffect(() => {
+    if (!isLogged) {
+      history.replace("/login");
+    }
+  }, [isLogged]);
 
   const downloadNewBoard = () => {
     setDisplayButtons(false);

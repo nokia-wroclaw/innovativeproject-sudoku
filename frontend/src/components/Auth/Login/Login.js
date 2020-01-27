@@ -1,30 +1,14 @@
 import "../Auth.scss";
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import { Button } from "@material-ui/core";
-// import { useHistory } from "react-router";
+import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ky from "ky";
 import TextField from "../../TextField/TextField";
-
-async function handleSubmit(params, setStatus) {
-  const formData = new FormData();
-  formData.append("username", params.data.username);
-  formData.append("password", params.data.password);
-  (async () => {
-    try {
-      await ky.post("/api/login", {
-        body: formData
-      });
-      Cookies.set("username", params.data.username);
-      window.location.reload();
-    } catch (e) {
-      setStatus({ error: "loginError" });
-    }
-  })();
-}
+import LoggedContext from "../../../contexts/LoggedContext";
 
 const validationSchema = yup.object({
   username: yup.string().required(),
@@ -37,7 +21,31 @@ const form = {
 };
 
 const Login = () => {
-  // const history = useHistory();
+  const history = useHistory();
+  const isLogged = useContext(LoggedContext);
+
+  useEffect(() => {
+    if (isLogged) {
+      history.replace("/menu");
+    }
+  }, [isLogged]);
+
+  async function handleSubmit(params, setStatus) {
+    const formData = new FormData();
+    formData.append("username", params.data.username);
+    formData.append("password", params.data.password);
+    (async () => {
+      try {
+        await ky.post("/api/login", {
+          body: formData
+        });
+        Cookies.set("username", params.data.username);
+        history.push("/menu");
+      } catch (e) {
+        setStatus({ error: "loginError" });
+      }
+    })();
+  }
 
   const onSubmit = (data, setSubmitting, setStatus) => {
     // setSubmitting(true);

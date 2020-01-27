@@ -1,20 +1,29 @@
 import "./Lobby.scss";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 import { buttonSound } from "../shared/Sounds";
+import LoggedContext from "../../contexts/LoggedContext";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
 const Lobby = () => {
   const history = useHistory();
+  const isLogged = useContext(LoggedContext);
 
   const [playersList, setPlayersList] = useState(emptyPlayersList);
 
+  useEffect(() => {
+    if (!isLogged) {
+      history.replace("/login");
+    }
+  }, [isLogged]);
+
+  // sprawdzić czy jest username w cookies i wylogować jak nie ma
   useEffect(() => {
     const ws = new CrazyAssWebSocket("/api/lobby");
 
