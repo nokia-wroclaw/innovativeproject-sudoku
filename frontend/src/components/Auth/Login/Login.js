@@ -28,7 +28,7 @@ const Login = () => {
     if (isLogged) {
       history.replace("/menu");
     }
-  }, [isLogged]);
+  }, [isLogged, history]);
 
   async function handleSubmit(params, setStatus) {
     const formData = new FormData();

@@ -55,14 +55,14 @@ const Board = () => {
   }
 
   if (gameEnd) {
-    // Redirect to game end view
+    history.push("/results", { place: 1 });
   }
 
   useEffect(() => {
     if (!isLogged) {
       history.replace("/login");
     }
-  }, [isLogged]);
+  }, [isLogged, history]);
 
   const downloadNewBoard = () => {
     setDisplayButtons(false);

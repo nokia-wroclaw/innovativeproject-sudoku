@@ -31,7 +31,7 @@ const Register = () => {
     if (isLogged) {
       history.replace("/menu");
     }
-  }, [isLogged]);
+  }, [isLogged, history]);
 
   async function handleRegister(params, setStatus) {
     const formData = new FormData();
