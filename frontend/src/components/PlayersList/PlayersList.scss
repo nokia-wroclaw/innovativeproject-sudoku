@@ -2,19 +2,30 @@
 
 :export {
     active: $active-opponents;
-    dead: $background-color
+    dead: $background-color;
+    bWhite: $white;
+    usernameColor: $timer-color;
+    worsePlayer : $timer-red;
 }
 
 .playersList {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
 
-.playersList .player {
-    height: 2.5vw;
-    width: 2.5vw;
+.playersList .avatar .time{
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.playersList .avatar {
+    height: 3vw;
+    width: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 1vh 0;
     opacity: 0.95;
     border-radius: 50%;
@@ -23,8 +34,21 @@
     box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 1);
 }
 
+.player {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.player .username{
+    margin: 0 0.5vw;
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+
 @media(max-width: 1400px) {
-    .playersList .player {
+    .playersList .avatar {
         height: 3.5vw;
         width: 3.5vw;
 
@@ -36,32 +60,61 @@
 
     .playersList {
         flex-direction: row;
+        justify-content: center;
     }
 
-    .playersList .player {
+    .player {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .playersList .avatar {
         height: 4.5vw;
         width: 4.5vw;
         margin: 0 1vw;
     }
+
+    .player .username{
+        margin: 0.25vh 0;
+        font-size: 15px;
+        font-weight: bold;
+        
+    }
 }
 
 @media(max-width: 800px) {
-    .playersList .player {
+    .playersList .avatar {
         height: 6.5vw;
         width: 6.5vw;
     }
 }
 
 @media(max-width: 600px) {
-    .playersList .player {
+    .playersList .avatar {
         height: 6vw;
         width: 6vw;
+    }
+
+    .player .username{
+        font-size: 12px;        
     }
 }
 
 @media(max-width: 420px) {
-    .playersList .player {
+    .playersList .avatar {
         height: 7vw;
         width: 7vw;
+    }
+
+    .player .username{
+        font-size: 12px;
+        margin-top: 1vh;
+        writing-mode: vertical-rl;  
+        text-orientation: sideways-right;
+    }
+
+    .playersList .avatar .time {
+        font-size: 10px;
     }
 }
