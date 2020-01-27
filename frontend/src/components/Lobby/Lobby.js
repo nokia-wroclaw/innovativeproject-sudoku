@@ -21,7 +21,7 @@ const Lobby = () => {
     if (!isLogged) {
       history.replace("/login");
     }
-  }, [isLogged]);
+  }, [isLogged, history]);
 
   // sprawdzić czy jest username w cookies i wylogować jak nie ma
   useEffect(() => {

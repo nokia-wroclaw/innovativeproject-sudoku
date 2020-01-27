@@ -14,7 +14,7 @@ const Menu = () => {
     if (!isLogged) {
       history.replace("/login");
     }
-  }, [isLogged]);
+  }, [isLogged, history]);
 
   const logout = async () => {
     try {

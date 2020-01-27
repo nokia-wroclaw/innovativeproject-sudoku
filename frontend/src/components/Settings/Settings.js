@@ -12,7 +12,7 @@ const Settings = () => {
     if (!isLogged) {
       history.replace("/login");
     }
-  }, [isLogged]);
+  }, [isLogged, history]);
 
   return (
     <div className="Settings">

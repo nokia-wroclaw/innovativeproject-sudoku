@@ -7,6 +7,7 @@ import Menu from "./components/Menu/Menu";
 import Board from "./components/Board/Board";
 import Settings from "./components/Settings/Settings";
 import Lobby from "./components/Lobby/Lobby";
+import Results from "./components/Results/Results";
 import LoggedContext from "./contexts/LoggedContext";
 
 const AppRouter = () => {
@@ -38,6 +39,7 @@ const AppRouter = () => {
           <Route path="/lobby" component={Lobby} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
+          <Route path="/results" component={Results} />
           <Route path="*">
             <Redirect to="/login" />
           </Route>
