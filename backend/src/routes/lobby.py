@@ -36,6 +36,7 @@ async def websocket_endpoint(websocket: WebSocket):
         if not lobby.timer_started and len(lobby.players) == MIN_PLAYERS:
             lobby.timer_started = True
             lobby.timer_end = time() + LOBBY_TIMEOUT
+            await lobby.push({"code": "timer_on"})
             while True:
                 await lobby.push(
                     {"code": "time", "time": lobby.timer_end - time(),}
@@ -46,9 +47,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     return
                 if len(lobby.players) < MIN_PLAYERS:
                     lobby.timer_started = False
-                    await lobby.push(
-                        {"code": "players", "players": lobby.get_usernames()}
-                    )
+                    await lobby.push({"code": "timer_off"})
                     while True:
                         await websocket.receive_json()
                 if lobby.timer_end - time() < 0:
