@@ -26,13 +26,7 @@
     background-color: rgba(green, $alpha: 0.20);
 }
 
-.bHeal > img {
-    content: url("/battleButtons/heal.png");
-    width: 200px;
-}
-
-.bHeal:hover > img {
-    content: url("/battleButtons/heal2.png");
+.bHeal img {
     width: 200px;
 }
 
@@ -46,13 +40,7 @@
     background-color: rgba(red, $alpha: 0.20);
 }
 
-.bFight > img {
-    content: url("/battleButtons/fight.png");
-    width: 200px;
-}
-
-.bFight:hover > img {
-    content: url("/battleButtons/fight2.png");
+.bFight img {
     width: 200px;
 }
 
@@ -68,21 +56,11 @@
         font-size: 30px;
     }
 
-    .bHeal > img {
-        content: url("/battleButtons/heal.png");
-        width: 200px;
-    }
-    .bHeal:hover > img {
-        content: url("/battleButtons/heal2.png");
+    .bHeal img {
         width: 200px;
     }
 
-    .bFight > img {
-        content: url("/battleButtons/fight.png");
-        width: 200px;
-    }
-    .bFight:hover > img {
-        content: url("/battleButtons/fight2.png");
+    .bFight img {
         width: 200px;
     }
 }
@@ -94,21 +72,11 @@
         font-size: 30px;
     }
 
-    .bHeal > img {
-        content: url("/battleButtons/heal.png");
-        width: 150px;
-    }
-    .bHeal:hover > img {
-        content: url("/battleButtons/heal2.png");
+    .bHeal img {
         width: 150px;
     }
 
-    .bFight > img {
-        content: url("/battleButtons/fight.png");
-        width: 150px;
-    }
-    .bFight:hover > img {
-        content: url("/battleButtons/fight2.png");
+    .bFight img {
         width: 150px;
     }
 }
@@ -119,21 +87,11 @@
         height: calc(72vw + 16px);
     }
 
-    .bHeal > img {
-        content: url("/battleButtons/heal.png");
-        width: 160px;
-    }
-    .bHeal:hover > img {
-        content: url("/battleButtons/heal2.png");
+    .bHeal img {
         width: 160px;
     }
 
-    .bFight > img {
-        content: url("/battleButtons/fight.png");
-        width: 160px;
-    }
-    .bFight:hover > img {
-        content: url("/battleButtons/fight2.png");
+    .bFight img {
         width: 160px;
     }
 }
@@ -145,21 +103,11 @@
         font-size: 20px;
     }
 
-    .bHeal > img {
-        content: url("/battleButtons/heal.png");
-        width: 130px;
-    }
-    .bHeal:hover > img {
-        content: url("/battleButtons/heal2.png");
+    .bHeal img {
         width: 130px;
     }
 
-    .bFight > img {
-        content: url("/battleButtons/fight.png");
-        width: 130px;
-    }
-    .bFight:hover > img {
-        content: url("/battleButtons/fight2.png");
+    .bFight img {
         width: 130px;
     }
 }
@@ -171,21 +119,11 @@
         font-size: 20px;
     }
 
-    .bHeal > img {
-        content: url("/battleButtons/heal.png");
-        width: 100px;
-    }
-    .bHeal:hover > img {
-        content: url("/battleButtons/heal2.png");
+    .bHeal img {
         width: 100px;
     }
 
-    .bFight > img {
-        content: url("/battleButtons/fight.png");
-        width: 100px;
-    }
-    .bFight:hover > img {
-        content: url("/battleButtons/fight2.png");
+    .bFight img {
         width: 100px;
     }
 }

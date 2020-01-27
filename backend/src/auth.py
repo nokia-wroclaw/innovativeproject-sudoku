@@ -13,7 +13,7 @@ from mongoengine import (
     connect,
     DoesNotExist,
 )
-from .models import User
+from .models import User, UserStats
 
 
 SECRET_KEY = environ["SUDOKUBR_SECRET_KEY"]
@@ -45,7 +45,9 @@ class RegisterForm:
 def create_user(username: str, password: str) -> User:
     hashed_password = get_password_hash(password)
     user = User(username=username, hashed_password=hashed_password)
+    userStats = UserStats(username=username)
     user.save()
+    userStats.save()
     logging.info("User: %s added to DB", user["username"])
 
 
@@ -105,7 +107,7 @@ def verify_cookies(cookies: Dict, name) -> str:
     try:
         token = cookies[name]
         return verify_token(token)
-    except TokenVerificationError:
+    except (TokenVerificationError, KeyError):
         raise CookieVerificationError
 
 

@@ -1,6 +1,7 @@
 import "./Lobby.scss";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import { useHistory } from "react-router";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
@@ -18,7 +19,6 @@ const Lobby = () => {
     const ws = new CrazyAssWebSocket("/api/lobby");
 
     const makePlayersList = newPlayersList =>
-      // TODO: playersList should contain opponents nicknames only
       Object.assign(
         [...emptyPlayersList],
         newPlayersList.slice(0, emptyPlayersList.length)
@@ -33,7 +33,13 @@ const Lobby = () => {
           history.push("/game");
           break;
         case "players":
-          setPlayersList([...makePlayersList(response.players)]);
+          setPlayersList([
+            ...makePlayersList(
+              response.players.filter(
+                username => username !== Cookies.get("username")
+              )
+            )
+          ]);
           break;
         default:
           break;
@@ -49,26 +55,32 @@ const Lobby = () => {
     };
   }, [history]);
 
+  const renderColumn = odd => {
+    return (
+      <Table size="small">
+        {playersList.map((player, index) => {
+          return index % 2 === odd ? (
+            <TableRow key={index + 2}>
+              <TableCell style={{ width: "1px", padding: "0" }}>
+                {index + 2}.
+              </TableCell>
+              <TableCell align="center" style={{ paddingRight: "30px" }}>
+                {player}
+              </TableCell>
+            </TableRow>
+          ) : null;
+        })}
+      </Table>
+    );
+  };
+
   const displayPlayersList = () => {
     return (
       <div className="players">
-        <p>1. MyUsername</p>{" "}
-        {/* TODO: display username from state manager/props/cookie */}
+        <p>1. {Cookies.get("username")}</p>
         <div className="columns">
-          <Table size="small">
-            {playersList.map((player, index) => {
-              return (
-                <TableRow key={index + 2}>
-                  <TableCell style={{ width: "1px", padding: "0" }}>
-                    {index + 2}.
-                  </TableCell>
-                  <TableCell align="center" style={{ paddingRight: "30px" }}>
-                    {player}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </Table>
+          {renderColumn(0)}
+          {renderColumn(1)}
         </div>
       </div>
     );
