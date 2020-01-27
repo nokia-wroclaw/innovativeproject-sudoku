@@ -30,7 +30,9 @@ const Lobby = () => {
     const makePlayersList = newPlayersList =>
       Object.assign(
         [...emptyPlayersList],
-        newPlayersList.slice(0, emptyPlayersList.length)
+        newPlayersList
+          .filter(username => username !== Cookies.get("username"))
+          .slice(0, emptyPlayersList.length)
       );
 
     ws.onmessage = event => {
@@ -42,13 +44,7 @@ const Lobby = () => {
           history.push("/game");
           break;
         case "players":
-          setPlayersList([
-            ...makePlayersList(
-              response.players.filter(
-                username => username !== Cookies.get("username")
-              )
-            )
-          ]);
+          setPlayersList(makePlayersList(response.players));
           break;
         default:
           break;

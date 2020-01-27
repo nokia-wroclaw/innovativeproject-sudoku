@@ -1,4 +1,5 @@
 import "../Auth.scss";
+import Cookies from "js-cookie";
 import React, { useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -43,6 +44,7 @@ const Register = () => {
         await ky.post("/api/register", {
           body: formData
         });
+        Cookies.set("username", params.data.username, { expires: 7 });
         history.push("/menu");
       } catch (e) {
         setStatus({ error: "registerError" });
