@@ -34,10 +34,22 @@ const Board = () => {
 
   const { minutes, seconds } = timeLeft;
 
+  const playersLeft = [
+    { username: "Kobi", time_left: "420" },
+    { username: "Szymon", time_left: "350" },
+    { username: "Karol", time_left: "200" },
+    { username: "Michał", time_left: "190" },
+    { username: "Konrad", time_left: "140" },
+    { username: "Paweł", time_left: "130" },
+    { username: "Filis", time_left: "20" },
+    { username: "Wawa", time_left: "31" },
+    { username: "Brodacz", time_left: "30" }
+  ];
+
   let timerColor = styles.timer;
 
   if (minutes === 0 && seconds < 20) {
-    timerColor = "#cc0033";
+    timerColor = styles.redTimer;
   }
 
   if (gameEnd) {
@@ -258,11 +270,10 @@ const Board = () => {
       </div>
       <div className="gamePanel">
         <GoBackButton />
-        {console.log(borderRed)}
         <div
-          className={
-            "sudoku sudoku-background " + (borderRed ? "borderRed" : null)
-          }
+          className={`sudoku sudoku-background ${
+            borderRed ? "borderRed" : null
+          }`}
         >
           {suggestions && (
             <CircularMenu
@@ -274,7 +285,12 @@ const Board = () => {
           )}
           {renderMode()}
         </div>
-        <PlayersList playersLeft={5} myPosition={3} />
+        <PlayersList
+          playersLeftAmount={7}
+          myPosition={3}
+          playersStartAmount={9}
+          playersLeft={playersLeft}
+        />
       </div>
     </div>
   );
