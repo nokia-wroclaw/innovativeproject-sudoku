@@ -1,0 +1,8 @@
+FROM node:12.2.0-alpine
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY frontend /app
+RUN npm install --production
+RUN npm install node-sass@latest
+RUN npm install serve
+RUN npm run build
