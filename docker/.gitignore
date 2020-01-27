@@ -2,3 +2,4 @@
 mongo-volume/
 node_modules/
 .env
+certificates/
