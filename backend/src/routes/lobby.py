@@ -13,7 +13,8 @@ from .game import initialize_new_game
 lobby_router = APIRouter()
 lobby = Lobby()
 
-LOBBY_TIMEOUT = 6.0
+LOBBY_TIMEOUT = 16.0
+MIN_PLAYERS = 3
 
 
 @lobby_router.websocket("/lobby")
@@ -32,25 +33,32 @@ async def websocket_endpoint(websocket: WebSocket):
             logging.info("Player: %s was in ongoing-game. Reconnecting", username)
             return
         await lobby.connect(websocket, username)
-        if not lobby.timer_started:
+        if not lobby.timer_started and len(lobby.players) == MIN_PLAYERS:
             lobby.timer_started = True
             lobby.timer_end = time() + LOBBY_TIMEOUT
             while True:
-                await lobby.push({"code": "time", "time": lobby.timer_end - time()})
+                await lobby.push(
+                    {"code": "time", "time": lobby.timer_end - time(),}
+                )
+                await sleep(0.5)
+                if len(lobby.players) == 0:
+                    lobby.timer_started = False
+                    return
+                if len(lobby.players) < MIN_PLAYERS:
+                    lobby.timer_started = False
+                    await lobby.push(
+                        {"code": "players", "players": lobby.get_usernames()}
+                    )
+                    while True:
+                        await websocket.receive_json()
                 if lobby.timer_end - time() < 0:
-                    if len(lobby.players) > 1:
-                        logging.info("Game start - not full lobby")
-                        await lobby.push({"code": "start_game"})
-                        await initialize_new_game(list(lobby.players.keys()))
-                        lobby.timer_started = False
-                    else:
-                        await lobby.push({"code": "time_out"})
-                        lobby.timer_started = False
-                        lobby.remove(username)
-                        return
-                await sleep(1.0)
+                    logging.info("Game start - not full lobby")
+                    await lobby.push({"code": "start_game"})
+                    await initialize_new_game(list(lobby.players.keys()))
+                    lobby.timer_started = False
         else:
             while True:
                 await websocket.receive_json()
     except (WebSocketDisconnect, ConnectionClosedError):
         lobby.remove(username)
+        await lobby.push({"code": "players", "players": lobby.get_usernames()})
