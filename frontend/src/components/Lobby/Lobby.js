@@ -9,7 +9,6 @@ import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 import { buttonSound } from "../shared/Sounds";
 import LoggedContext from "../../contexts/LoggedContext";
-
 import "react-sweet-progress/lib/style.css";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
@@ -54,6 +53,10 @@ const Lobby = () => {
         case "time":
           setMessage("Starting game...");
           setLobbyTimer(response.time);
+          break;
+        case "timer_off":
+          setMessage("Waiting for players...");
+          setLobbyTimer(15);
           break;
         default:
           break;
