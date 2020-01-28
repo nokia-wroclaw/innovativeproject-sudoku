@@ -1,5 +1,6 @@
 import logging
 import time
+from random import randint
 from typing import Dict, List
 
 from starlette.websockets import WebSocket
@@ -108,18 +109,25 @@ class Game:
 
     async def heal(self, username: str) -> None:
         logging.info("%s is healing.", username)
-        self.players_data[username].heals += 1
-        self.players_data[username].endgame_time += HEAL_VALUE
+        player = self.players_data[username]
+        player.heals += 1
+        player.endgame_time += (
+            10 + len(self.usernames) * randint(1, player.level) / 2  # nosec
+        )
         await self.players[username].send_json(
             {"code": "heal", "time_left": self.get_time_left(username)}
         )
 
     async def fight(self, username: str) -> None:
         logging.info("%s is attacking.", username)
-        self.players_data[username].attacks += 1
-        for name, player in self.players_data.items():
+        player = self.players_data[username]
+        player.attacks += 1
+        player.endgame_time += 5 + randint(1, player.level * 2)  # nosec
+        for name, enemy in self.players_data.items():
             if name != username:
-                player.endgame_time -= FIGHT_VALUE
+                enemy.endgame_time -= (
+                    10 + len(self.usernames) * randint(1, player.level) / 4  # nosec
+                )
                 await self.players[name].send_json(
                     {"code": "attacked", "time_left": self.get_time_left(name),}
                 )
