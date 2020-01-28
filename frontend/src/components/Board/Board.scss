@@ -1,6 +1,9 @@
 @import "../../Variables";
-
-:export {timer: $timer-color; bWhite: $white; redTimer: $timer-red}
+:export {
+    timer: $timer-color;
+    bWhite: $white;
+    redTimer: $timer-red
+}
 
 .game {
     display: flex;
@@ -19,74 +22,72 @@
 .sudoku table {
     border: 3px solid black;
     border-collapse: collapse;
-
     td {
         padding: 0;
         border: 1px solid black;
         text-align: center;
     }
-
     td:nth-child(3n) {
-      border-right: 3px solid black;
+        border-right: 3px solid black;
     }
-
     tr:nth-child(3n) {
-      border-bottom: 3px solid black;
+        border-bottom: 3px solid black;
     }
-  }
+}
 
 .board {
     border: 3px solid black;
     text-align: center;
 }
 
-.gamePanel{
+.gamePanel {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
 
-.gamePanel .borderRed{
+.gamePanel .borderRed {
     animation: redBorder 0.75s linear;
 }
 
 @keyframes redBorder {
-    50%	{ background-color: #ef0a1a;}
+    50% {
+        background-color: #ef0a1a;
+    }
 }
 
-.Timer{
+.Timer {
     border-radius: 30px;
     display: inline-block;
     background-color: rgba($background-color, $alpha: 0.75);
 }
 
-.Timer p{
+.Timer p {
     margin: 0;
     font-size: 60px;
     font-family: 'Exo 2', sans-serif;
 }
 
-@media(max-width: 1024px){
-    .sudoku-background{
+@media(max-width: 1024px) {
+    .sudoku-background {
         margin-right: 0;
         margin-bottom: 1vh;
     }
-    .gameView{
+    .gameView {
         flex-direction: column;
     }
-
-    .gamePanel{
+    .gamePanel {
         flex-direction: column;
     }
-    .Timer p{
+    .Timer p {
         float: none;
         text-align: center;
     }
 }
 
-@media(max-width: 500px){
-    .gameView{
+@media(max-width: 500px) {
+    .gameView {
         margin-top: -15vh;
     }
 }
