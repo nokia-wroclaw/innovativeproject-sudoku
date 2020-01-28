@@ -30,7 +30,7 @@ const Board = () => {
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
   const [displayButtons, setDisplayButtons] = useState(false);
-  const [timeLeft, setTimeLeft, timeEnd] = useTimer(0);
+  const [timeLeft, setTimeLeft] = useTimer(1297);
   const [action, setAction] = useState();
   const [borderRed, setBorderRed] = useState();
   const [players, setPlayers] = useState([]);
@@ -43,10 +43,6 @@ const Board = () => {
 
   if (minutes === 0 && seconds < 20) {
     timerColor = styles.redTimer;
-  }
-
-  if (timeEnd) {
-    history.push("/results", { place: 1 });
   }
 
   useEffect(() => {
@@ -107,11 +103,10 @@ const Board = () => {
           history.push("/lobby");
           break;
         case "game_lost":
-          setTimeLeft(0);
-          alert("You lost!");
+          history.push("/results", { place: 2 });
           break;
         case "game_won":
-          alert("You won!");
+          history.push("/results", { place: 1 });
           break;
         case "next_level":
           correctBoardSound.play();

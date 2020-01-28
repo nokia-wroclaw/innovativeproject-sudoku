@@ -3,12 +3,6 @@ import PropTypes from "prop-types";
 import colors from "./PlayersList.scss";
 
 const PlayersList = ({ myPosition, playersStartAmount, playersLeft }) => {
-  console.log({
-    myPosition,
-    playersStartAmount,
-    playersLeft
-  });
-
   const playersList = [];
 
   const parseTime = time => {

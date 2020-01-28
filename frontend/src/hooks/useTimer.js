@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const useTimer = startTime => {
   const [timeLeft, setTimeLeft] = useState(startTime);
-  const [timeEnd, setTimeEnd] = useState(false);
 
   const parseTime = time => {
     const minutes = Math.floor(time / 60);
@@ -19,12 +18,6 @@ const useTimer = startTime => {
   };
 
   useEffect(() => {
-    if (timeLeft === 0) {
-      setTimeEnd(true);
-    }
-  }, [timeLeft]);
-
-  useEffect(() => {
     const interval = setInterval(
       () =>
         setTimeLeft(currentTimeLeft =>
@@ -35,7 +28,7 @@ const useTimer = startTime => {
     return () => clearInterval(interval);
   }, []);
 
-  return [parseTime(timeLeft), newValue => setTimeLeft(newValue), timeEnd];
+  return [parseTime(timeLeft), newValue => setTimeLeft(newValue)];
 };
 
 export default useTimer;

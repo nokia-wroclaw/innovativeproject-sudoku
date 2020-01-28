@@ -78,7 +78,7 @@ async def get_data(websocket, wrapper):
 
 
 async def check_timers(websocket, username, game):
-    if len(game.usernames) == 1:
+    if len(game.usernames) == 1 and game.usernames[0] == username:
         await websocket.send_json({"code": "game_won"})
         update_stats(game.players_data[username], username, True)
         game.remove(username)

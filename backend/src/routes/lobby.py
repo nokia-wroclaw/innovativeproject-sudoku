@@ -7,14 +7,11 @@ from starlette.websockets import WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
 
 from ..auth import CookieVerificationError, verify_cookies
-from ..lobby import Lobby
+from ..lobby import LOBBY_TIMEOUT, MIN_PLAYERS, Lobby
 from .game import check_if_in_game, initialize_new_game
 
 lobby_router = APIRouter()
 lobby = Lobby()
-
-LOBBY_TIMEOUT = 16.0
-MIN_PLAYERS = 3
 
 
 @lobby_router.websocket("/lobby")

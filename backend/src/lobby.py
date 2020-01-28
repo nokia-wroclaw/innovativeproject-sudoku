@@ -6,7 +6,9 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 
 from .routes.game import initialize_new_game
 
+LOBBY_TIMEOUT = 16.0
 LOBBY_SIZE = 4
+MIN_PLAYERS = 3
 
 
 class Lobby:
@@ -27,6 +29,7 @@ class Lobby:
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
         self.players[username] = websocket
+        await websocket.send_json({"code": "enter_lobby", "timer_limit": LOBBY_TIMEOUT})
         await self.push({"code": "players", "players": sorted(self.get_usernames())})
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
