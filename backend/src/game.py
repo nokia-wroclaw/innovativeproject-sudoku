@@ -5,7 +5,7 @@ from typing import Dict, List
 from starlette.websockets import WebSocket
 from websockets.exceptions import ConnectionClosedError
 
-from .sudokuboard import check_sudoku
+from .sudoku import SudokuPuzzle, check_sudoku
 
 GAME_DURATION = 150
 HEAL_VALUE = 20
@@ -21,9 +21,11 @@ class Player:
         self.attacks = 0
         self.heals = 0
         self.start_time = time.time()
+        self.level = 1
 
 
 class Game:
+    # this needs a refactor ASAP....
     def __init__(self, usernames: List[str]):
         self.usernames = usernames
         self.generator = self.message_generator()
@@ -70,6 +72,7 @@ class Game:
                     "code": "start",
                     "username": username,
                     "players": self.get_players_hp(),
+                    "board": SudokuPuzzle().get_puzzle(),
                     "time_left": self.get_time_left(username),
                 }
             )
@@ -87,12 +90,21 @@ class Game:
 
     async def check_board(self, board: Grid, username: str) -> None:
         logging.info("%s has completed his puzzle.", username)
-        await self.players[username].send_json(
-            {
-                "code": "next_level" if check_sudoku(board) else "incorrect_board",
-                "time_left": self.get_time_left(username),
-            }
-        )
+
+        response = {
+            "time_left": self.get_time_left(username),
+        }
+
+        if check_sudoku(board):
+            response["code"] = "next_level"
+            self.players_data[username].level += 1
+            response["board"] = SudokuPuzzle(
+                difficulty=self.players_data[username].level
+            ).get_puzzle()
+        else:
+            response["code"] = "incorrect_board"
+
+        await self.players[username].send_json(response)
 
     async def heal(self, username: str) -> None:
         logging.info("%s is healing.", username)
