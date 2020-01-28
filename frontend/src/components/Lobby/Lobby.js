@@ -3,19 +3,26 @@ import React, { useState, useEffect, useContext } from "react";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import Cookies from "js-cookie";
 import { useHistory } from "react-router";
+import { Progress } from "react-sweet-progress";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 import { buttonSound } from "../shared/Sounds";
 import LoggedContext from "../../contexts/LoggedContext";
+import "react-sweet-progress/lib/style.css";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
+const waitingMessage = "Waiting for players...";
+const startingMessage = "Starting game...";
 
 const Lobby = () => {
   const history = useHistory();
   const isLogged = useContext(LoggedContext);
 
   const [playersList, setPlayersList] = useState(emptyPlayersList);
+  const [lobbyTimer, setLobbyTimer] = useState(1);
+  const [message, setMessage] = useState(waitingMessage);
+  const [lobbyTimerLimit, setLobbyTimerLimit] = useState(1);
 
   useEffect(() => {
     if (!isLogged) {
@@ -43,8 +50,20 @@ const Lobby = () => {
         case "in_game_already":
           history.push("/game");
           break;
+        case "enter_lobby":
+          setLobbyTimerLimit(response.timer_limit);
+          setLobbyTimer(response.timer_limit);
+          break;
         case "players":
           setPlayersList(makePlayersList(response.players));
+          break;
+        case "time":
+          setMessage(startingMessage);
+          setLobbyTimer(response.time);
+          break;
+        case "timer_off":
+          setMessage(waitingMessage);
+          setLobbyTimer(lobbyTimerLimit);
           break;
         default:
           break;
@@ -59,6 +78,12 @@ const Lobby = () => {
       ws.close();
     };
   }, [history]);
+
+  useEffect(() => {
+    if (message === waitingMessage) {
+      setLobbyTimer(lobbyTimerLimit);
+    }
+  }, [message]);
 
   const renderColumn = odd => {
     return (
@@ -79,6 +104,31 @@ const Lobby = () => {
     );
   };
 
+  const displayTimer = () => {
+    return (
+      <Progress
+        percent={(parseInt(lobbyTimer, 10) / lobbyTimerLimit) * 100}
+        theme={{
+          active: {
+            symbol: `${parseInt(lobbyTimer, 10)}s`,
+            trailColor: "lightblue",
+            color: "#68b3e1"
+          },
+          success: {
+            symbol: "⏱️",
+            trailColor: "lightblue",
+            color: "#68b3e1"
+          },
+          default: {
+            symbol: "0s",
+            trailColor: "lightblue",
+            color: "#68b3e1"
+          }
+        }}
+      />
+    );
+  };
+
   const displayPlayersList = () => {
     return (
       <div className="players">
@@ -96,7 +146,8 @@ const Lobby = () => {
       <GoBackButtonLobby />
       <div className="card">
         <img src="logo.png" alt="logo_image" />
-        <h2>Waiting for players...</h2>
+        {displayTimer()}
+        <h3>{message}</h3>
         {displayPlayersList()}
         <Loader />
         <Button

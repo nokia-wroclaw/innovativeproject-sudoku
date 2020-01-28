@@ -25,7 +25,7 @@ const Result = () => {
   }, [isLogged, history, location.state]);
 
   const renderConfetti = () => {
-    return place && <Confetti width={width} height={height} />;
+    return place === 1 && <Confetti width={width} height={height} />;
   };
 
   return (
