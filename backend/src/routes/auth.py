@@ -1,25 +1,24 @@
 import logging
 
-from fastapi import Depends, HTTPException, APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
-from starlette.status import HTTP_400_BAD_REQUEST
-from starlette.responses import Response
+from mongoengine import NotUniqueError, SaveConditionError
 from starlette.requests import Request
-from mongoengine import SaveConditionError, NotUniqueError
+from starlette.responses import Response
+from starlette.status import HTTP_400_BAD_REQUEST
 
 from ..auth import (
-    REFRESH_TOKEN_LIFETIME,
     ACCESS_TOKEN_LIFETIME,
-    create_token,
-    create_user,
-    authenticate_user,
-    verify_cookies,
+    REFRESH_TOKEN_LIFETIME,
+    CookieVerificationError,
     RegisterForm,
     UserVerificationError,
-    CookieVerificationError,
+    authenticate_user,
+    create_token,
+    create_user,
+    verify_cookies,
 )
-
 
 auth_router = APIRouter()
 

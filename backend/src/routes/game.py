@@ -86,6 +86,8 @@ async def check_timers(websocket, username, game):
     for name, player in game.players_data.copy().items():
         if player.endgame_time <= time.time():
             update_stats(player, name, False)
-            await game.players[name].send_json({"code": "game_lost"})
+            await game.players[name].send_json(
+                {"code": "game_lost", "position": len(game.usernames)}
+            )
             logging.info("time out on player %s", username)
             game.remove(name)

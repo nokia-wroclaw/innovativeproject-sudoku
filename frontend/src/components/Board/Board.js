@@ -69,7 +69,7 @@ const Board = () => {
           history.push("/lobby");
           break;
         case "game_lost":
-          history.push("/results", { place: 2 });
+          history.push("/results", { place: response.position });
           break;
         case "game_won":
           history.push("/results", { place: 1 });

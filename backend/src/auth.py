@@ -3,18 +3,14 @@ from datetime import datetime, timedelta
 from os import environ
 from typing import Dict
 
-
 import jwt
-from jwt.exceptions import ExpiredSignatureError
 from fastapi import Form
 from fastapi.security import OAuth2PasswordBearer
+from jwt.exceptions import ExpiredSignatureError
+from mongoengine import DoesNotExist, connect
 from passlib.context import CryptContext
-from mongoengine import (
-    connect,
-    DoesNotExist,
-)
-from .models import User, UserStats
 
+from .models import User, UserStats
 
 SECRET_KEY = environ["SUDOKUBR_SECRET_KEY"]
 DB_USERNAME = environ["SUDOKUBR_DB_USERNAME"]
