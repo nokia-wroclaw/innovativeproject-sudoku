@@ -1,8 +1,10 @@
 import logging
 import time
 from typing import Dict, List
+
 from starlette.websockets import WebSocket
 from websockets.exceptions import ConnectionClosedError
+
 from .sudokuboard import check_sudoku
 
 GAME_DURATION = 150
@@ -41,6 +43,16 @@ class Game:
     def get_time_left(self, username: str) -> float:
         return max(round(self.players_data[username].endgame_time - time.time()), 0.0)
 
+    def get_players_hp(self) -> List[Dict[str, float]]:
+        return sorted(
+            [
+                {"username": username, "time_left": self.get_time_left(username)}
+                for username in self.usernames
+            ],
+            key=lambda item: item["time_left"],
+            reverse=True,
+        )
+
     async def message_generator(self) -> None:
         while True:
             message = yield
@@ -54,7 +66,12 @@ class Game:
             await websocket.accept()
             self.players[username] = websocket
             await websocket.send_json(
-                {"code": "start", "time_left": self.get_time_left(username)}
+                {
+                    "code": "start",
+                    "username": username,
+                    "players": self.get_players_hp(),
+                    "time_left": self.get_time_left(username),
+                }
             )
             logging.info("Player %s connected to game.", username)
         except (ConnectionClosedError, AssertionError):
@@ -92,5 +109,5 @@ class Game:
             if name != username:
                 player.endgame_time -= FIGHT_VALUE
                 await self.players[name].send_json(
-                    {"code": "attacked", "time_left": self.get_time_left(name)}
+                    {"code": "attacked", "time_left": self.get_time_left(name),}
                 )
