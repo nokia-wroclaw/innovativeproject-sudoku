@@ -2,12 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import colors from "./PlayersList.scss";
 
-const PlayersList = ({
-  myPosition,
-  playersStartAmount,
-  playersLeft,
-  playersLeftAmount
-}) => {
+const PlayersList = ({ myPosition, playersStartAmount, playersLeft }) => {
+  console.log({
+    myPosition,
+    playersStartAmount,
+    playersLeft
+  });
+
   const playersList = [];
 
   const parseTime = time => {
@@ -26,17 +27,11 @@ const PlayersList = ({
       let { usernameColor } = colors;
       let timeColor = colors.backgroundColor;
 
-      if (i < playersLeftAmount) {
+      if (i < playersLeft.length) {
         if (i === 0) {
           backgroundColor = "gold";
         } else if (i === myPosition) {
           timeColor = colors.bWhite;
-          usernameColor = colors.dead;
-          backgroundColor = colors.active;
-        } else if (
-          parseInt(playersLeft[i].time_left, 10) >
-          parseInt(playersLeft[myPosition].time_left, 10)
-        ) {
           backgroundColor = colors.active;
         } else {
           backgroundColor = colors.worsePlayer;
@@ -47,6 +42,20 @@ const PlayersList = ({
         timeColor = colors.dead;
       }
 
+      const time =
+        i < playersLeft.length
+          ? i === myPosition
+            ? "YOU"
+            : `${parseTime(playersLeft[i].time_left).minutes}:${
+                parseTime(playersLeft[i].time_left).seconds
+              }`
+          : " ";
+
+      const username =
+        i === myPosition || i >= playersLeft.length
+          ? ""
+          : playersLeft[i].username;
+
       playersList.push(
         <div className="player">
           <div
@@ -54,16 +63,10 @@ const PlayersList = ({
             className="avatar"
             style={{ backgroundColor, color: timeColor }}
           >
-            <p className="time">
-              {i === myPosition
-                ? "YOU"
-                : `${parseTime(playersLeft[i].time_left).minutes}:${
-                    parseTime(playersLeft[i].time_left).seconds
-                  }`}
-            </p>
+            <p className="time">{time}</p>
           </div>
           <p className="username" style={{ color: usernameColor }}>
-            {i === myPosition ? "" : playersLeft[i].username}
+            {username}
           </p>
         </div>
       );
@@ -77,7 +80,6 @@ const PlayersList = ({
 PlayersList.propTypes = {
   playersLeft: PropTypes.array.isRequired,
   playersStartAmount: PropTypes.number.isRequired,
-  playersLeftAmount: PropTypes.number.isRequired,
   myPosition: PropTypes.number.isRequired
 };
 

@@ -1,18 +1,17 @@
-import logging
-from asyncio import wait_for
 import asyncio
 import asyncio.exceptions
-from typing import List
+import logging
 import time
+from asyncio import wait_for
+from typing import List
 
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
 
+from ..auth import CookieVerificationError, verify_cookies
 from ..game import Game
-from ..auth import verify_cookies, CookieVerificationError
 from .stats import update_stats
-
 
 game_router = APIRouter()
 games: List[Game] = []
@@ -43,7 +42,7 @@ async def websocket_endpoint(websocket: WebSocket):
     while True:
         try:
             data = []  # a wrapper to achieve _pass_by_reference_
-            await wait_for(get_data(websocket, data), timeout=1.0)
+            await wait_for(get_data(websocket, data), timeout=0.5)
             if data[0]["code"] == "check_board":
                 await game.check_board(data[0]["board"], username)
             elif data[0]["code"] == "heal":
@@ -52,6 +51,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 await game.fight(username)
         except asyncio.TimeoutError:
             await check_timers(websocket, username, game)
+            await game.push({"code": "players", "players": game.get_players_hp()})
         except (WebSocketDisconnect, ConnectionClosedError):
             update_stats(game.players_data[username], username, False)
             game.remove(username)

@@ -1,8 +1,8 @@
 import logging
 from typing import Dict, List
 
-from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from starlette.websockets import WebSocket, WebSocketDisconnect
+from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 
 from .routes.game import initialize_new_game
 
@@ -27,7 +27,7 @@ class Lobby:
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
         self.players[username] = websocket
-        await self.push({"code": "players", "players": self.get_usernames()})
+        await self.push({"code": "players", "players": sorted(self.get_usernames())})
         if len(self.players) == LOBBY_SIZE:
             logging.info("Game start")
             await self.push({"code": "start_game"})
@@ -52,5 +52,5 @@ class Lobby:
         self.players = active_players
 
     def get_usernames(self) -> List[str]:
-        usernames = sorted(list(self.players.keys()))
+        usernames = list(self.players.keys())
         return usernames
