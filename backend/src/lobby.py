@@ -6,8 +6,8 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 
 from .routes.game import initialize_new_game
 
-LOBBY_TIMEOUT = 16.0
-LOBBY_SIZE = 4
+LOBBY_TIMEOUT = 30.0
+LOBBY_SIZE = 9
 MIN_PLAYERS = 3
 
 

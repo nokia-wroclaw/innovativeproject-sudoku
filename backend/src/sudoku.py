@@ -1,23 +1,15 @@
 from dataclasses import dataclass
-from enum import Enum
 from functools import singledispatchmethod
-from random import shuffle, randint
+from random import randint, shuffle
 from typing import Final, List, Set
+
+Matrix = List[List[int]]
 
 
 @dataclass(frozen=True)
 class Coord:
     x: int = 0
     y: int = 0
-
-
-class Difficulty(Enum):
-    TEST_SIMPLE = 81
-    NOOB = 72
-    EASY = 32
-    MEDIUM = 27
-    HARD = 22
-    DIABOLIC = 17
 
 
 @dataclass
@@ -48,7 +40,7 @@ class SudokuCell:
 
 
 class SudokuBoard:
-    def __init__(self, SIZE=3, difficulty: Difficulty = Difficulty.NOOB):
+    def __init__(self, SIZE=3, difficulty: int = 1):
         self.SIZE = SIZE
         self.VALID_VALUES = {x + 1 for x in range(SIZE ** 2)}
         self.cells = [
@@ -56,7 +48,7 @@ class SudokuBoard:
             for x in range(SIZE ** 2)
             for y in range(SIZE ** 2)
         ]
-        self.difficulty = difficulty
+        self.difficulty = (SIZE ** 4) - difficulty
         self.fill_cells(0)
 
     def reset(self):
@@ -94,7 +86,7 @@ class SudokuBoard:
                 coords = self.resolve_index(index)
             return index
 
-        while clues >= self.difficulty.value:
+        while clues > self.difficulty:
             index = get_index()
             while self.cells[index].value == 0:
                 index = get_index()
@@ -134,11 +126,20 @@ class SudokuBoard:
     def _(self, cell_meta: int) -> SudokuCell:
         return self.cells[cell_meta]
 
-    def get_board_matrix(self) -> List[List[int]]:
+    def get_board_matrix(self) -> Matrix:
         return [
             [cell.value for cell in self.cells[x : x + self.SIZE ** 2]]
             for x in range(0, self.SIZE ** 2 ** 2, self.SIZE ** 2)
         ]
+
+
+class SudokuPuzzle:
+    def __init__(self, SIZE=3, difficulty: int = 1):
+        self.board = SudokuBoard(SIZE=SIZE, difficulty=difficulty)
+        self.board.make_puzzle()
+
+    def get_puzzle(self) -> Matrix:
+        return self.board.get_board_matrix()
 
 
 def check_sudoku(sudoku):

@@ -51,41 +51,6 @@ const Board = () => {
     }
   }, [isLogged, history]);
 
-  const downloadNewBoard = () => {
-    setDisplayButtons(false);
-    fetch(`/api/sudoku`)
-      .then(res => res.json())
-      .then(board => {
-        setBoardArray(board.sudokuBoard);
-      });
-  };
-
-  useMountEffect(() => {
-    downloadNewBoard();
-  });
-
-  useUpdateEffect(() => {
-    const createRows = board => {
-      const newRows = [];
-      let currentRow;
-      for (let row = 0; row < 9; row++) {
-        currentRow = [];
-        newRows.push(currentRow);
-        for (let col = 0; col < 9; col++) {
-          currentRow.push(
-            new FieldModel(
-              newRows.length - 1,
-              currentRow.length,
-              board[row][col]
-            )
-          );
-        }
-      }
-      return newRows;
-    };
-    setRows(createRows(boardArray));
-  }, [boardArray]);
-
   useMountEffect(() => {
     ws = new CrazyAssWebSocket("/api/game");
 
@@ -97,6 +62,7 @@ const Board = () => {
           setUsername(response.username);
           setPlayers(response.players);
           setPlayersStartAmount(response.players.length);
+          setBoardArray(response.board);
           break;
         case "no_game":
           ws.close();
@@ -110,7 +76,7 @@ const Board = () => {
           break;
         case "next_level":
           correctBoardSound.play();
-          downloadNewBoard();
+          setBoardArray(response.board);
           setDisplayButtons(true);
           break;
         case "incorrect_board":
@@ -141,6 +107,28 @@ const Board = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history]);
+
+  useUpdateEffect(() => {
+    const createRows = board => {
+      const newRows = [];
+      let currentRow;
+      for (let row = 0; row < 9; row++) {
+        currentRow = [];
+        newRows.push(currentRow);
+        for (let col = 0; col < 9; col++) {
+          currentRow.push(
+            new FieldModel(
+              newRows.length - 1,
+              currentRow.length,
+              board[row][col]
+            )
+          );
+        }
+      }
+      return newRows;
+    };
+    setRows(createRows(boardArray));
+  }, [boardArray]);
 
   useUpdateEffect(() => {
     if (action === Action.HEAL) {
