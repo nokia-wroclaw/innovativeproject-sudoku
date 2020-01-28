@@ -8,7 +8,7 @@
     border-radius: 5px;
     background: rgba($card-color, 0.6);
   }
-  
+
   .Results .textField {
     width: 85%;
   }
@@ -22,27 +22,27 @@
   .Results h1 {
       font-size: 140px;
   }
-  
+
   .Results .textFieldWrapper {
     width: 400px;
   }
-  
+
   .Results a {
     padding: 20px 0;
     color: white;
   }
-  
+
   .Results button {
     width: 100%;
   }
-  
+
   .Results img {
     margin-top: -95px;
     margin-bottom: 0;
     width: 265px;
     height: 208px;
   }
-  
+
   @media (max-width: 576px) {
     .Results .card {
       width: 100vw;
@@ -50,25 +50,25 @@
       background: rgba($card-color, 0.4);
       border-radius: 0;
     }
-  
+
     .Results .textField {
       width: 100%;
     }
-  
+
     .Results img {
       margin-top: 0;
       margin-bottom: 10px;
     }
-  
+
     .Results .textFieldWrapper {
       width: 100%;
     }
   }
-  
+
   @media (max-height: 812px) {
     .Results img {
       width: 225px;
       height: 166px;
     }
   }
-  
+
