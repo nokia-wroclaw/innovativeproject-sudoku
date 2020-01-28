@@ -5,10 +5,10 @@ from time import time
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
+
+from ..auth import CookieVerificationError, verify_cookies
 from ..lobby import Lobby
-from ..auth import verify_cookies, CookieVerificationError
-from .game import check_if_in_game
-from .game import initialize_new_game
+from .game import check_if_in_game, initialize_new_game
 
 lobby_router = APIRouter()
 lobby = Lobby()
@@ -60,4 +60,4 @@ async def websocket_endpoint(websocket: WebSocket):
                 await websocket.receive_json()
     except (WebSocketDisconnect, ConnectionClosedError):
         lobby.remove(username)
-        await lobby.push({"code": "players", "players": lobby.get_usernames()})
+        await lobby.push({"code": "players", "players": sorted(lobby.get_usernames())})

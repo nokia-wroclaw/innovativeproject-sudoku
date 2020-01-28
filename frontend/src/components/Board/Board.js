@@ -30,23 +30,14 @@ const Board = () => {
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
   const [displayButtons, setDisplayButtons] = useState(false);
-  const [timeLeft, setTimeLeft, gameEnd] = useTimer(30);
+  const [timeLeft, setTimeLeft, timeEnd] = useTimer(0);
   const [action, setAction] = useState();
   const [borderRed, setBorderRed] = useState();
+  const [players, setPlayers] = useState([]);
+  const [playersStartAmount, setPlayersStartAmount] = useState(0);
+  const [username, setUsername] = useState();
 
   const { minutes, seconds } = timeLeft;
-
-  const playersLeft = [
-    { username: "Kobi", time_left: "420" },
-    { username: "Szymon", time_left: "350" },
-    { username: "Karol", time_left: "200" },
-    { username: "Michał", time_left: "190" },
-    { username: "Konrad", time_left: "140" },
-    { username: "Paweł", time_left: "130" },
-    { username: "Filis", time_left: "20" },
-    { username: "Wawa", time_left: "31" },
-    { username: "Brodacz", time_left: "30" }
-  ];
 
   let timerColor = styles.timer;
 
@@ -54,7 +45,7 @@ const Board = () => {
     timerColor = styles.redTimer;
   }
 
-  if (gameEnd) {
+  if (timeEnd) {
     history.push("/results", { place: 1 });
   }
 
@@ -106,6 +97,11 @@ const Board = () => {
       const response = JSON.parse(event.data);
 
       switch (response.code) {
+        case "start":
+          setUsername(response.username);
+          setPlayers(response.players);
+          setPlayersStartAmount(response.players.length);
+          break;
         case "no_game":
           ws.close();
           history.push("/lobby");
@@ -129,6 +125,9 @@ const Board = () => {
         case "attacked":
           swordsSound.play();
           break;
+        case "players":
+          setPlayers(response.players);
+          break;
         default:
           break;
       }
@@ -149,18 +148,12 @@ const Board = () => {
   }, [history]);
 
   useUpdateEffect(() => {
-    switch (action) {
-      case Action.HEAL:
-        ws.send(JSON.stringify({ code: "heal" }));
-        setAction(null);
-        break;
-      case Action.FIGHT:
-        ws.send(JSON.stringify({ code: "fight" }));
-        setAction(null);
-        break;
-      default:
-        break;
+    if (action === Action.HEAL) {
+      ws.send(JSON.stringify({ code: "heal" }));
+    } else if (action === Action.FIGHT) {
+      ws.send(JSON.stringify({ code: "fight" }));
     }
+    setAction(null);
   }, [action]);
 
   const parseBoard = (sRow, sColumn, value) => {
@@ -294,11 +287,11 @@ const Board = () => {
           {renderMode()}
         </div>
         <PlayersList
-          playersLeftAmount={7}
-          myPosition={3}
-          playersStartAmount={9}
-          playersLeft={playersLeft}
+          myPosition={players.map(p => p.username).indexOf(username) || 0}
+          playersStartAmount={playersStartAmount}
+          playersLeft={players}
         />
+        ;
       </div>
     </div>
   );
