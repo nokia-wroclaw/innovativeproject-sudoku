@@ -38,25 +38,26 @@ async def websocket_endpoint(websocket: WebSocket):
             username,
         )
         return
-
+    if not game.timer_function_initialized:
+        game.timer_function_initialized = True
+        task1 = asyncio.create_task(check_timers(game))
     while True:
         try:
             data = []  # a wrapper to achieve _pass_by_reference_
-            await wait_for(get_data(websocket, data), timeout=0.5)
+            await get_data(websocket, data)
             if data[0]["code"] == "check_board":
                 await game.check_board(data[0]["board"], username)
             elif data[0]["code"] == "heal":
                 await game.heal(username)
             elif data[0]["code"] == "fight":
                 await game.fight(username)
-        except asyncio.TimeoutError:
-            await check_timers(websocket, username, game)
-            await game.push({"code": "players", "players": game.get_players_hp()})
-        except (WebSocketDisconnect, ConnectionClosedError):
+        except (WebSocketDisconnect, ConnectionClosedError, RuntimeError):
             update_stats(game.players_data[username], username, False)
+            logging.info("Removing ended game")
             game.remove(username)
             if len(game.players) == 0 and game in games:
                 games.remove(game)
+    await task1
 
 
 async def initialize_new_game(usernames):
@@ -77,15 +78,18 @@ async def get_data(websocket, wrapper):
     wrapper.append(data)
 
 
-async def check_timers(websocket, username, game):
-    if len(game.usernames) == 1:
-        await websocket.send_json({"code": "game_won"})
-        update_stats(game.players_data[username], username, True)
-        game.remove(username)
-
-    for name, player in game.players_data.copy().items():
-        if player.endgame_time <= time.time():
-            update_stats(player, name, False)
-            await game.players[name].send_json({"code": "game_lost"})
-            logging.info("time out on player %s", username)
-            game.remove(name)
+async def check_timers(game):
+    while len(game.usernames) >= 1:
+        if len(game.usernames) == 1:
+            winner = game.players[game.usernames[0]]
+            await winner.send_json({"code": "game_won"})
+            update_stats(game.players_data[game.usernames[0]], game.usernames[0], True)
+            game.remove(game.usernames[0])
+            return
+        for name, player in game.players_data.copy().items():
+            if player.endgame_time <= time.time():
+                update_stats(player, name, False)
+                await game.players[name].send_json({"code": "game_lost"})
+                logging.info("time out on player %s", name)
+                game.remove(name)
+        await asyncio.sleep(0.1)

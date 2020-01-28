@@ -7,7 +7,7 @@ from websockets.exceptions import ConnectionClosedError
 
 from .sudokuboard import check_sudoku
 
-GAME_DURATION = 150
+GAME_DURATION = 30
 HEAL_VALUE = 20
 FIGHT_VALUE = 10
 
@@ -29,6 +29,8 @@ class Game:
         self.generator = self.message_generator()
         self.players: Dict[str, WebSocket] = {}
         self.players_data: Dict[str, Player] = {}
+        self.timer_function_initialized = False
+
         for p in usernames:
             self.players_data[p] = Player(p)
 
