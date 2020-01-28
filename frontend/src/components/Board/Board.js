@@ -247,34 +247,35 @@ const Board = () => {
 
   return (
     <div className="gameView">
-      <div className="Timer">
-        <p style={{ color: timerColor }}>
-          {minutes}:{seconds}
-        </p>
-      </div>
       <div className="gamePanel">
         <GoBackButton />
-        <div
-          className={`sudoku sudoku-background ${
-            borderRed ? "borderRed" : null
-          }`}
-        >
-          {suggestions && (
-            <CircularMenu
-              itemsAmount={9}
-              suggestions={suggestions}
-              updateBoard={updateBoard}
-              hideMenu={hideSuggestions}
-            />
-          )}
-          {renderMode()}
+        <div>
+          <div className="Timer">
+            <p style={{ color: timerColor }}>
+              {minutes}:{seconds}
+            </p>
+          </div>
+          <div
+            className={`sudoku sudoku-background ${
+              borderRed ? "borderRed" : null
+            }`}
+          >
+            {suggestions && (
+              <CircularMenu
+                itemsAmount={9}
+                suggestions={suggestions}
+                updateBoard={updateBoard}
+                hideMenu={hideSuggestions}
+              />
+            )}
+            {renderMode()}
+          </div>
         </div>
         <PlayersList
           myPosition={players.map(p => p.username).indexOf(username) || 0}
           playersStartAmount={playersStartAmount}
           playersLeft={players}
         />
-        ;
       </div>
     </div>
   );
