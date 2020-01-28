@@ -4,6 +4,7 @@ import { Button } from "@material-ui/core";
 import { useHistory, useLocation } from "react-router";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import { winSound } from "../shared/Sounds";
 import LoggedContext from "../../contexts/LoggedContext";
 
 const Result = () => {
@@ -24,13 +25,14 @@ const Result = () => {
     }
   }, [isLogged, history, location.state]);
 
-  const renderConfetti = () => {
-    return place === 1 && <Confetti width={width} height={height} />;
+  const renderWin = () => {
+    winSound.play();
+    return <Confetti width={width} height={height} />;
   };
 
   return (
     <div className="Results">
-      {renderConfetti()}
+      {place === 1 && renderWin()}
       <div className="card">
         <img src="logo.png" alt="logo_image" />
         <h2>{place === 1 ? "YOU WIN!" : "YOU LOST"}</h2>

@@ -6,6 +6,7 @@ import { Button } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ky from "ky";
+import { buttonSound } from "../../shared/Sounds";
 import TextField from "../../TextField/TextField";
 import LoggedContext from "../../../contexts/LoggedContext";
 
@@ -86,6 +87,7 @@ const Register = () => {
                 size="large"
                 className="mt-5 mb-3"
                 disabled={isSubmitting}
+                onClick={() => buttonSound.play()}
               >
                 Sign Up
               </Button>

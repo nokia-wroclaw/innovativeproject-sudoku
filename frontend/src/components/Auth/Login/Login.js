@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ky from "ky";
+import { buttonSound } from "../../shared/Sounds";
 import TextField from "../../TextField/TextField";
 import LoggedContext from "../../../contexts/LoggedContext";
 
@@ -48,10 +49,8 @@ const Login = () => {
   }
 
   const onSubmit = (data, setSubmitting, setStatus) => {
-    // setSubmitting(true);
+    setSubmitting(true);
     handleSubmit({ data }, setStatus);
-
-    // history.push("/menu");
     setSubmitting(false);
   };
 
@@ -79,6 +78,7 @@ const Login = () => {
                 variant="outlined"
                 color="default"
                 disabled={isSubmitting}
+                onClick={() => buttonSound.play()}
               >
                 Sign In
               </Button>

@@ -16,7 +16,7 @@ import useMountEffect from "../../hooks/useMountEffect";
 import {
   correctBoardSound,
   wrongBoardSound,
-  swordsSound
+  attackedSound
 } from "../shared/Sounds";
 import Action from "../shared/Action";
 import LoggedContext from "../../contexts/LoggedContext";
@@ -84,7 +84,7 @@ const Board = () => {
           setBorderRed(true);
           break;
         case "attacked":
-          swordsSound.play();
+          attackedSound.play();
           break;
         case "players":
           setPlayers(response.players);
