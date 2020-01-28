@@ -3,11 +3,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { Button, Table, TableRow, TableCell } from "@material-ui/core";
 import Cookies from "js-cookie";
 import { useHistory } from "react-router";
+import { Progress } from "react-sweet-progress";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
 import { buttonSound } from "../shared/Sounds";
 import LoggedContext from "../../contexts/LoggedContext";
+
+import "react-sweet-progress/lib/style.css";
 
 const emptyPlayersList = ["-", "-", "-", "-", "-", "-", "-", "-"];
 
@@ -16,6 +19,8 @@ const Lobby = () => {
   const isLogged = useContext(LoggedContext);
 
   const [playersList, setPlayersList] = useState(emptyPlayersList);
+  const [lobbyTimer, setLobbyTimer] = useState(15);
+  const [message, setMessage] = useState("Waiting for players...");
 
   useEffect(() => {
     if (!isLogged) {
@@ -45,6 +50,10 @@ const Lobby = () => {
           break;
         case "players":
           setPlayersList(makePlayersList(response.players));
+          break;
+        case "time":
+          setMessage("Starting game...");
+          setLobbyTimer(response.time);
           break;
         default:
           break;
@@ -79,6 +88,31 @@ const Lobby = () => {
     );
   };
 
+  const displayTimer = () => {
+    return (
+      <Progress
+        percent={(parseInt(lobbyTimer, 10) / 15) * 100}
+        theme={{
+          active: {
+            symbol: `${parseInt(lobbyTimer, 10)}s`,
+            trailColor: "lightblue",
+            color: "#68b3e1"
+          },
+          success: {
+            symbol: "⏱️",
+            trailColor: "lightblue",
+            color: "#68b3e1"
+          },
+          default: {
+            symbol: "0s",
+            trailColor: "lightblue",
+            color: "#68b3e1"
+          }
+        }}
+      />
+    );
+  };
+
   const displayPlayersList = () => {
     return (
       <div className="players">
@@ -96,7 +130,8 @@ const Lobby = () => {
       <GoBackButtonLobby />
       <div className="card">
         <img src="logo.png" alt="logo_image" />
-        <h2>Waiting for players...</h2>
+        {displayTimer()}
+        <h3>{message}</h3>
         {displayPlayersList()}
         <Loader />
         <Button
