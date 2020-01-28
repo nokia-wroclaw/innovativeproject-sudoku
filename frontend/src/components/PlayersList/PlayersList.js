@@ -23,7 +23,7 @@ const PlayersList = ({ myPosition, playersStartAmount, playersLeft }) => {
 
       if (i < playersLeft.length) {
         if (i === 0) {
-          backgroundColor = "gold";
+          backgroundColor = colors.firstPlayer;
         } else if (i === myPosition) {
           timeColor = colors.bWhite;
           backgroundColor = colors.active;
