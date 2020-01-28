@@ -7,7 +7,7 @@ import { Progress } from "react-sweet-progress";
 import GoBackButtonLobby from "../GoBackButton/GoBackButton";
 import CrazyAssWebSocket from "../../Utils";
 import Loader from "../Loader/Loader";
-import { buttonSound } from "../shared/Sounds";
+import { startSound, buttonSound } from "../shared/Sounds";
 import LoggedContext from "../../contexts/LoggedContext";
 import "react-sweet-progress/lib/style.css";
 
@@ -48,6 +48,7 @@ const Lobby = () => {
       switch (response.code) {
         case "start_game":
         case "in_game_already":
+          startSound.play();
           history.push("/game");
           break;
         case "enter_lobby":
