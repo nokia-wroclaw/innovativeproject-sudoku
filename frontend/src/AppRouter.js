@@ -9,6 +9,7 @@ import Settings from "./components/Settings/Settings";
 import Lobby from "./components/Lobby/Lobby";
 import Results from "./components/Results/Results";
 import LoggedContext from "./contexts/LoggedContext";
+import BattleButtons from "./components/BattleButtons/BattleButtons";
 
 const AppRouter = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const AppRouter = () => {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/results" component={Results} />
+          <Route path="/bb" component={BattleButtons} />
           <Route path="*">
             <Redirect to="/login" />
           </Route>

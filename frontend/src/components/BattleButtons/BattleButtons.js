@@ -8,6 +8,10 @@ const BattleButtons = ({ setAction, setDisplay }) => {
   const [healSrc, setHealSrc] = useState("/battleButtons/heal.png");
   const [fightSrc, setFightSrc] = useState("/battleButtons/fight.png");
 
+  // from server
+  const [healVal, setHealVal] = useState(20);
+  const [fightVal, setFightVal] = useState(10);
+
   return (
     <div className="BattleButtons">
       <div
@@ -23,6 +27,7 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         }}
       >
         <img alt="heal" src={healSrc} />
+        <h1>+{healVal}s</h1>
       </div>
       <div
         className="bButton bFight"
@@ -37,6 +42,7 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         }}
       >
         <img alt="fight" src={fightSrc} />
+        <h1>-{fightVal}s</h1>
       </div>
     </div>
   );
