@@ -1,9 +1,4 @@
-from mongoengine import (
-    Document,
-    StringField,
-    IntField,
-    FloatField,
-)
+from mongoengine import Document, FloatField, IntField, StringField
 
 
 class User(Document):

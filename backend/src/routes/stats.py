@@ -1,18 +1,15 @@
-from time import time
 import json
+from time import time
 
 from fastapi import APIRouter, HTTPException
-from starlette.status import HTTP_400_BAD_REQUEST
-from starlette.responses import JSONResponse
-from starlette.requests import Request
 from mongoengine import DoesNotExist
+from starlette.requests import Request
+from starlette.responses import JSONResponse
+from starlette.status import HTTP_400_BAD_REQUEST
 
-from ..models import UserStats
-from ..auth import (
-    verify_cookies,
-    CookieVerificationError,
-)
+from ..auth import CookieVerificationError, verify_cookies
 from ..game import Player
+from ..models import UserStats
 
 stats_router = APIRouter()
 
