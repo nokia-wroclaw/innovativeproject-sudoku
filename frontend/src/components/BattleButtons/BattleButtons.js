@@ -23,6 +23,7 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         }}
       >
         <img alt="heal" src={healSrc} />
+        <h1>HEAL</h1>
       </div>
       <div
         className="bButton bFight"
@@ -37,6 +38,7 @@ const BattleButtons = ({ setAction, setDisplay }) => {
         }}
       >
         <img alt="fight" src={fightSrc} />
+        <h1>ATTACK</h1>
       </div>
     </div>
   );

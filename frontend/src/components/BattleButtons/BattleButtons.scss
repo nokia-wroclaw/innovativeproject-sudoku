@@ -10,10 +10,25 @@
 }
 
 .bButton {
+    position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
+}
+
+.bButton h1 {
+    color: $grey;
+    position: absolute;
+    bottom: 2vh;
+    font-size: 10vmin;
+}
+
+.bButton:hover {
+    h1 {
+        color: white;
+    }
 }
 
 .bHeal {
@@ -28,6 +43,7 @@
 
 .bHeal img {
     width: 200px;
+    margin-bottom: 7vh;
 }
 
 .bFight {
@@ -42,12 +58,18 @@
 
 .bFight img {
     width: 200px;
+    margin-bottom: 5vh;
 }
 
 .BattleButtons p {
     margin: 0;
 }
 
+@media(min-width: 500px){
+    .bButton h1 {
+        font-size: 50px;
+    }
+}
 
 @media(max-width: 1400px){
     .BattleButtons {
