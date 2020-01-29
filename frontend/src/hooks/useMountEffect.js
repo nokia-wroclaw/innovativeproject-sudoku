@@ -11,9 +11,9 @@ export default function useMountEffect(effect, deps) {
 
   useEffect(() => {
     if (isInitialMount.current) {
-      effect();
       isInitialMount.current = false;
+      return effect();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return undefined;
   }, deps);
 }
