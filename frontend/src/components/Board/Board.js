@@ -104,7 +104,6 @@ const Board = () => {
     return () => {
       ws.close();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
   useUpdateEffect(() => {
@@ -138,18 +137,6 @@ const Board = () => {
     setAction(null);
   }, [action]);
 
-  const parseBoard = () => {
-    const userCompleteBoard = [];
-    rows.forEach(row => {
-      const rowArr = [];
-      row.forEach(field => {
-        rowArr.push(field.value);
-      });
-      userCompleteBoard.push(rowArr);
-    });
-    return userCompleteBoard;
-  };
-
   const getPosition = element => {
     const rect = element.getBoundingClientRect();
     return { x: rect.left, y: rect.top };
@@ -172,7 +159,7 @@ const Board = () => {
         ws.send(
           JSON.stringify({
             code: "check_board",
-            board: parseBoard()
+            board: rows.map(row => row.map(field => field.value))
           })
         );
       }
