@@ -7,14 +7,14 @@
   padding: 10px 40px;
   border-radius: 5px;
   background: rgba($card-color, 0.6);
-}
+  color: $white;
+  h1 {
+    margin-bottom: 40px;
+  }
 
-.Statistics h1 {
-  margin-bottom: 40px;
-}
-
-.Statistics a {
-  margin-bottom: 10px;
+  a {
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -25,6 +25,7 @@
     border-radius: 0;
   }
 }
+
 * {
   box-sizing: border-box;
 }

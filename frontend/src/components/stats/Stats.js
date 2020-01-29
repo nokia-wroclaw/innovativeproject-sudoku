@@ -11,7 +11,7 @@ const roman = ["I", "II", "III", "IV", "V"];
 const Stats = () => {
   const history = useHistory();
   const isLogged = useContext(LoggedContext);
-  const [stats, updateStats] = useState(EmptyStats);
+  const [stats, setStats] = useState(EmptyStats);
   useEffect(() => {
     if (!isLogged) {
       history.replace("/login");
@@ -20,22 +20,22 @@ const Stats = () => {
 
   const renderTop5 = () => (
     <TableRow>
-      <TableCell align="center">
+      <TableCell align="left">
         <p>
-          <h4>Player:</h4>
+          <h4>Player</h4>
         </p>
         {stats.top5.map((player, index) => (
-          <p key="index">
+          <p key={player.username}>
             <b>{roman[index]}.</b> {player.username}{" "}
           </p>
         ))}
       </TableCell>
       <TableCell align="center">
         <p>
-          <h4>Games won:</h4>
+          <h4>Wins</h4>
         </p>
         {stats.top5.map(player => (
-          <p key="index">
+          <p key={player.username}>
             {" "}
             <b>{player.games_won}</b>{" "}
           </p>
@@ -44,18 +44,22 @@ const Stats = () => {
     </TableRow>
   );
   const renderMyStats = () => (
-    <TableRow align="center">
-      <TableCell>
-        <h5>
-          <p>Games played: {stats.player_stats.games_total}</p>
-          <p> Games won: {stats.player_stats.games_won}</p>
-        </h5>
+    <TableRow>
+      <TableCell align="left">
+        <p>Games: </p>
+        <p>Wins: </p>
+        <p>Attacks: </p>
+        <p>Heals: </p>
+        <p>Time in game: </p>
       </TableCell>
-      <TableCell>
-        <p>Attacks: {stats.player_stats.attacks}</p>
-        <p>Heals: {stats.player_stats.heals}</p>
+
+      <TableCell align="center">
+        <p>{stats.player_stats.games_total}</p>
+        <p>{stats.player_stats.games_won}</p>
+        <p>{stats.player_stats.attacks}</p>
+        <p>{stats.player_stats.heals}</p>
         <p>
-          Total time playing: {Math.round(stats.player_stats.time_spend / 60)}m{" "}
+          {Math.round(stats.player_stats.time_spend / 60)}m{" "}
           {Math.round(stats.player_stats.time_spend % 60)}s
         </p>
       </TableCell>
@@ -66,11 +70,11 @@ const Stats = () => {
     return (
       <div>
         <p>
-          <h2>Top 5:</h2>
+          <h2>Top 5</h2>
         </p>
         <Table>{renderTop5()}</Table>
         <p>
-          <h2>Your statistics: </h2>
+          <h2>Your statistics </h2>
         </p>
         <Table>{renderMyStats()}</Table>
       </div>
@@ -78,16 +82,13 @@ const Stats = () => {
   };
 
   useEffect(() => {
-    const statistics = async () => {
-      try {
-        fetch(`/api/stats`)
-          .then(res => res.json())
-          .then(res => updateStats(res));
-      } catch (e) {
-        console.log("Stats error");
-      }
-    };
-    statistics();
+    try {
+      fetch(`/api/stats`)
+        .then(res => res.json())
+        .then(res => setStats(res));
+    } catch (e) {
+      console.log("Stats error");
+    }
   }, []);
 
   return (
