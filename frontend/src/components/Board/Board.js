@@ -106,7 +106,7 @@ const Board = () => {
       ws.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history]);
+  });
 
   useUpdateEffect(() => {
     const createRows = board => {
@@ -139,16 +139,12 @@ const Board = () => {
     setAction(null);
   }, [action]);
 
-  const parseBoard = (sRow, sColumn, value) => {
+  const parseBoard = () => {
     const userCompleteBoard = [];
     rows.forEach(row => {
       const rowArr = [];
       row.forEach(field => {
-        if (field.row === sRow && field.col === sColumn) {
-          rowArr.push(value);
-        } else {
-          rowArr.push(field.value);
-        }
+        rowArr.push(field.value);
       });
       userCompleteBoard.push(rowArr);
     });
@@ -170,30 +166,31 @@ const Board = () => {
     setSuggestions({ x: coords.x, y: coords.y, row, column });
   };
 
-  const checkBoardComplete = (sRow, sColumn, value) => {
-    setBorderRed(false);
-    let complete = true;
-    rows.forEach(row => {
-      row.forEach(field => {
-        if (field.value === "" && field.row !== sRow && field.col !== sColumn) {
-          complete = false;
-        }
+  useEffect(() => {
+    if (rows) {
+      setBorderRed(false);
+      let complete = true;
+      rows.forEach(row => {
+        row.forEach(field => {
+          if (field.value === "") {
+            complete = false;
+          }
+        });
       });
-    });
-    if (complete) {
-      ws.send(
-        JSON.stringify({
-          code: "check_board",
-          board: parseBoard(sRow, sColumn, value)
-        })
-      );
+      if (complete) {
+        ws.send(
+          JSON.stringify({
+            code: "check_board",
+            board: parseBoard()
+          })
+        );
+      }
     }
-  };
+  }, [rows]);
 
   const updateBoard = (row, column, item) => {
     const value = _.get(item, "value", item);
-    setRows(prev => _.set(prev, `['${row}'].['${column}'].value`, value));
-    checkBoardComplete(row, column, item);
+    setRows([..._.set(rows, `['${row}'].['${column}'].value`, value)]);
   };
 
   let boardRows = null;
