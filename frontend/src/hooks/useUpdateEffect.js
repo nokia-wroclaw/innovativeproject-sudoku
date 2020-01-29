@@ -12,9 +12,8 @@ export default function useUpdateEffect(effect, deps) {
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
-    } else {
-      effect();
+      return undefined;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return effect();
   }, deps);
 }

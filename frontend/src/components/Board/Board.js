@@ -11,7 +11,6 @@ import CrazyAssWebSocket from "../../Utils";
 import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 import useUpdateEffect from "../../hooks/useUpdateEffect";
-import useMountEffect from "../../hooks/useMountEffect";
 import { correctBoardSound, wrongBoardSound, attackedSound } from "../shared/Sounds";
 import Action from "../shared/Action";
 import LoggedContext from "../../contexts/LoggedContext";
@@ -46,7 +45,7 @@ const Board = () => {
     }
   }, [isLogged, history]);
 
-  useMountEffect(() => {
+  useEffect(() => {
     ws = new CrazyAssWebSocket("/api/game");
 
     ws.onmessage = event => {
@@ -93,14 +92,10 @@ const Board = () => {
       }
     };
 
-    ws.onclose = () => {
-      ws.close();
-    };
-
     return () => {
       ws.close();
     };
-  });
+  }, []);
 
   useUpdateEffect(() => {
     setRows(

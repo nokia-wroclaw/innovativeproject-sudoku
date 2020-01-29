@@ -78,7 +78,7 @@ const Lobby = () => {
     return () => {
       ws.close();
     };
-  }, [history]);
+  }, []);
 
   useEffect(() => {
     if (message === waitingMessage) {
