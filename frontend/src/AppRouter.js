@@ -41,7 +41,6 @@ const AppRouter = () => {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/results" component={Results} />
-          <Route path="/bb" component={BattleButtons} />
           <Route path="*">
             <Redirect to="/login" />
           </Route>
