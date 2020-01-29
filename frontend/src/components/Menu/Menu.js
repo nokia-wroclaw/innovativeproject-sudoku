@@ -39,7 +39,8 @@ const Menu = () => {
         >
           Play
         </Button>
-        <Button
+        {/* <Button
+          disabled
           size="large"
           variant="outlined"
           onClick={() => {
@@ -48,8 +49,9 @@ const Menu = () => {
           }}
         >
           Stats
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
+          disabled
           size="large"
           variant="outlined"
           onClick={() => {
@@ -58,7 +60,7 @@ const Menu = () => {
           }}
         >
           Settings
-        </Button>
+        </Button> */}
         <Button
           size="large"
           variant="outlined"
