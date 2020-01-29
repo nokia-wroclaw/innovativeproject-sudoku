@@ -9,7 +9,6 @@ import Settings from "./components/Settings/Settings";
 import Lobby from "./components/Lobby/Lobby";
 import Results from "./components/Results/Results";
 import LoggedContext from "./contexts/LoggedContext";
-import BattleButtons from "./components/BattleButtons/BattleButtons";
 
 const AppRouter = () => {
   const location = useLocation();
