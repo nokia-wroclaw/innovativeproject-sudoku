@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import _ from "lodash";
 import { useHistory } from "react-router-dom";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
@@ -30,7 +29,7 @@ const Board = () => {
   const [rows, setRows] = useState();
   const [suggestions, setSuggestions] = useState(null);
   const [displayButtons, setDisplayButtons] = useState(false);
-  const [timeLeft, setTimeLeft] = useTimer(1297);
+  const [timeLeft, setTimeLeft] = useTimer(0);
   const [action, setAction] = useState();
   const [borderRed, setBorderRed] = useState();
   const [players, setPlayers] = useState([]);
@@ -169,15 +168,7 @@ const Board = () => {
   useEffect(() => {
     if (rows) {
       setBorderRed(false);
-      let complete = true;
-      rows.forEach(row => {
-        row.forEach(field => {
-          if (field.value === "") {
-            complete = false;
-          }
-        });
-      });
-      if (complete) {
+      if (!rows.some(row => row.some(field => field.value === ""))) {
         ws.send(
           JSON.stringify({
             code: "check_board",
@@ -188,9 +179,9 @@ const Board = () => {
     }
   }, [rows]);
 
-  const updateBoard = (row, column, item) => {
-    const value = _.get(item, "value", item);
-    setRows([..._.set(rows, `['${row}'].['${column}'].value`, value)]);
+  const updateBoard = (row, column, value) => {
+    rows[row][column].value = value;
+    setRows([...rows]);
   };
 
   let boardRows = null;
