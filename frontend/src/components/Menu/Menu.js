@@ -39,17 +39,18 @@ const Menu = () => {
         >
           Play
         </Button>
-        {/* <Button
-          disabled
-          size="large"
-          variant="outlined"
-          onClick={() => {
-            history.push("/game");
-            buttonSound.play();
-          }}
-        >
-          Stats
-        </Button> */}
+        {
+          <Button
+            size="large"
+            variant="outlined"
+            onClick={() => {
+              history.push("/stats");
+              buttonSound.play();
+            }}
+          >
+            Stats
+          </Button>
+        }
         {/* <Button
           disabled
           size="large"

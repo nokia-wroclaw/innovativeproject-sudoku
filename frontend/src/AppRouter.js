@@ -10,6 +10,7 @@ import Settings from "./components/Settings/Settings";
 import Lobby from "./components/Lobby/Lobby";
 import Results from "./components/Results/Results";
 import LoggedContext from "./contexts/LoggedContext";
+import Stats from "./components/stats/Stats";
 
 const AppRouter = () => {
   const location = useLocation();
@@ -46,6 +47,7 @@ const AppRouter = () => {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/results" component={Results} />
+          <Route path="/stats" component={Stats} />
           <Route path="*">
             <Redirect to="/login" />
           </Route>

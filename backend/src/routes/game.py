@@ -53,7 +53,8 @@ async def websocket_endpoint(websocket: WebSocket):
             await check_timers(websocket, username, game)
             await game.push({"code": "players", "players": game.get_players_hp()})
         except (WebSocketDisconnect, ConnectionClosedError):
-            update_stats(game.players_data[username], username, False)
+            if username in game.players_data:
+                update_stats(game.players_data[username], username, False)
             game.remove(username)
             if len(game.players) == 0 and game in games:
                 games.remove(game)

@@ -1,0 +1,30 @@
+@import "../../Variables";
+
+.Statistics .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 40px;
+  border-radius: 5px;
+  background: rgba($card-color, 0.6);
+}
+
+.Statistics h1 {
+  margin-bottom: 40px;
+}
+
+.Statistics a {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 576px) {
+  .Statistics .card {
+    width: 100vw;
+    height: 100vh;
+    background: rgba($card-color, 0.4);
+    border-radius: 0;
+  }
+}
+* {
+  box-sizing: border-box;
+}

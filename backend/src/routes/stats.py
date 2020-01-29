@@ -31,12 +31,12 @@ async def get_stats(request: Request) -> JSONResponse:
 
 def get_current_top():
     players = UserStats.objects.order_by("-games_won").limit(5)
-    top5_dict = {}
-    for i, player in enumerate(players):
+    top5_dict = []
+    for player in enumerate(players):
         player_json = {}
         player_json["username"] = player.username
         player_json["games_won"] = player.games_won
-        top5_dict[i] = player_json
+        top5_dict.append(player_json)
     return top5_dict
 
 
