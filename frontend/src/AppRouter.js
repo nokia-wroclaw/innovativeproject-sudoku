@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Redirect, Switch, useLocation } from "react-router-dom";
 import ky from "ky";
+import GridLoader from "react-spinners/GridLoader";
 import Register from "./components/Auth/Register/Register";
 import Login from "./components/Auth/Login/Login";
 import Menu from "./components/Menu/Menu";
@@ -13,6 +14,7 @@ import LoggedContext from "./contexts/LoggedContext";
 const AppRouter = () => {
   const location = useLocation();
   const [isLogged, setIsLogged] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getToken = async () => {
@@ -21,12 +23,16 @@ const AppRouter = () => {
         setIsLogged(true);
       } catch (e) {
         setIsLogged(false);
+      } finally {
+        setLoading(false);
       }
     };
     getToken();
   }, [location]);
 
-  return (
+  return loading ? (
+    <GridLoader loading={loading} color="#68b3e1" />
+  ) : (
     <div>
       <LoggedContext.Provider value={isLogged}>
         <Switch>
