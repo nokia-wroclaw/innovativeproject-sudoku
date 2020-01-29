@@ -10,7 +10,7 @@ import Settings from "./components/Settings/Settings";
 import Lobby from "./components/Lobby/Lobby";
 import Results from "./components/Results/Results";
 import LoggedContext from "./contexts/LoggedContext";
-import Stats from "./components/stats/Stats";
+import Stats from "./components/Stats/Stats";
 
 const AppRouter = () => {
   const location = useLocation();

@@ -2,16 +2,17 @@ import "./Stats.scss";
 import React, { useEffect, useContext, useState } from "react";
 import { useHistory } from "react-router";
 import { Table, TableRow, TableCell } from "@material-ui/core";
+import GridLoader from "react-spinners/GridLoader";
 import GoBackButton from "../GoBackButton/GoBackButton";
 import LoggedContext from "../../contexts/LoggedContext";
 
-const EmptyStats = { top5: [], player_stats: {} };
 const roman = ["I", "II", "III", "IV", "V"];
 
 const Stats = () => {
   const history = useHistory();
   const isLogged = useContext(LoggedContext);
-  const [stats, setStats] = useState(EmptyStats);
+  const [stats, setStats] = useState();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!isLogged) {
       history.replace("/login");
@@ -85,13 +86,18 @@ const Stats = () => {
     try {
       fetch(`/api/stats`)
         .then(res => res.json())
-        .then(res => setStats(res));
+        .then(res => {
+          setStats(res);
+          setLoading(false);
+        });
     } catch (e) {
       console.log("Stats error");
     }
   }, []);
 
-  return (
+  return loading ? (
+    <GridLoader loading={loading} color="#68b3e1" />
+  ) : (
     <div className="Statistics">
       <GoBackButton />
       <div className="card">{displayStats()}</div>
