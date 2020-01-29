@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import GridLoader from "react-spinners/GridLoader";
 import Field from "./Field/Field";
 import styles from "./Board.scss";
 import CircularMenu from "../CircularMenu/CircularMenu";
@@ -11,7 +12,11 @@ import CrazyAssWebSocket from "../../Utils";
 import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 import useUpdateEffect from "../../hooks/useUpdateEffect";
-import { correctBoardSound, wrongBoardSound, attackedSound } from "../shared/Sounds";
+import {
+  correctBoardSound,
+  wrongBoardSound,
+  attackedSound
+} from "../shared/Sounds";
 import Action from "../shared/Action";
 import LoggedContext from "../../contexts/LoggedContext";
 
@@ -30,6 +35,7 @@ const Board = () => {
   const [players, setPlayers] = useState([]);
   const [playersStartAmount, setPlayersStartAmount] = useState(0);
   const [username, setUsername] = useState();
+  const [loading, setLoading] = useState(true);
 
   const { minutes, seconds } = timeLeft;
 
@@ -57,6 +63,7 @@ const Board = () => {
           setPlayers(response.players);
           setPlayersStartAmount(response.players.length);
           setBoardArray(response.board);
+          setLoading(false);
           break;
         case "no_game":
           ws.close();
@@ -99,7 +106,9 @@ const Board = () => {
 
   useUpdateEffect(() => {
     setRows(
-      boardArray.map((row, i) => row.map((value, j) => new FieldModel(i, j, value)))
+      boardArray.map((row, i) =>
+        row.map((value, j) => new FieldModel(i, j, value))
+      )
     );
   }, [boardArray]);
 
@@ -167,7 +176,10 @@ const Board = () => {
                 onClick={
                   field.blocked ||
                   (suggestions &&
-                    !(suggestions.row === idx && suggestions.column === field.col))
+                    !(
+                      suggestions.row === idx &&
+                      suggestions.column === field.col
+                    ))
                     ? () => hideSuggestions()
                     : () => displaySuggestions(field.row, field.col)
                 }
@@ -181,7 +193,9 @@ const Board = () => {
 
   const renderMode = () => {
     if (displayButtons) {
-      return <BattleButtons setDisplay={setDisplayButtons} setAction={setAction} />;
+      return (
+        <BattleButtons setDisplay={setDisplayButtons} setAction={setAction} />
+      );
     }
     return (
       <table>
@@ -190,7 +204,9 @@ const Board = () => {
     );
   };
 
-  return (
+  return loading ? (
+    <GridLoader loading={loading} color={styles.timer} />
+  ) : (
     <div className="gameView">
       <div className="gamePanel">
         <GoBackButton />
@@ -200,7 +216,11 @@ const Board = () => {
               {minutes}:{seconds}
             </p>
           </div>
-          <div className={`sudoku sudoku-background ${borderRed ? "borderRed" : null}`}>
+          <div
+            className={`sudoku sudoku-background ${
+              borderRed ? "borderRed" : null
+            }`}
+          >
             {suggestions && (
               <CircularMenu
                 itemsAmount={9}
