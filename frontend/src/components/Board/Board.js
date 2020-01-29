@@ -12,11 +12,7 @@ import PlayersList from "../PlayersList/PlayersList";
 import BattleButtons from "../BattleButtons/BattleButtons";
 import useUpdateEffect from "../../hooks/useUpdateEffect";
 import useMountEffect from "../../hooks/useMountEffect";
-import {
-  correctBoardSound,
-  wrongBoardSound,
-  attackedSound
-} from "../shared/Sounds";
+import { correctBoardSound, wrongBoardSound, attackedSound } from "../shared/Sounds";
 import Action from "../shared/Action";
 import LoggedContext from "../../contexts/LoggedContext";
 
@@ -107,25 +103,9 @@ const Board = () => {
   });
 
   useUpdateEffect(() => {
-    const createRows = board => {
-      const newRows = [];
-      let currentRow;
-      for (let row = 0; row < 9; row++) {
-        currentRow = [];
-        newRows.push(currentRow);
-        for (let col = 0; col < 9; col++) {
-          currentRow.push(
-            new FieldModel(
-              newRows.length - 1,
-              currentRow.length,
-              board[row][col]
-            )
-          );
-        }
-      }
-      return newRows;
-    };
-    setRows(createRows(boardArray));
+    setRows(
+      boardArray.map((row, i) => row.map((value, j) => new FieldModel(i, j, value)))
+    );
   }, [boardArray]);
 
   useUpdateEffect(() => {
@@ -192,10 +172,7 @@ const Board = () => {
                 onClick={
                   field.blocked ||
                   (suggestions &&
-                    !(
-                      suggestions.row === idx &&
-                      suggestions.column === field.col
-                    ))
+                    !(suggestions.row === idx && suggestions.column === field.col))
                     ? () => hideSuggestions()
                     : () => displaySuggestions(field.row, field.col)
                 }
@@ -209,9 +186,7 @@ const Board = () => {
 
   const renderMode = () => {
     if (displayButtons) {
-      return (
-        <BattleButtons setDisplay={setDisplayButtons} setAction={setAction} />
-      );
+      return <BattleButtons setDisplay={setDisplayButtons} setAction={setAction} />;
     }
     return (
       <table>
@@ -230,11 +205,7 @@ const Board = () => {
               {minutes}:{seconds}
             </p>
           </div>
-          <div
-            className={`sudoku sudoku-background ${
-              borderRed ? "borderRed" : null
-            }`}
-          >
+          <div className={`sudoku sudoku-background ${borderRed ? "borderRed" : null}`}>
             {suggestions && (
               <CircularMenu
                 itemsAmount={9}
